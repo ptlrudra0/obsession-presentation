@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OBSESSION — English Group Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@600;700&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4E2CA;--red:#B42719;--ink:#0E0A07;--blush:#EFA997}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#000;font-family:'Outfit',Arial,sans-serif;color:var(--ink)}
+.slide{position:fixed;inset:0;display:none;overflow:hidden;padding:11vmin 7vmin 11vmin;flex-direction:column;justify-content:center}
+.slide.on{display:flex;animation:in .5s ease-out}
+@keyframes in{from{opacity:0}to{opacity:1}}
+#fold{position:fixed;inset:0;z-index:49;pointer-events:none;mix-blend-mode:multiply;opacity:.9;
+background:linear-gradient(90deg,transparent calc(50% - 3px),rgba(60,35,15,.10) calc(50% - 1px),rgba(255,255,255,.35) 50%,transparent calc(50% + 3px)),
+linear-gradient(0deg,transparent calc(33% - 3px),rgba(60,35,15,.08) calc(33% - 1px),rgba(255,255,255,.3) 33%,transparent calc(33% + 3px))}
+#fold svg{position:absolute;inset:0;opacity:.06}
+body.th-inkbg #fold{display:none}
+.slide>.ph{outline:.9vmin solid #FBF1E0;box-shadow:.8vmin 1vmin 0 rgba(14,10,7,.32);transform:rotate(-.8deg)}
+.slide.inkbg>.ph,.redbg>.ph{outline:none;box-shadow:none;transform:none}
+@media (max-width:760px){.slide>.ph{transform:none!important;outline-width:.6vmin}}
+
+.slide.on .ttl{animation:kt 1s cubic-bezier(.2,.8,.1,1) both;transform-origin:0 100%}
+@keyframes kt{0%{clip-path:inset(0 0 100% 0);transform:translateY(32%) scaleY(1.35);opacity:.2}100%{clip-path:inset(-25% -8% -25% -8%);transform:none;opacity:1}}
+.slide>.mq{position:absolute;left:0;right:0;top:80%;bottom:auto;overflow:hidden;white-space:nowrap;font-family:Anton,sans-serif;font-size:clamp(22px,5.4vmin,70px);text-transform:uppercase;border-top:4px solid currentColor;border-bottom:4px solid currentColor;padding:.5vmin 0;z-index:3}
+.mq span{display:inline-block;padding-right:.6em;animation:mqa 26s linear infinite}
+@keyframes mqa{to{transform:translateX(-100%)}}
+.redbg .mq{color:var(--paper)}.beige .mq{color:var(--ink)}
+#wipe{position:fixed;inset:0;background:var(--ink);z-index:70;pointer-events:none;transform:translateX(101%);opacity:0}
+#wipe.go{animation:wp .65s cubic-bezier(.7,0,.2,1)}
+@keyframes wp{0%{opacity:1;transform:translateX(0)}99%{opacity:1;transform:translateX(100%)}100%{opacity:0;transform:translateX(101%)}}
+@media (prefers-reduced-motion:reduce){.slide.on .ttl,.mq span,#wipe.go{animation:none}}
+
+.beige{background:var(--paper);color:var(--ink)}.redbg{background:var(--red);color:var(--paper)}.inkbg{background:var(--ink);color:var(--paper)}
+.slide>*{position:relative;z-index:3}
+.A{font-family:'Anton','Arial Narrow',Impact,sans-serif;text-transform:uppercase;font-weight:400;line-height:.92;letter-spacing:.005em}
+.S{font-family:'DM Serif Display',serif;font-style:italic;text-transform:none;font-weight:400}
+.M{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.14em}
+.r{color:var(--red)}.redbg .r,.inkbg .r{color:var(--paper)}
+/* fused overprint type: ink + offset blush plate, rough ink edge */
+.fz{color:var(--red);text-shadow:.045em .035em 0 var(--blush);filter:url(#rough)}
+.redbg .fz{color:var(--paper);text-shadow:.045em .035em 0 rgba(14,10,7,.55)}
+.inkbg .fz{color:var(--paper);text-shadow:.045em .035em 0 var(--red)}
+/* riso speckle overlay: paper dots punching through ink */
+#speck{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.06}
+.hd{position:absolute;left:7vmin;right:7vmin;top:3.4vmin;display:flex;justify-content:space-between;font-size:clamp(11px,1.8vmin,17px);z-index:4;border-bottom:3px solid currentColor;padding-bottom:1.1vmin}
+.hd b{font-weight:700}
+#chip{position:fixed;left:7vmin;bottom:2.8vmin;z-index:60;font-family:'Space Mono',monospace;font-size:clamp(11px,1.9vmin,18px);letter-spacing:.14em;text-transform:uppercase;padding:.8vmin 1.5vmin;background:var(--ink);color:var(--paper)}
+#chip b{color:#fff}
+#cnt{position:fixed;right:7vmin;bottom:3.2vmin;z-index:60;font-family:'Space Mono',monospace;font-size:clamp(11px,1.9vmin,18px);letter-spacing:.14em;font-weight:700}
+#bar{position:fixed;left:0;bottom:0;height:6px;background:var(--red);z-index:61;transition:width .5s}
+body.th-inkbg #chip,body.th-redbg #chip{background:var(--paper);color:var(--ink)}body.th-inkbg #chip b,body.th-redbg #chip b{color:var(--red)}
+body.th-inkbg #cnt,body.th-redbg #cnt{color:var(--paper)}body.th-beige #cnt{color:var(--ink)}
+body.th-inkbg #bar,body.th-redbg #bar{background:var(--paper)}
+#nav{position:fixed;inset:0;z-index:55;display:flex}#nav div{flex:1}#nav div:first-child{flex:.28}
+.st{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.st.show{opacity:1;transform:none}
+/* photo frames: black ink + red ink layers, multiplied, misregistered */
+.ph{position:absolute;aspect-ratio:var(--ar);overflow:hidden}
+.ph img{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply;display:block}
+.ph .r{animation:reg 9s ease-in-out infinite}
+@keyframes reg{0%,100%{transform:translate(0,0)}50%{transform:translate(3px,2px)}}
+.gl{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#FBF0DD 0%,rgba(251,240,221,.92) 22%,rgba(244,226,202,.55) 48%,transparent 72%);pointer-events:none;z-index:2}
+.gl.g0{animation:fa 7s infinite}.gl.g1{animation:fb 9s infinite}.gl.g2{animation:fc 11s infinite}
+@keyframes fa{0%,40%,44%,48%,100%{opacity:1}42%{opacity:.35}46%{opacity:.7}70%,72%{opacity:.85}71%{opacity:.4}}
+@keyframes fb{0%,60%,100%{opacity:1}62%{opacity:.45}64%{opacity:.9}66%{opacity:.5}20%{opacity:.9}}
+@keyframes fc{0%,80%,100%{opacity:1}81%{opacity:.5}83%{opacity:.95}30%{opacity:.8}}
+.inkbg .ph img.k{mix-blend-mode:screen}
+/* spotlight reveal + annotations */
+#spot{position:fixed;inset:0;z-index:57;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--x,50%) var(--y,40%),transparent 0,transparent var(--r,18vmin),rgba(14,10,7,.7) calc(var(--r,18vmin)*2.1))}
+#spot.go{animation:sp 2.6s ease-in-out forwards}
+@keyframes sp{0%{opacity:0}18%{opacity:1}68%{opacity:1}100%{opacity:0}}
+.an{position:absolute;z-index:8;color:var(--red);font-family:'Caveat',cursive;font-weight:700;font-size:clamp(26px,5.6vmin,70px);line-height:1;transform:rotate(var(--rot));opacity:0}
+.redbg .an,.inkbg .an{color:var(--paper)}
+.an svg{display:block;fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:420;stroke-dashoffset:420;width:clamp(120px,22vmin,260px);height:auto}
+.slide.on .an{animation:anin .4s ease forwards;animation-delay:var(--dl,1.9s)}
+.slide.on .an svg path{animation:dr .9s ease forwards;animation-delay:calc(var(--dl,1.9s) + .15s)}
+@keyframes anin{to{opacity:1}}@keyframes dr{to{stroke-dashoffset:0}}
+body.all *{animation:none!important;transition:none!important}
+body.all .an{opacity:1}body.all .an svg{stroke-dashoffset:0}body.all #spot{display:none}
+.grainp{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:multiply;opacity:.2}
+.inkbg .grainp{mix-blend-mode:screen;opacity:0}
+/* generic */
+.rule{height:4px;background:currentColor}
+.row{display:flex;justify-content:space-between;align-items:baseline;border-top:4px solid var(--ink);padding:1.5vmin 0}
+.row small{font-size:clamp(11px,1.8vmin,17px);color:var(--red);font-weight:700}
+.row span{font-family:Anton;text-transform:uppercase;font-size:clamp(28px,6vmin,80px)}
+.q{font-size:clamp(44px,11vmin,160px);max-width:1500px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(520px,100%),1fr));gap:2vmin;margin-top:5vmin;max-width:1500px}
+.opt{display:flex;align-items:center;gap:2vmin;background:var(--paper);color:var(--ink);padding:2.6vmin 3vmin;cursor:pointer;position:relative;z-index:70;user-select:none;border:5px solid var(--ink);min-width:0}
+.opt:active{transform:scale(.97)}
+.opt .l{font-family:Anton;font-size:clamp(34px,6.4vmin,80px);color:var(--red)}
+.opt .t{font-family:Anton;text-transform:uppercase;font-size:clamp(26px,5vmin,64px);flex:1;line-height:1;min-width:0}
+.opt .n{font-family:Anton;font-size:clamp(30px,6vmin,76px);min-width:1.2em;text-align:right}
+.opt.hit{background:var(--ink);color:var(--paper)}.opt.hit .l{color:var(--paper)}
+.hint{margin-top:3vmin;font-size:clamp(11px,1.9vmin,18px);font-weight:700}
+.tags{display:flex;flex-wrap:wrap;gap:1.2vmin;margin-top:5vmin}
+.tags span{border:4px solid currentColor;padding:1vmin 1.8vmin;font-size:clamp(12px,2.3vmin,26px);font-weight:700;background:var(--paper);color:var(--ink)}
+.redbg .tags span,.inkbg .tags span{background:transparent;color:var(--paper)}
+.ls li,.kw li{list-style:none;font-family:Anton;text-transform:uppercase;border-top:4px solid currentColor;display:flex;gap:2vmin;align-items:baseline}
+.ls li b,.kw li b{font-family:'Space Mono';font-size:.3em;color:var(--red);font-weight:700;min-width:2.2em}
+.inkbg .ls li b{color:var(--blush)}
+/* per-slide */
+#s1 .tt{font-size:min(12.2vw,25vmin);margin-left:-1.2vmin;white-space:nowrap;line-height:.82;position:relative;z-index:5}
+#s1 .ln{display:flex;justify-content:space-between;font-size:clamp(11px,2vmin,19px);font-weight:700;margin-bottom:1vmin}
+#s1 .qt{max-width:52vw;font-size:clamp(28px,6.6vmin,86px);margin-top:3vmin}
+#s1 .tm{position:absolute;left:7vmin;right:7vmin;bottom:9.5vmin;display:flex;justify-content:space-between;font-size:clamp(11px,2vmin,19px);font-weight:700;border-top:5px solid var(--ink);padding-top:1.4vmin}
+#s2 .txt{position:relative;width:48%;z-index:4}
+#s2 h2{font-size:clamp(54px,13vmin,180px);margin-bottom:2vmin}
+.band{background:var(--red);color:var(--paper);padding:2vmin 2.4vmin;margin-top:3vmin;font-size:clamp(26px,5.6vmin,74px);display:flex;gap:2vmin;flex-wrap:wrap;align-items:baseline}
+.stairs .A{display:block;font-size:clamp(54px,15vmin,220px)}
+.stairs .A:nth-child(2){margin-left:7vw}.stairs .A:nth-child(3){margin-left:14vw}.stairs .A:nth-child(4){margin-left:21vw}
+.stairs .A i{font-style:normal;color:var(--blush);font-size:.42em;margin-right:.3em;vertical-align:middle;font-family:'Space Mono'}
+#s5 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:3vmin}
+.cd .pic{position:relative;aspect-ratio:4/3.4;background:var(--paper);overflow:hidden;border:5px solid var(--ink);margin-bottom:1.6vmin}
+.cd .pic .ph{width:100%;height:100%;aspect-ratio:auto}
+.cd .pic .ph img{object-fit:cover}
+.cd .nm{font-family:Anton;text-transform:uppercase;font-size:clamp(36px,8vmin,104px);line-height:.95;margin-top:1.2vmin;position:relative;z-index:5}
+.cd .ac{font-size:clamp(10px,1.7vmin,16px);color:var(--red);font-weight:700;margin:.8vmin 0 1vmin}
+.cd li{list-style:none;font-size:clamp(16px,3vmin,34px);font-weight:700;padding:.5vmin 0;border-top:2px solid var(--ink)}
+#s6{padding:0;flex-direction:row}
+#s6 .h{flex:1;padding:12vmin 6vmin 12vmin;display:flex;flex-direction:column;justify-content:center;position:relative}
+#s6 .h1{background:var(--paper);color:var(--ink);padding-right:9vmin}#s6 .h2{background:var(--ink);color:var(--paper);padding-left:9vmin}
+#s6 h3{font-family:Anton;text-transform:uppercase;font-size:clamp(50px,14vmin,200px);line-height:.88;margin-bottom:3vmin}
+#s6 .h2 h3{color:var(--paper);text-shadow:.045em .035em 0 var(--red)}
+#s6 li{list-style:none;font-family:Anton;text-transform:uppercase;font-size:clamp(24px,5.2vmin,70px);padding:1.4vmin 0;border-top:4px solid currentColor}
+#s6 .vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--red);color:var(--paper);width:12vmin;height:12vmin;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:clamp(24px,5vmin,60px);z-index:6;border:5px solid var(--paper)}
+.qmark{position:absolute;right:3vmin;top:12vmin;font-family:Anton;font-size:56vmin;line-height:.9;color:var(--red);opacity:1;z-index:1;background-image:radial-gradient(var(--paper) 28%,transparent 31%);background-size:2.2vmin 2.2vmin;-webkit-background-clip:text}
+.spec .bar{height:2vmin;background:linear-gradient(90deg,var(--ink),var(--red));margin-top:5vmin}
+.spec .lb{display:flex;justify-content:space-between;font-family:Anton;text-transform:uppercase;font-size:clamp(26px,5vmin,64px);margin-top:1.4vmin}
+.sw{position:absolute;right:9vmin;top:0;z-index:5;transform-origin:50% 0;animation:sw 5s ease-in-out infinite}
+@keyframes sw{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.sw .rope{width:4px;height:22vmin;background:var(--paper);margin:0 auto}
+.sw .tg{background:var(--paper);color:var(--ink);padding:2.2vmin 2.8vmin;font-family:Anton;font-size:clamp(22px,4.2vmin,54px);text-align:center;line-height:1;border:5px solid var(--ink);box-shadow:.8vmin .8vmin 0 var(--ink)}
+.tri .A{display:flex;align-items:baseline;gap:2.4vmin;font-size:clamp(54px,15vmin,210px);border-top:5px solid var(--paper);padding:1vmin 0}
+.tri .A small{font-family:'Space Mono';font-size:clamp(12px,2.2vmin,22px);letter-spacing:.14em}
+.big{font-size:clamp(46px,11.6vmin,170px);max-width:1650px}
+.chain{display:flex;flex-wrap:wrap;gap:1.4vmin 2.4vmin;margin-top:5vmin;font-size:clamp(22px,4.8vmin,64px);align-items:baseline}
+.trio{display:flex;flex-wrap:wrap;gap:2vmin;margin-top:8vmin}
+.trio span{border:5px solid var(--ink);padding:1.4vmin 2.6vmin;font-size:clamp(24px,5vmin,66px);background:var(--paper)}
+#s14 .tt{font-size:clamp(70px,22vmin,340px);position:relative;z-index:5;line-height:.84}
+#s14 .qq{display:inline-block;background:var(--red);color:var(--paper);padding:1.4vmin 2.4vmin;font-size:clamp(30px,7vmin,92px);margin-top:3vmin;align-self:flex-start}
+@media (max-aspect-ratio:1/1){
+ .slide{padding:12vmin 6vmin 13vmin;justify-content:flex-start;overflow-y:auto}
+ #s1 .tt{font-size:21vw}
+ .slide>.ph{position:relative!important;right:auto!important;left:auto!important;top:auto!important;bottom:auto!important;width:100%!important;height:auto!important;opacity:1!important;margin-top:3vh;flex:none;order:50}
+ .slide>.ph:nth-of-type(n){transform:none}
+ #s1 .tt,#s14 .tt{font-size:21vw}
+ #s10 .row p,#s10 div[style*=max-width]{max-width:100%!important}
+ #s13 .big,#s9 .ttl,#s9 .kw{max-width:100%!important}
+ #s2 .txt{width:100%}#s6{flex-direction:column}#s6 .h{padding:10vmin 6vmin 4vmin}#s6 .vs{display:none}
+ #s5 .cards{grid-template-columns:1fr}.cd{display:grid;grid-template-columns:36% 1fr;column-gap:3vmin}.cd .pic{grid-row:1/span 3;aspect-ratio:1;margin:0}.cd .nm{margin-top:0}
+ .stairs .A:nth-child(n){margin-left:0}.sw,.qmark{display:none}.an{display:none}
+}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<filter id="rough" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="2" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="4"/></filter>
+<filter id="mot" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".008 .012" numOctaves="3" seed="7"/><feColorMatrix values="0 0 0 0 .45 0 0 0 0 .3 0 0 0 0 .18 0 0 0 1.6 -.35"/></filter><filter id="spk" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="11"/><feColorMatrix values="0 0 0 0 .96 0 0 0 0 .89 0 0 0 0 .79 0 0 0 22 -14.2"/></filter>
+<filter id="gr" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .9 0"/></filter>
+</defs></svg>
+<div id="fold"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#mot)"/></svg></div><div id="wipe"></div><div id="speck"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#spk)"/></svg></div>
+<div id="spot"></div>
+<section class="slide beige" id="s1" data-th="beige" data-who="Jal" data-t="0:30"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / English group presentation</span><span>No. 01</span></div>
+<div class="ph bgph" style="--ar:1.497;right:0;top:12vmin;width:42vw;"><img class="k" src="stills/riso-house-k.png" alt=""><img class="r" src="stills/riso-house-r.png" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div>
+<div class="ln M"><span>A film by Curry Barker · Horror · 2026</span></div>
+<div class="tt A fz ttl" data-t="Obsession">Obsession</div>
+<div class="qt S st">“Be careful who you wish for…”</div>
+<div class="tm M"><span>Jal</span><span>Rudra</span><span>Payal</span><span>Swet</span><span>Hetarth</span><span>Aanshi</span></div>
+<div class="an" style="left:70%;top:68%;--rot:-4deg;--dl:2.2s"><span>someone's watching</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s2" data-th="beige" data-who="Jal" data-t="1:00"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Quick intro</span><span>No. 02</span></div>
+<div class="ph " style="--ar:1.499;right:0;top:13vmin;width:46vw;"><img class="k" src="stills/riso-friends-k.png" alt=""><img class="r" src="stills/riso-friends-r.png" alt=""><i class="gl g0" style="left:75.3%;top:26.1%;width:14%"></i></div>
+<div class="txt"><h2 class="A fz ttl" data-t="The film">The film</h2>
+<div class="row st"><small class="M">Genre</small><span>Horror</span></div><div class="row st"><small class="M">Director &amp; writer</small><span>Curry Barker</span></div><div class="row st"><small class="M">Release</small><span>May 15, 2026</span></div><div class="row st"><small class="M">Main characters</small><span>Bear &amp; Nikki</span></div>
+<div class="band A st"><span>Love</span><span>→</span><span>Desire</span><span>→</span><span style="color:var(--ink)">Obsession</span></div></div>
+<div class="an" style="left:57%;top:14%;--rot:4deg;--dl:2.2s"><span>the friends</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide redbg" id="s3" data-th="redbg" data-who="Jal" data-t="1–1.5 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Question 1 · audience</span><span>No. 03</span></div>
+<div class="ph " style="--ar:1.777;right:4vmin;bottom:12vmin;width:28vw;opacity:.9;"><img class="k" src="stills/riso-bed-k.png" alt=""><img class="r" src="stills/riso-bed-r.png" alt=""></div>
+<div class="q A fz ttl" data-t="">If you could make <span class="S">one wish</span> come true… what would you choose?</div>
+<div class="opts" style="max-width:62vw;grid-template-columns:1fr 1fr"><div class="opt"><span class="l">A</span><span class="t">Love</span><span class="n">0</span></div><div class="opt"><span class="l">B</span><span class="t">Success</span><span class="n">0</span></div><div class="opt"><span class="l">C</span><span class="t">Money</span><span class="n">0</span></div><div class="opt"><span class="l">D</span><span class="t">Something else</span><span class="n">0</span></div></div>
+<div class="hint M">Take 2–3 answers · tap to tally</div><div class="an" style="left:69%;top:40%;--rot:5deg;--dl:2.2s"><span>pick one</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s4" data-th="beige" data-who="Rudra" data-t="3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Story &amp; plot</span><span>No. 04</span></div>
+<div class="ph " style="--ar:1.777;right:0;top:11vmin;width:40vw;"><img class="k" src="stills/riso-phone-k.png" alt=""><img class="r" src="stills/riso-phone-r.png" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div>
+<div class="stairs A ttl" style="position:relative;z-index:5;mix-blend-mode:multiply"><span class="A fz st" data-t=""><i>1</i>Bear</span><span class="A fz st" data-t=""><i>2</i>Wish</span><span class="A fz st" data-t=""><i>3</i>Nikki</span><span class="A fz st" data-t=""><i>4</i>Consequences</span></div>
+<div class="tags M" style="max-width:65%"><span class="st">Feelings for Nikki</span><span class="st">Can’t say it</span><span class="st">One Wish Willow</span><span class="st">The wish</span><span class="st">After the wish</span><span class="st">Everything shifts</span></div>
+<div class="an" style="left:74%;top:70%;--rot:-4deg;--dl:2.2s"><span>she's watching</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 20 C60 80 150 80 190 20"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s5" data-th="beige" data-who="Payal" data-t="3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Main characters</span><span>No. 05</span></div><div class="cards">
+<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.777;"><img class="k" src="stills/riso-phone-k.png" alt=""><img class="r" src="stills/riso-phone-r.png" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div></div><div class="nm fz ttl" data-t="">Bear</div><div class="ac M">Michael Johnston</div><ul><li>Protagonist</li><li>Loves Nikki</li><li>Makes the wish</li><li>Faces the fallout</li></ul></div>
+<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.777;"><img class="k" src="stills/riso-bed-k.png" alt=""><img class="r" src="stills/riso-bed-r.png" alt=""></div></div><div class="nm fz" data-t="">Nikki</div><div class="ac M">Inde Navarrette</div><ul><li>Bear’s crush</li><li>Center of the wish</li><li>Drives the story</li></ul></div>
+<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.499;"><img class="k" src="stills/riso-friends-k.png" alt=""><img class="r" src="stills/riso-friends-r.png" alt=""><i class="gl g0" style="left:75.3%;top:26.1%;width:14%"></i></div></div><div class="nm fz" data-t="">Ian &amp; Sarah</div><div class="ac M">Cooper Tomlinson · Megan Lawless</div><ul><li>Close friends</li><li>Pulled in</li><li>Feel the fallout</li></ul></div></div></section><section class="slide beige" id="s6" data-th="beige" data-who="Swet" data-t="3 min"><div class="h h1"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="M r" style="margin-bottom:2vmin;font-size:clamp(11px,1.9vmin,18px);font-weight:700">06 · The title</div><h3 class="fz ttl" data-t="">Love</h3><ul><li class="st">Mutual</li><li class="st">Respects boundaries</li><li class="st">Allows freedom</li><li class="st">Accepts “no”</li></ul></div>
+<div class="h h2"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><h3>Obses&shy;sion</h3><ul><li class="st">One-sided</li><li class="st">Ignores boundaries</li><li class="st">Controlling</li><li class="st">Needs one outcome</li></ul></div><div class="vs">VS</div></section><section class="slide beige" id="s7" data-th="beige" data-who="Swet" data-t="1.5 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Question 2 · audience</span><span>No. 07</span></div><div class="qmark">?</div><div class="q A fz ttl" data-t="" style="position:relative;z-index:4">Can <span class="S">love</span> become obsession?</div>
+<div class="opts" style="position:relative;z-index:4"><div class="opt"><span class="l">1</span><span class="t">Clear difference</span><span class="n">0</span></div><div class="opt"><span class="l">2</span><span class="t">One turns into the other</span><span class="n">0</span></div></div>
+<div class="spec" style="max-width:1500px;position:relative;z-index:4"><div class="bar"></div><div class="lb"><span>Love</span><span class="r">Obsession</span></div></div><div class="hint M" style="position:relative;z-index:4">Take 2–3 answers · tap to tally</div><div class="an" style="left:36%;top:60%;--rot:-4deg;--dl:2.2s"><span>tap to vote</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide redbg" id="s8" data-th="redbg" data-who="Hetarth" data-t="3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Symbolism</span><span>No. 08</span></div><div class="sw"><div class="rope"></div><div class="tg">ONE<br>WISH<br>WILLOW</div></div>
+<div class="M" style="font-size:clamp(11px,1.9vmin,18px);margin-bottom:1.4vmin;font-weight:700">The One Wish Willow</div>
+<div class="tri ttl"><div class="A fz st" data-t=""><small>01</small>Desire</div><div class="A fz st" data-t=""><small>02</small>Choice</div><div class="A fz st" data-t=""><small>03</small>Consequence</div></div>
+<div class="tags M" style="max-width:80%"><span class="st">Looks ordinary</span><span class="st">Really grants it</span><span class="st">Quick fix = danger</span><span class="st">Changes the story</span></div><div class="an" style="left:60%;top:16%;--rot:-5deg;--dl:2.2s"><span>careful…</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s9" data-th="beige" data-who="Hetarth" data-t="2.5–3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Horror &amp; cinematography</span><span>No. 09</span></div>
+<div class="ph " style="--ar:1.497;right:0;top:9vmin;width:50vw;"><img class="k" src="stills/riso-house-k.png" alt=""><img class="r" src="stills/riso-house-r.png" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div><div class="ph " style="--ar:1.777;right:1vmin;bottom:3vmin;width:30vw;"><img class="k" src="stills/riso-phone-k.png" alt=""><img class="r" src="stills/riso-phone-r.png" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div>
+<div class="A fz ttl" data-t="" style="font-size:clamp(40px,9.4vmin,130px);margin-bottom:3vmin;position:relative;z-index:5;max-width:48%">How does it create <span class="S">fear?</span></div>
+<ul class="kw" style="position:relative;z-index:5;max-width:50%;background:var(--paper)"><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>01</b>Darkness &amp; shadows</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>02</b>Silence &amp; suspense</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>03</b>Uncertainty</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>04</b>Slow escalation</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>05</b>Ordinary vs disturbing</li></ul>
+<div class="an" style="left:54%;top:27%;--rot:-5deg;--dl:2.2s"><span>look at the light</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s10" data-th="beige" data-who="Aanshi" data-t="3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Psychological &amp; social themes</span><span>No. 10</span></div>
+<div class="ph " style="--ar:1.499;right:0;top:12vmin;width:40vw;"><img class="k" src="stills/riso-friends-k.png" alt=""><img class="r" src="stills/riso-friends-r.png" alt=""></div>
+<div class="A fz ttl" data-t="" style="font-size:clamp(40px,9.4vmin,130px);margin-bottom:2vmin;position:relative;z-index:5">What it’s <span class="S">really</span> about</div>
+<div style="position:relative;z-index:5;max-width:50%">
+<div class="row st"><span class="A">Desire</span><p class="S r" style="font-size:clamp(16px,3.2vmin,40px)">How badly do we want it?</p></div>
+<div class="row st"><span class="A">Control</span><p class="S r" style="font-size:clamp(16px,3.2vmin,40px)">Can feelings be controlled?</p></div>
+<div class="row st"><span class="A">Boundaries</span><p class="S r" style="font-size:clamp(16px,3.2vmin,40px)">When do we accept “no”?</p></div>
+<div class="row st"><span class="A">Consequences</span><p class="S r" style="font-size:clamp(16px,3.2vmin,40px)">Acting without thinking</p></div>
+<div class="row st"><span class="A r">Reality vs fantasy</span><p class="S r" style="font-size:clamp(16px,3.2vmin,40px)">What we imagine ≠ what is</p></div></div></section><section class="slide inkbg" id="s11" data-th="inkbg" data-who="Aanshi" data-t="2 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / What it teaches</span><span>No. 11</span></div>
+<div class="A fz ttl" data-t="" style="font-size:clamp(46px,11vmin,150px);margin-bottom:2vmin">Lessons</div>
+<ul class="ls" style="max-width:70%"><li class="st" style="font-size:clamp(26px,6vmin,80px)"><b>01</b>Feelings can’t be forced</li><li class="st" style="font-size:clamp(26px,6vmin,80px)"><b>02</b>Desire clouds judgment</li><li class="st" style="font-size:clamp(26px,6vmin,80px)"><b>03</b>Every choice has consequences</li><li class="st" style="font-size:clamp(26px,6vmin,80px)"><b>04</b>Love needs mutual choice</li><li class="st" style="font-size:clamp(26px,6vmin,80px)"><b>05</b>What we want ≠ what’s best</li></ul><div class="an" style="left:74%;top:14%;--rot:5deg;--dl:2.2s"><span>remember this</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide redbg" id="s12" data-th="redbg" data-who="Jal" data-t="2 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Summary · in one line</span><span>No. 12</span></div>
+<div class="big A fz ttl st" data-t="">A desire for <span class="S">love</span> becomes a lesson about consequences.</div>
+<div class="chain A st"><span>Desire</span><span>/</span><span>Control</span><span>/</span><span>Boundaries</span><span>/</span><span>Consequences</span></div><div class="mq"><span>Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + </span><span>Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + </span></div></section><section class="slide beige" id="s13" data-th="beige" data-who="Jal" data-t="1.5–2 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Conclusion · final takeaway</span><span>No. 13</span></div>
+<div class="ph " style="--ar:1.499;right:0;bottom:0;width:40vw;opacity:.9;"><img class="k" src="stills/riso-friends-k.png" alt=""><img class="r" src="stills/riso-friends-r.png" alt=""></div>
+<div class="big A fz ttl st" data-t="" style="max-width:52%;position:relative;z-index:5">“You cannot create genuine <span class="S">love</span> by forcing the outcome.”</div>
+<div class="trio A st"><span>Mutual feelings</span><span>Freedom</span><span>Respect</span></div></section><section class="slide beige" id="s14" data-th="beige" data-who="Jal" data-t="Q&amp;A"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Thank you</span><span>No. 14</span></div>
+<div class="ph bgph" style="--ar:1.497;right:0;top:12vmin;width:48vw;"><img class="k" src="stills/riso-house-k.png" alt=""><img class="r" src="stills/riso-house-r.png" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div>
+<div class="tt A fz ttl" data-t="">Thank<br>you</div><div class="qq A st">Any questions?</div>
+<div class="M st" style="margin-top:3vmin;font-size:clamp(12px,2.2vmin,22px);font-weight:700">“Be careful who you wish for…”</div><div class="an" style="left:35%;top:62%;--rot:-5deg;--dl:2.2s"><span>ask away</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section>
+<div id="chip"></div><div id="cnt"></div><div id="bar"></div>
+<div id="nav"><div id="pv"></div><div id="nx"></div></div>
+<script>
+const S=[...document.querySelectorAll('.slide')];let i=0;
+const chip=document.getElementById('chip'),cnt=document.getElementById('cnt'),bar=document.getElementById('bar');
+function sts(s){return[...s.querySelectorAll('.st')]}
+function show(n,end){
+  i=Math.max(0,Math.min(S.length-1,n));
+  S.forEach((s,k)=>s.classList.toggle('on',k===i));
+  const s=S[i];sts(s).forEach(e=>e.classList.toggle('show',!!end));
+  chip.innerHTML='<b>'+s.dataset.who+'</b> · '+s.dataset.t;
+  cnt.textContent=String(i+1).padStart(2,'0')+' / '+S.length;bar.style.width=((i+1)/S.length*100)+'%';
+  document.body.className=(location.search.includes('all')?'all ':'')+'th-'+s.dataset.th;document.body.className=(location.search.includes('all')?'all ':'')+'th-'+s.dataset.th;location.hash=i+1;spot(s);
+  if(!end)autoreveal(s);
+}
+let timer;
+function autoreveal(s){clearTimeout(timer);const a=sts(s).filter(e=>!e.classList.contains('show'));
+  if(!a.length)return;let k=0;
+  // first element appears on its own so the slide is never empty; rest reveal on Next
+  a[0].classList.add('show');}
+function next(){const s=S[i];const hid=sts(s).filter(e=>!e.classList.contains('show'));
+  if(hid.length){hid[0].classList.add('show');return}
+  if(i<S.length-1)show(i+1)}
+function prev(){if(i>0)show(i-1,true)}
+document.getElementById('nx').onclick=next;document.getElementById('pv').onclick=prev;
+addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();next()}
+ else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev()}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(S.length-1,true)});
+let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50){d<0?next():prev()}tx=null},{passive:true});
+function spot(s){const w=document.getElementById('wipe');w.classList.remove('go');if(!location.search.includes('all')){void w.offsetWidth;w.classList.add('go')}const t=s.querySelector('.ttl');const sp=document.getElementById('spot');sp.classList.remove('go');if(!t||location.search.includes('all'))return;
+ const r=t.getBoundingClientRect();sp.style.setProperty('--x',(r.left+Math.min(r.width,innerWidth*.6)/2)+'px');sp.style.setProperty('--y',(r.top+r.height/2)+'px');sp.style.setProperty('--r',Math.max(innerHeight*.2,Math.min(r.height,innerHeight*.5)*.75)+'px');void sp.offsetWidth;sp.classList.add('go')}
+// polls
+document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',e=>{e.stopPropagation();const n=o.querySelector('.n');n.textContent=+n.textContent+1;o.classList.add('hit');setTimeout(()=>o.classList.remove('hit'),500)})});
+if(location.search.includes('all'))document.body.classList.add('all');document.body.classList.add('th-'+S[0].dataset.th);document.body.classList.add('th-'+S[0].dataset.th);
+const h=parseInt(location.hash.slice(1));show(h>0?h-1:0,location.search.includes('all'));
+</script></body></html>

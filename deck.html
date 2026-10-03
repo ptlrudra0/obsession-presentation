@@ -21,7 +21,7 @@ html,body{height:100%;overflow:hidden;background:#000;font-family:'Outfit',Arial
 .redbg .fz{color:var(--paper);text-shadow:.045em .035em 0 rgba(14,10,7,.55)}
 .inkbg .fz{color:var(--paper);text-shadow:.045em .035em 0 var(--red)}
 /* riso speckle overlay: paper dots punching through ink */
-#speck{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.22}
+#speck{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.06}
 .hd{position:absolute;left:7vmin;right:7vmin;top:3.4vmin;display:flex;justify-content:space-between;font-size:clamp(11px,1.8vmin,17px);z-index:4;border-bottom:3px solid currentColor;padding-bottom:1.1vmin}
 .hd b{font-weight:700}
 #chip{position:fixed;left:7vmin;bottom:2.8vmin;z-index:60;font-family:'Space Mono',monospace;font-size:clamp(11px,1.9vmin,18px);letter-spacing:.14em;text-transform:uppercase;padding:.8vmin 1.5vmin;background:var(--ink);color:var(--paper)}
@@ -57,8 +57,8 @@ body.th-inkbg #bar,body.th-redbg #bar{background:var(--paper)}
 @keyframes anin{to{opacity:1}}@keyframes dr{to{stroke-dashoffset:0}}
 body.all *{animation:none!important;transition:none!important}
 body.all .an{opacity:1}body.all .an svg{stroke-dashoffset:0}body.all #spot{display:none}
-.grainp{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:multiply;opacity:.4}
-.inkbg .grainp{mix-blend-mode:screen;opacity:.12}
+.grainp{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:multiply;opacity:.2}
+.inkbg .grainp{mix-blend-mode:screen;opacity:0}
 /* generic */
 .rule{height:4px;background:currentColor}
 .row{display:flex;justify-content:space-between;align-items:baseline;border-top:4px solid var(--ink);padding:1.5vmin 0}
@@ -135,7 +135,7 @@ body.all .an{opacity:1}body.all .an svg{stroke-dashoffset:0}body.all #spot{displ
 <svg width="0" height="0" style="position:absolute"><defs>
 <filter id="rough" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="2" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="4"/></filter>
 <filter id="spk" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="11"/><feColorMatrix values="0 0 0 0 .96 0 0 0 0 .89 0 0 0 0 .79 0 0 0 22 -14.2"/></filter>
-<filter id="gr" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .9 0"/></filter>
+<filter id="gr" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .9 0"/></filter>
 </defs></svg>
 <div id="speck"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#spk)"/></svg></div>
 <div id="spot"></div>
@@ -168,8 +168,8 @@ body.all .an{opacity:1}body.all .an svg{stroke-dashoffset:0}body.all #spot{displ
 <div class="M" style="font-size:clamp(11px,1.9vmin,18px);margin-bottom:1.4vmin;font-weight:700">The One Wish Willow</div>
 <div class="tri ttl"><div class="A fz st" data-t=""><small>01</small>Desire</div><div class="A fz st" data-t=""><small>02</small>Choice</div><div class="A fz st" data-t=""><small>03</small>Consequence</div></div>
 <div class="tags M" style="max-width:80%"><span class="st">Looks ordinary</span><span class="st">Really grants it</span><span class="st">Quick fix = danger</span><span class="st">Changes the story</span></div><div class="an" style="left:60%;top:16%;--rot:-5deg;--dl:2.2s"><span>careful…</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s9" data-th="beige" data-who="Hetarth" data-t="2.5–3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Horror &amp; cinematography</span><span>No. 09</span></div>
-<div class="ph " style="--ar:1.497;right:0;top:9vmin;width:60vw;"><img class="k" src="stills/riso-house-k.png" alt=""><img class="r" src="stills/riso-house-r.png" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div><div class="ph " style="--ar:1.777;right:1vmin;bottom:3vmin;width:30vw;"><img class="k" src="stills/riso-phone-k.png" alt=""><img class="r" src="stills/riso-phone-r.png" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div>
-<div class="A fz ttl" data-t="" style="font-size:clamp(40px,9.4vmin,130px);margin-bottom:3vmin;position:relative;z-index:5;max-width:55%">How does it create <span class="S">fear?</span></div>
+<div class="ph " style="--ar:1.497;right:0;top:9vmin;width:50vw;"><img class="k" src="stills/riso-house-k.png" alt=""><img class="r" src="stills/riso-house-r.png" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div><div class="ph " style="--ar:1.777;right:1vmin;bottom:3vmin;width:30vw;"><img class="k" src="stills/riso-phone-k.png" alt=""><img class="r" src="stills/riso-phone-r.png" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div>
+<div class="A fz ttl" data-t="" style="font-size:clamp(40px,9.4vmin,130px);margin-bottom:3vmin;position:relative;z-index:5;max-width:48%">How does it create <span class="S">fear?</span></div>
 <ul class="kw" style="position:relative;z-index:5;max-width:50%;background:var(--paper)"><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>01</b>Darkness &amp; shadows</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>02</b>Silence &amp; suspense</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>03</b>Uncertainty</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>04</b>Slow escalation</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>05</b>Ordinary vs disturbing</li></ul>
 <div class="an" style="left:54%;top:27%;--rot:-5deg;--dl:2.2s"><span>look at the light</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s10" data-th="beige" data-who="Aanshi" data-t="3 min"><div class="grainp"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#gr)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Psychological &amp; social themes</span><span>No. 10</span></div>
 <div class="ph " style="--ar:1.499;right:0;top:12vmin;width:40vw;"><img class="k" src="stills/riso-friends-k.png" alt=""><img class="r" src="stills/riso-friends-r.png" alt=""></div>

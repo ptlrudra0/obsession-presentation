@@ -2,249 +2,173 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OBSESSION — English Group Presentation</title>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#ED1C24;--red2:#B31217;--ink:#F2E8DA;--dim:#8d8478;--bg:#000}
+:root{--paper:#F4E2CA;--paper2:#EAD3B3;--red:#B42719;--redhi:#C9301F;--ink:#16110D;--mute:#6a5846}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:#000;color:var(--ink);font-family:'Outfit',sans-serif}
-.slide{position:fixed;inset:0;display:none;flex-direction:column;justify-content:center;padding:9vmin 8vmin 11vmin;background:#000;overflow:hidden}
-.slide.on{display:flex;animation:in .7s ease-out}
+html,body{height:100%;overflow:hidden;background:#000;font-family:'Outfit',sans-serif;color:var(--ink)}
+.slide{position:fixed;inset:0;display:none;overflow:hidden;padding:11vmin 7vmin 11vmin;flex-direction:column;justify-content:center}
+.slide.on{display:flex;animation:in .6s ease-out}
 @keyframes in{from{opacity:0}to{opacity:1}}
-.A{font-family:'Anton','Arial Narrow',Impact,sans-serif;text-transform:uppercase;font-weight:400;letter-spacing:.02em}
-.red{color:var(--red)}
-.tag{font-size:clamp(10px,1.5vmin,15px);letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:2.4vmin}
-.tag b{color:var(--red);font-weight:500;margin-right:1em}
-h1,h2{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;line-height:1}
-h2{font-size:clamp(34px,9.0vmin,110.4px);margin-bottom:4vmin}
-/* steps */
-.st{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
-.st.show{opacity:1;transform:none}
+.slide.beige{background:var(--paper);color:var(--ink)}
+.slide.black{background:#0A0806;color:var(--paper)}
+.slide.redbg{background:var(--red);color:var(--paper)}
+.slide>*{position:relative;z-index:2}
+.A{font-family:'Anton','Arial Narrow',Impact,sans-serif;text-transform:uppercase;font-weight:400;line-height:.92;letter-spacing:.01em}
+.S{font-family:'DM Serif Display',serif;font-style:italic;text-transform:none;font-weight:400}
+.M{font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.14em}
+.r{color:var(--red)}.black .r{color:var(--paper)}
+.black .rb{color:#D2412F}
+/* paper grain */
+.grain{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5;mix-blend-mode:multiply}
+.black .grain{mix-blend-mode:screen;opacity:.16}
+.redbg .grain{mix-blend-mode:multiply;opacity:.4}
 /* furniture */
-#grain{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.09;mix-blend-mode:screen}
-#scan{position:fixed;inset:0;z-index:49;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.025) 3px 4px)}
-#vig{position:fixed;inset:0;z-index:48;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.7) 100%)}
-#chip{position:fixed;left:3vmin;bottom:2.6vmin;z-index:60;font-size:clamp(10px,1.4vmin,14px);letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
-#chip b{color:var(--ink);font-weight:500}
-#cnt{position:fixed;right:3vmin;bottom:2.6vmin;z-index:60;font-size:clamp(10px,1.4vmin,14px);letter-spacing:.2em;color:var(--dim)}
-#bar{position:fixed;left:0;bottom:0;height:2px;background:var(--red);z-index:61;transition:width .5s;box-shadow:0 0 8px var(--red)}
-#nav{position:fixed;inset:0;z-index:55;display:flex}
-#nav div{flex:1}#nav div:first-child{flex:.28}
-/* bg stills */
-.bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 2.4s ease 1s;filter:sepia(.3) contrast(1.05) brightness(.7)}
-.on .bg{opacity:.75}
-.shade{position:absolute;inset:0;background:linear-gradient(90deg,#000 15%,rgba(0,0,0,.55) 60%,rgba(0,0,0,.2))}
-.slide>*:not(.bg):not(.shade):not(.sw){position:relative;z-index:2}
-body.all *{animation:none!important;transition:none!important}
-.flick{animation:fl 7s infinite}
-@keyframes fl{0%,91%,94%,97%,100%{opacity:1}92%{opacity:.35}95%{opacity:.6}98%{opacity:.4}}
-/* title */
-.big{font-size:clamp(60px,26.8vmin,360px);color:var(--red);line-height:.9;text-shadow:0 0 30px rgba(237,28,36,.35);text-align:center}
-.sub{text-align:center;font-size:clamp(14px,3.7vmin,38.4px);letter-spacing:.08em;margin-top:3vmin;font-weight:300}
-.names{text-align:center;margin-top:5vmin;font-size:clamp(10px,1.7vmin,16px);letter-spacing:.3em;color:var(--dim);text-transform:uppercase;line-height:2}
-/* chips grid */
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:3vmin 4vmin;max-width:1100px}
-.kv small{display:block;font-size:clamp(10px,1.5vmin,14px);letter-spacing:.3em;color:var(--red);text-transform:uppercase;margin-bottom:.8vmin}
-.kv span{font-family:'Anton';font-size:clamp(22px,5.9vmin,67.2px);text-transform:uppercase;letter-spacing:.02em}
-.chain{display:flex;flex-wrap:wrap;align-items:center;gap:1.5vmin 2.4vmin;margin-top:5vmin}
-.chain .A{font-size:clamp(26px,7.6vmin,96px)}
-.chain i{font-style:normal;color:var(--red);font-size:clamp(20px,4.9vmin,60px)}
-/* poll */
-.q{font-size:clamp(34px,10.0vmin,132px);line-height:1.02;margin-bottom:5vmin;max-width:1300px}
-.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:2vmin;max-width:1300px}
-.opt{border:1px solid #3a342d;padding:3vmin 3vmin;display:flex;align-items:center;gap:2.4vmin;cursor:pointer;position:relative;z-index:70;background:rgba(10,8,6,.7);transition:.25s;user-select:none}
-.opt:hover{border-color:var(--red)}
-.opt .l{font-family:'Anton';color:var(--red);font-size:clamp(26px,6.1vmin,72px)}
-.opt .t{font-family:'Anton';text-transform:uppercase;font-size:clamp(20px,5.1vmin,60px);flex:1}
-.opt .n{font-family:'Anton';font-size:clamp(22px,5.4vmin,62.4px);color:var(--ink);min-width:1.2em;text-align:right}
-.opt.hit{border-color:var(--red);box-shadow:0 0 24px rgba(237,28,36,.35)}
-.hint{margin-top:3vmin;font-size:clamp(10px,1.5vmin,14px);letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
-/* plot */
-.plot{display:flex;flex-wrap:wrap;gap:1.5vmin 2.6vmin;align-items:baseline}
-.plot span{font-family:'Anton';text-transform:uppercase;font-size:clamp(34px,11.5vmin,156px)}
-.plot i{font-style:normal;color:var(--red);font-size:clamp(24px,7.3vmin,96px)}
-.beats{display:flex;flex-wrap:wrap;gap:1.4vmin;margin-top:6vmin}
-.beats span{border:1px solid #3a342d;padding:1.4vmin 2.2vmin;font-size:clamp(12px,2.8vmin,31.2px);letter-spacing:.14em;text-transform:uppercase;background:rgba(10,8,6,.7)}
-/* cards */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:2.4vmin;margin-top:1vmin}
-.card{position:relative;border:1px solid #2c2721;background:#0a0807;overflow:hidden;min-height:34vmin}
-.card .im{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.45;filter:sepia(.3) brightness(.7)}
-.card .tx{position:relative;padding:3vmin;height:100%;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(0deg,#000 20%,transparent)}
-.card .nm{font-family:'Anton';text-transform:uppercase;font-size:clamp(28px,7.3vmin,86.4px);color:var(--red);line-height:1}
-.card .ac{font-size:clamp(9px,1.4vmin,13px);letter-spacing:.24em;color:var(--dim);margin:.8vmin 0 1.6vmin;text-transform:uppercase}
-.card li{list-style:none;font-size:clamp(14px,3.0vmin,33.6px);padding:.5vmin 0}
-.card li:before{content:"— ";color:var(--red)}
-/* versus */
-.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:3vmin;align-items:stretch}
-.col h3{font-family:'Anton';font-size:clamp(34px,9.8vmin,120px);text-transform:uppercase;margin-bottom:2.4vmin;line-height:1}
-.col li{list-style:none;font-family:'Anton';text-transform:uppercase;font-size:clamp(18px,4.6vmin,55.2px);padding:1.2vmin 0;border-top:1px solid #2c2721;letter-spacing:.03em}
-.col.o h3,.col.o li{color:var(--red)}
-.col.o li{border-top-color:#4a1013}
-.vs .v{align-self:center;font-size:clamp(14px,3.2vmin,36px);color:var(--dim);letter-spacing:.3em}
-/* spectrum */
-.spec{margin-top:5vmin;max-width:1300px}
-.spec .bar{height:6px;background:linear-gradient(90deg,var(--ink),var(--red));position:relative}
-.spec .lbl{display:flex;justify-content:space-between;font-family:'Anton';font-size:clamp(18px,4.4vmin,50.4px);margin-top:1.6vmin}
-/* tag swing */
-.sw{position:absolute;right:12vmin;top:0;z-index:2;transform-origin:50% 0;animation:sw 5s ease-in-out infinite}
+.hd{position:absolute;left:7vmin;right:7vmin;top:3.4vmin;display:flex;justify-content:space-between;align-items:center;font-size:clamp(10px,1.7vmin,16px);z-index:3;border-bottom:1.5px solid currentColor;padding-bottom:1.2vmin}
+.hd b{font-weight:700}
+.ghost{position:absolute;right:3vmin;bottom:-6vmin;font-family:Anton;font-size:60vmin;line-height:1;color:transparent;-webkit-text-stroke:2px currentColor;opacity:.09;z-index:1;pointer-events:none}
+#chip{position:fixed;left:7vmin;bottom:2.8vmin;z-index:60;font-family:'Space Mono',monospace;font-size:clamp(10px,1.8vmin,17px);letter-spacing:.14em;text-transform:uppercase;padding:.7vmin 1.4vmin;background:var(--ink);color:var(--paper)}
+#chip b{color:#fff}
+#cnt{position:fixed;right:7vmin;bottom:3.2vmin;z-index:60;font-family:'Space Mono',monospace;font-size:clamp(10px,1.8vmin,17px);letter-spacing:.14em}
+#bar{position:fixed;left:0;bottom:0;height:5px;background:var(--red);z-index:61;transition:width .5s}
+body.th-black #chip{background:var(--paper);color:var(--ink)}body.th-black #chip b{color:var(--red)}
+body.th-black #cnt{color:var(--paper)}body.th-beige #cnt{color:var(--ink)}body.th-redbg #cnt{color:var(--paper)}
+body.th-redbg #chip{background:var(--ink)}body.th-redbg #bar,body.th-black #bar{background:var(--paper)}
+#nav{position:fixed;inset:0;z-index:55;display:flex}#nav div{flex:1}#nav div:first-child{flex:.28}
+/* steps */
+.st{opacity:0;transform:translateY(16px);transition:opacity .55s,transform .55s}
+.st.show{opacity:1;transform:none}
+/* helpers */
+.rule{height:3px;background:currentColor;margin:2.4vmin 0}
+.stamp{display:inline-block;border:2px solid currentColor;padding:.8vmin 1.6vmin;font-size:clamp(11px,1.8vmin,17px)}
+.fr{position:relative;background-size:cover;background-position:center;border:.9vmin solid var(--ink);box-shadow:1.3vmin 1.3vmin 0 var(--red);filter:grayscale(.85) contrast(1.12) sepia(.25)}
+.black .fr{border-color:var(--paper);box-shadow:1.3vmin 1.3vmin 0 var(--red)}
+/* S1 */
+#s1 .tt{font-size:clamp(70px,27vmin,420px);color:var(--red);white-space:nowrap;margin-left:-.6vmin;letter-spacing:-.005em}
+#s1 .ln{display:flex;justify-content:space-between;font-size:clamp(11px,1.9vmin,18px);margin:0 0 2vmin}
+#s1 .qt{font-size:clamp(26px,6vmin,76px);margin-top:3vmin;max-width:70%}
+#s1 .tm{position:absolute;left:7vmin;right:7vmin;bottom:9vmin;display:flex;justify-content:space-between;font-size:clamp(11px,1.9vmin,18px);border-top:3px solid var(--ink);padding-top:1.4vmin}
+.willow{position:absolute;right:8vmin;top:34vmin;width:30vmin;z-index:2}
+/* S2 */
+#s2{padding:0}
+#s2 .l{position:absolute;left:0;top:0;bottom:0;width:44%}
+#s2 .l .im{position:absolute;inset:0;background:url(stills/friends.jpg) center/cover;filter:grayscale(.9) contrast(1.1) sepia(.3) brightness(.85)}
+#s2 .l:after{content:"";position:absolute;inset:0;background:var(--red);mix-blend-mode:multiply;opacity:.35}
+#s2 .rt{position:absolute;left:44%;right:0;top:0;bottom:0;padding:11vmin 6vmin 12vmin 6vmin;display:flex;flex-direction:column;justify-content:center;background:var(--paper)}
+#s2 h2{font-size:clamp(46px,11vmin,150px);margin-bottom:2vmin}
+.row{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);padding:1.6vmin 0}
+.row small{font-size:clamp(10px,1.8vmin,17px);color:var(--red)}
+.row span{font-family:Anton;text-transform:uppercase;font-size:clamp(24px,5.4vmin,72px)}
+.band{background:var(--red);color:var(--paper);padding:2vmin 2.4vmin;margin-top:3vmin;font-size:clamp(24px,5vmin,64px);display:flex;gap:2vmin;flex-wrap:wrap;align-items:baseline}
+/* S3 / S7 polls */
+.q{font-size:clamp(40px,10.4vmin,150px);max-width:1500px}
+.q .S{font-size:.92em}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(540px,100%),1fr));gap:2vmin;margin-top:5vmin;max-width:1500px}
+.opt{display:flex;align-items:center;gap:2vmin;background:var(--paper);color:var(--ink);padding:2.6vmin 3vmin;cursor:pointer;position:relative;z-index:70;user-select:none;border:3px solid var(--ink);transition:transform .15s}
+.opt:active{transform:scale(.97)}
+.opt .l{font-family:Anton;font-size:clamp(30px,6vmin,76px);color:var(--red)}
+.opt{min-width:0}.opt .t{min-width:0;font-family:Anton;text-transform:uppercase;font-size:clamp(22px,4.6vmin,58px);flex:1;line-height:1}
+.opt .n{font-family:Anton;font-size:clamp(28px,5.6vmin,70px);min-width:1.2em;text-align:right}
+.opt.hit{background:var(--ink);color:var(--paper)}
+.beige .opt{background:transparent}.beige .opt.hit{background:var(--red);border-color:var(--red);color:var(--paper)}.beige .opt.hit .l{color:var(--paper)}
+.hint{margin-top:3vmin;font-size:clamp(10px,1.8vmin,17px)}
+.spec .bar{height:1.4vmin;background:linear-gradient(90deg,var(--ink),var(--red));margin-top:5vmin}
+.spec .lb{display:flex;justify-content:space-between;font-family:Anton;text-transform:uppercase;font-size:clamp(24px,4.6vmin,58px);margin-top:1.4vmin}
+/* S4 */
+.stairs{display:flex;flex-direction:column;gap:0}
+.stairs .A{font-size:clamp(48px,14vmin,200px);display:block}
+.stairs .A:nth-child(2){margin-left:7vw}.stairs .A:nth-child(3){margin-left:14vw}.stairs .A:nth-child(4){margin-left:21vw}
+.stairs .A i{font-style:normal;color:var(--red);font-size:.5em;vertical-align:middle;margin-right:.3em}
+#s4 .fr{position:absolute;right:7vmin;top:15vmin;width:19vw;aspect-ratio:4/5;background-image:url(stills/phone.jpg);background-position:50% 40%}
+.tags{display:flex;flex-wrap:wrap;gap:1.2vmin;margin-top:3.5vmin;max-width:70%}
+.tags span{border:2px solid var(--ink);padding:1vmin 1.8vmin;font-size:clamp(11px,2.1vmin,22px)}
+/* S5 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:3vmin}
+.cd .fr{aspect-ratio:4/3;margin-bottom:2.4vmin}
+.cd .nm{font-family:Anton;text-transform:uppercase;color:var(--paper);font-size:clamp(34px,7.4vmin,96px);line-height:1}
+.cd .ac{font-size:clamp(10px,1.7vmin,16px);color:#D2412F;margin:.8vmin 0 1.2vmin}
+.cd li{list-style:none;font-size:clamp(16px,3vmin,34px);padding:.5vmin 0;border-top:1px solid #4a3d33}
+/* S6 */
+#s6{padding:0;flex-direction:row}
+#s6 .h{flex:1;padding:12vmin 6vmin 12vmin;display:flex;flex-direction:column;justify-content:center}
+#s6 .h1{padding-right:9vmin;background:var(--paper);color:var(--ink)}#s6 .h2{padding-left:9vmin;background:var(--red);color:var(--paper)}
+#s6 h3{font-family:Anton;text-transform:uppercase;font-size:clamp(44px,12vmin,170px);line-height:.9;margin-bottom:3vmin}
+#s6 li{list-style:none;font-family:Anton;text-transform:uppercase;font-size:clamp(22px,4.8vmin,64px);padding:1.4vmin 0;border-top:3px solid currentColor}
+#s6 .vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--ink);color:var(--paper);width:11vmin;height:11vmin;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Anton;font-size:clamp(22px,4.4vmin,50px);z-index:5}
+/* S8 */
+.sw{position:absolute;right:9vmin;top:0;z-index:2;transform-origin:50% 0;animation:sw 5s ease-in-out infinite}
 @keyframes sw{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
-.sw .rope{width:2px;height:20vmin;background:var(--red2);margin:0 auto}
-.sw .tg{border:2px solid var(--red);padding:2vmin 2.4vmin;font-family:'Anton';color:var(--red);font-size:clamp(18px,4.1vmin,48px);text-align:center;line-height:1.1;background:#0a0000;box-shadow:0 0 30px rgba(237,28,36,.35)}
-/* horror */
-.hz{display:grid;grid-template-columns:1.1fr 1fr;gap:5vmin;align-items:center}
-.pics{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:1.6vmin}
-.pics div{background-size:cover;background-position:center;aspect-ratio:16/9;filter:sepia(.3) brightness(.75);border:1px solid #2c2721}
-.pics div:first-child{grid-column:1/3;aspect-ratio:16/8}
-.kws li{list-style:none;font-family:'Anton';text-transform:uppercase;font-size:clamp(20px,5.6vmin,67.2px);padding:1.3vmin 0;border-bottom:1px solid #2c2721}
-.kws li b{color:var(--red);font-weight:400;margin-right:.6em;font-size:.6em;letter-spacing:.1em}
-/* themes */
-.th{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:2vmin}
-.th div{border-top:2px solid var(--red);padding-top:2vmin}
-.th .A{font-size:clamp(24px,5.6vmin,67.2px)}
-.th p{margin-top:1.2vmin;font-size:clamp(13px,2.8vmin,31.2px);color:var(--dim);font-weight:300}
-/* lessons */
-.ls li{list-style:none;font-family:'Anton';text-transform:uppercase;font-size:clamp(22px,6.6vmin,79.2px);padding:1.5vmin 0;border-bottom:1px solid #221e19;display:flex;gap:2.4vmin;align-items:baseline}
-.ls li b{font-family:'Outfit';color:var(--red);font-size:.4em;letter-spacing:.2em;font-weight:500}
-.quote{font-family:'Anton';text-transform:uppercase;font-size:clamp(30px,8.8vmin,117.6px);line-height:1.06;max-width:1400px}
-.trio{display:flex;flex-wrap:wrap;gap:3vmin 6vmin;margin-top:6vmin}
-.trio .A{font-size:clamp(20px,5.6vmin,67.2px);color:var(--red)}
-@media (max-aspect-ratio:1/1){.big{font-size:17vw!important}.vs{grid-template-columns:1fr}.vs .v{justify-self:center}.hz{grid-template-columns:1fr}.slide{padding:7vmin 6vmin 12vmin;justify-content:flex-start;padding-top:12vmin;overflow-y:auto}}
+.sw .rope{width:3px;height:22vmin;background:var(--red);margin:0 auto}
+.sw .tg{background:var(--paper);color:var(--ink);padding:2.2vmin 2.8vmin;font-family:Anton;font-size:clamp(20px,3.8vmin,48px);text-align:center;line-height:1;border:3px solid var(--red);box-shadow:0 0 40px rgba(180,39,25,.5)}
+.tri .A{display:flex;align-items:baseline;gap:2.4vmin;font-size:clamp(46px,13vmin,180px);border-top:3px solid var(--paper);padding:1vmin 0}
+.tri .A small{font-family:'Space Mono';font-size:clamp(11px,2vmin,20px);color:#D2412F;letter-spacing:.14em}
+.tri .A:last-child{color:#D2412F}
+/* S9 */
+.hz{display:grid;grid-template-columns:1.15fr 1fr;gap:5vmin;align-items:center}
+.film{background:var(--ink);padding:2vmin 2.6vmin;display:flex;flex-direction:column;gap:1.2vmin;position:relative}
+.film:before,.film:after{content:"";position:absolute;top:0;bottom:0;width:1.1vmin;background:repeating-linear-gradient(180deg,var(--paper) 0 1.4vmin,transparent 1.4vmin 3vmin)}
+.film:before{left:.5vmin}.film:after{right:.5vmin}
+.film div{aspect-ratio:16/4.9;background-size:cover;background-position:center;filter:sepia(.5) contrast(1.1) brightness(.95)}
+.kw li{list-style:none;font-family:Anton;text-transform:uppercase;font-size:clamp(24px,5.2vmin,68px);padding:1.3vmin 0;border-top:3px solid var(--ink);display:flex;gap:1.6vmin;align-items:baseline}
+.kw li b{font-family:'Space Mono';font-size:.3em;color:var(--red);font-weight:700}
+/* S10 */
+.tb .row{padding:1.5vmin 0;border-top:3px solid var(--ink)}
+.tb .row .A{font-size:clamp(30px,7vmin,92px)}
+.tb .row p{font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(16px,3.2vmin,40px);color:var(--red);text-align:right}
+/* S11 */
+.ls li{list-style:none;display:flex;gap:3vmin;align-items:baseline;border-top:2px solid #4a3d33;padding:1.5vmin 0;font-family:Anton;text-transform:uppercase;font-size:clamp(26px,6vmin,80px)}
+.ls li b{font-family:'Space Mono';color:#D2412F;font-size:.3em;font-weight:700;min-width:2.4em}
+/* S12/13 */
+.big{font-size:clamp(40px,10.6vmin,150px);max-width:1600px}
+.chain{display:flex;flex-wrap:wrap;gap:1.4vmin 2.4vmin;margin-top:5vmin;font-size:clamp(20px,4.2vmin,56px);align-items:baseline}
+.chain i{font-style:normal;color:var(--red)}
+.trio{display:flex;flex-wrap:wrap;gap:2vmin;margin-top:6vmin}
+.trio span{border:3px solid var(--paper);padding:1.4vmin 2.6vmin;font-size:clamp(22px,4.6vmin,60px)}
+/* S14 */
+#s14 .bgi{position:absolute;inset:0;background:url(stills/house.jpg) center/cover;filter:sepia(.4) brightness(.65);opacity:0;transition:opacity 2.4s ease 1s;z-index:0}
+#s14.on .bgi{opacity:1}
+#s14 .tt{font-size:clamp(60px,21vmin,320px);color:var(--paper);text-align:left}
+#s14 .qq{display:inline-block;background:var(--red);color:var(--paper);padding:1.4vmin 2.4vmin;font-size:clamp(28px,6.4vmin,84px);margin-top:3vmin;align-self:flex-start}
+.fl{animation:fl 7s infinite}@keyframes fl{0%,91%,94%,97%,100%{opacity:1}92%{opacity:.4}95%{opacity:.65}98%{opacity:.45}}
+body.all *{animation:none!important;transition:none!important}
+@media (max-aspect-ratio:1/1){
+ .slide{padding:12vmin 6vmin 13vmin;justify-content:flex-start;overflow-y:auto}
+ #s1 .tt{font-size:20vw}.willow{display:none}.cards{grid-template-columns:1fr;gap:2vmin}.cd{display:grid;grid-template-columns:36% 1fr;column-gap:3vmin;align-items:start}.cd .fr{grid-row:1/span 3;aspect-ratio:1;margin:0}.cd ul{grid-column:2}
+ #s2 .l{position:relative;width:auto;height:30vh;flex:none;margin:-12vmin -6vmin 3vmin}#s2{padding:0 0 13vmin;justify-content:flex-start}#s2 .rt{position:relative;left:0;padding:2vmin 6vmin;background:transparent}
+ #s6{flex-direction:column}#s6 .h{padding:10vmin 6vmin 4vmin}#s6 .vs{display:none}
+ .hz{grid-template-columns:1fr}#s4 .fr{display:none}.tags{max-width:100%}.stairs .A:nth-child(n){margin-left:0}
+ .ghost{display:none}.sw{display:none}
+}
 </style></head><body>
-<svg width="0" height="0" style="position:absolute"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2"/></filter></svg>
-<div id="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div id="scan"></div><div id="vig"></div>
-
-<!-- 1 -->
-<section class="slide" data-who="Jal" data-t="0:30" style="justify-content:center">
-  <div class="tag" style="text-align:center">English group presentation · 2026 horror film</div>
-  <div class="big A flick">Obsession</div>
-  <div class="sub st">“Be careful who you wish for…”</div>
-  <div class="names st">Curry Barker · 2026 &nbsp;|&nbsp; Jal · Rudra · Payal · Swet · Hetarth · Aanshi</div>
-</section>
-<!-- 2 -->
-<section class="slide" data-who="Jal" data-t="1:00">
-  <div class="bg" style="background-image:url(stills/friends.jpg)"></div><div class="shade"></div>
-  <div class="tag"><b>02</b>Quick intro</div>
-  <h2>The <span class="red">film</span></h2>
-  <div class="grid2">
-    <div class="kv st"><small>Genre</small><span>Horror</span></div>
-    <div class="kv st"><small>Director &amp; writer</small><span>Curry Barker</span></div>
-    <div class="kv st"><small>Release</small><span>May 15, 2026</span></div>
-    <div class="kv st"><small>Main characters</small><span>Bear &amp; Nikki</span></div>
-  </div>
-  <div class="chain st"><span class="A">Love</span><i>→</i><span class="A">Desire</span><i>→</i><span class="A red">Obsession</span></div>
-</section>
-<!-- 3 -->
-<section class="slide" data-who="Jal" data-t="1–1.5 min" data-poll="1">
-  <div class="tag"><b>03</b>Question 1 · audience</div>
-  <div class="q A">If you could make <span class="red">one wish</span> come true…<br>what would you choose?</div>
-  <div class="opts">
-    <div class="opt"><span class="l">A</span><span class="t">Love</span><span class="n">0</span></div>
-    <div class="opt"><span class="l">B</span><span class="t">Success</span><span class="n">0</span></div>
-    <div class="opt"><span class="l">C</span><span class="t">Money</span><span class="n">0</span></div>
-    <div class="opt"><span class="l">D</span><span class="t">Something else</span><span class="n">0</span></div>
-  </div>
-  <div class="hint">Take 2–3 answers · tap an option to tally</div>
-</section>
-<!-- 4 -->
-<section class="slide" data-who="Rudra" data-t="3 min">
-  <div class="bg" style="background-image:url(stills/phone.jpg)"></div><div class="shade"></div>
-  <div class="tag"><b>04</b>Story &amp; plot</div>
-  <div class="plot A"><span class="st">Bear</span><i class="st">→</i><span class="st red">Wish</span><i class="st">→</i><span class="st">Nikki</span><i class="st">→</i><span class="st red">Consequences</span></div>
-  <div class="beats">
-    <span class="st">Feelings for Nikki</span><span class="st">Can’t say it</span><span class="st">One Wish Willow</span><span class="st">The wish</span><span class="st">After the wish</span><span class="st">Everything shifts</span>
-  </div>
-</section>
-<!-- 5 -->
-<section class="slide" data-who="Payal" data-t="3 min">
-  <div class="tag"><b>05</b>Main characters</div>
-  <div class="cards">
-    <div class="card st"><div class="im" style="background-image:url(stills/phone.jpg)"></div><div class="tx"><div class="nm">Bear</div><div class="ac">Michael Johnston</div><ul><li>Protagonist</li><li>Loves Nikki</li><li>Makes the wish</li><li>Faces the fallout</li></ul></div></div>
-    <div class="card st"><div class="im" style="background-image:url(stills/bed.jpg)"></div><div class="tx"><div class="nm">Nikki</div><div class="ac">Inde Navarrette</div><ul><li>Bear’s crush</li><li>Center of the wish</li><li>Drives the story</li></ul></div></div>
-    <div class="card st"><div class="im" style="background-image:url(stills/friends.jpg)"></div><div class="tx"><div class="nm">Ian &amp; Sarah</div><div class="ac">Cooper Tomlinson · Megan Lawless</div><ul><li>Close friends</li><li>Pulled in</li><li>Feel the fallout</li></ul></div></div>
-  </div>
-</section>
-<!-- 6 -->
-<section class="slide" data-who="Swet" data-t="3 min">
-  <div class="tag"><b>06</b>The title</div>
-  <h2><span>Love</span> <span style="color:var(--dim)">vs</span> <span class="red">Obsession</span></h2>
-  <div class="vs">
-    <div class="col"><h3>Love</h3><ul><li class="st">Mutual</li><li class="st">Respects boundaries</li><li class="st">Allows freedom</li><li class="st">Accepts “no”</li></ul></div>
-    <div class="v">VS</div>
-    <div class="col o"><h3>Obsession</h3><ul><li class="st">One-sided</li><li class="st">Ignores boundaries</li><li class="st">Controlling</li><li class="st">Needs one outcome</li></ul></div>
-  </div>
-</section>
-<!-- 7 -->
-<section class="slide" data-who="Swet" data-t="1.5 min" data-poll="1">
-  <div class="tag"><b>07</b>Question 2 · audience</div>
-  <div class="q A">Can <span class="red">love</span> become <span class="red">obsession?</span></div>
-  <div class="opts">
-    <div class="opt"><span class="l">1</span><span class="t">Clear difference</span><span class="n">0</span></div>
-    <div class="opt"><span class="l">2</span><span class="t">One turns into the other</span><span class="n">0</span></div>
-  </div>
-  <div class="spec"><div class="bar"></div><div class="lbl"><span>Love</span><span class="red">Obsession</span></div></div>
-  <div class="hint">Take 2–3 answers · tap an option to tally</div>
-</section>
-<!-- 8 -->
-<section class="slide" data-who="Hetarth" data-t="3 min">
-  <div class="sw"><div class="rope"></div><div class="tg">ONE<br>WISH<br>WILLOW</div></div>
-  <div class="tag"><b>08</b>Symbolism</div>
-  <h2>The One Wish <span class="red">Willow</span></h2>
-  <div class="chain" style="margin-top:0"><span class="A st">Desire</span><i class="st">→</i><span class="A st">Choice</span><i class="st">→</i><span class="A red st">Consequence</span></div>
-  <div class="beats">
-    <span class="st">Looks ordinary</span><span class="st">Really grants it</span><span class="st">Why Bear used it</span><span class="st">Quick fix = danger</span><span class="st">Changes the story</span>
-  </div>
-</section>
-<!-- 9 -->
-<section class="slide" data-who="Hetarth" data-t="2.5–3 min">
-  <div class="tag"><b>09</b>Horror &amp; cinematography</div>
-  <h2>How does it create <span class="red">fear?</span></h2>
-  <div class="hz">
-    <ul class="kws">
-      <li class="st"><b>01</b>Darkness &amp; shadows</li><li class="st"><b>02</b>Silence &amp; suspense</li><li class="st"><b>03</b>Uncertainty</li><li class="st"><b>04</b>Slow escalation</li><li class="st"><b>05</b>Ordinary vs disturbing</li>
-    </ul>
-    <div class="pics"><div class="st flick" style="background-image:url(stills/house.jpg)"></div><div class="st" style="background-image:url(stills/phone.jpg)"></div><div class="st" style="background-image:url(stills/bed.jpg)"></div></div>
-  </div>
-</section>
-<!-- 10 -->
-<section class="slide" data-who="Aanshi" data-t="3 min">
-  <div class="tag"><b>10</b>Psychological &amp; social themes</div>
-  <h2>What it’s <span class="red">really</span> about</h2>
-  <div class="th">
-    <div class="st"><span class="A">Desire</span><p>How badly do we want it?</p></div>
-    <div class="st"><span class="A">Control</span><p>Can feelings be controlled?</p></div>
-    <div class="st"><span class="A">Boundaries</span><p>When do we accept “no”?</p></div>
-    <div class="st"><span class="A">Consequences</span><p>Acting without thinking</p></div>
-    <div class="st"><span class="A red">Reality vs fantasy</span><p>What we imagine ≠ what is</p></div>
-  </div>
-</section>
-<!-- 11 -->
-<section class="slide" data-who="Aanshi" data-t="2 min">
-  <div class="tag"><b>11</b>What it teaches</div>
-  <h2>Lessons</h2>
-  <ul class="ls">
-    <li class="st"><b>01</b>Feelings can’t be forced</li><li class="st"><b>02</b>Desire clouds judgment</li><li class="st"><b>03</b>Every choice has consequences</li><li class="st"><b>04</b>Love needs mutual choice</li><li class="st"><b>05</b>What we want <span class="red">≠</span> what’s best</li>
-  </ul>
-</section>
-<!-- 12 -->
-<section class="slide" data-who="Jal" data-t="2 min">
-  <div class="bg" style="background-image:url(stills/bed.jpg)"></div><div class="shade"></div>
-  <div class="tag"><b>12</b>Summary · in one line</div>
-  <div class="quote st">A desire for <span class="red">love</span> becomes a lesson about <span class="red">consequences.</span></div>
-  <div class="chain st"><span class="A">Desire</span><i>·</i><span class="A">Control</span><i>·</i><span class="A">Boundaries</span><i>·</i><span class="A red">Consequences</span></div>
-</section>
-<!-- 13 -->
-<section class="slide" data-who="Jal" data-t="1.5–2 min">
-  <div class="tag"><b>13</b>Conclusion · final takeaway</div>
-  <div class="quote st">“You cannot create genuine love by <span class="red">forcing</span> the outcome.”</div>
-  <div class="trio st"><span class="A">Mutual feelings</span><span class="A">Freedom</span><span class="A">Respect</span></div>
-</section>
-<!-- 14 -->
-<section class="slide" data-who="Jal" data-t="Q&amp;A" style="justify-content:center">
-  <div class="bg" style="background-image:url(stills/house.jpg)"></div><div class="shade" style="background:rgba(0,0,0,.45)"></div>
-  <div class="big A flick" style="font-size:clamp(50px,20.7vmin,288px)">Thank you</div>
-  <div class="sub st">Any questions?</div>
-  <div class="names st">“Be careful who you wish for…”</div>
-</section>
-
+<svg width="0" height="0" style="position:absolute"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .9 0"/></filter></svg>
+<section class="slide beige" id="s1" data-th="beige" data-who="Jal" data-t="0:30"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / English group presentation</span><span>No. 01</span></div><svg class="willow" viewBox="0 0 300 200" fill="none" stroke="#B42719" stroke-width="6" stroke-linejoin="round"><path d="M10 150 L130 98 L142 104 L134 112 L142 120 L14 172 Z" fill="#B42719" fill-opacity=".12"/><path d="M290 150 L170 98 L160 106 L168 112 L160 122 L286 172 Z" fill="#B42719" fill-opacity=".12"/><g fill="#B42719" stroke="none"><path d="M150 10 L156 40 L186 46 L156 52 L150 84 L144 52 L114 46 L144 40Z"/><path d="M92 58 L95 72 L108 75 L95 78 L92 92 L89 78 L76 75 L89 72Z"/><path d="M212 62 L215 74 L227 77 L215 80 L212 92 L209 80 L197 77 L209 74Z"/><circle cx="150" cy="120" r="3"/><circle cx="141" cy="132" r="2"/><circle cx="160" cy="130" r="2"/></g></svg>
+<div class="ln M"><span>A film by Curry Barker</span><span>Horror · 2026</span></div>
+<div class="tt A fl">Obsession</div>
+<div class="qt S st">“Be careful who you wish for…”</div>
+<div class="tm M"><span>Jal</span><span>Rudra</span><span>Payal</span><span>Swet</span><span>Hetarth</span><span>Aanshi</span></div></section><section class="slide beige" id="s2" data-th="beige" data-who="Jal" data-t="1:00"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="l"><div class="im"></div></div>
+<div class="rt"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="M" style="color:var(--red);font-size:clamp(10px,1.8vmin,17px);margin-bottom:1.4vmin">02 · Quick intro</div><h2 class="A">The <span class="S r" style="font-size:.95em">film</span></h2>
+<div class="row st"><small class="M">Genre</small><span>Horror</span></div><div class="row st"><small class="M">Director &amp; writer</small><span>Curry Barker</span></div><div class="row st"><small class="M">Release</small><span>May 15, 2026</span></div><div class="row st"><small class="M">Main characters</small><span>Bear &amp; Nikki</span></div>
+<div class="band A st"><span>Love</span><i style="font-style:normal">→</i><span>Desire</span><i style="font-style:normal">→</i><span style="color:var(--ink)">Obsession</span></div></div></section><section class="slide redbg" id="s3" data-th="redbg" data-who="Jal" data-t="1–1.5 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Question 1 · audience</span><span>No. 03</span></div><div class="q A">If you could make <span class="S" style="color:var(--ink)">one wish</span> come true… what would you choose?</div>
+<div class="opts"><div class="opt"><span class="l">A</span><span class="t">Love</span><span class="n">0</span></div><div class="opt"><span class="l">B</span><span class="t">Success</span><span class="n">0</span></div><div class="opt"><span class="l">C</span><span class="t">Money</span><span class="n">0</span></div><div class="opt"><span class="l">D</span><span class="t">Something else</span><span class="n">0</span></div></div>
+<div class="hint M">Take 2–3 answers · tap to tally</div></section><section class="slide beige" id="s4" data-th="beige" data-who="Rudra" data-t="3 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Story &amp; plot</span><span>No. 04</span></div><div class="ghost">4</div><div class="fr"></div>
+<div class="stairs"><span class="A st"><i>1</i>Bear</span><span class="A st r"><i>2</i>Wish</span><span class="A st"><i>3</i>Nikki</span><span class="A st r"><i>4</i>Consequences</span></div>
+<div class="tags M"><span class="st">Feelings for Nikki</span><span class="st">Can’t say it</span><span class="st">One Wish Willow</span><span class="st">The wish</span><span class="st">After the wish</span><span class="st">Everything shifts</span></div></section><section class="slide black" id="s5" data-th="black" data-who="Payal" data-t="3 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Main characters</span><span>No. 05</span></div><div class="cards">
+<div class="cd st"><div class="fr" style="background-image:url(stills/phone.jpg);background-position:55% 40%"></div><div class="nm">Bear</div><div class="ac M">Michael Johnston</div><ul><li>Protagonist</li><li>Loves Nikki</li><li>Makes the wish</li><li>Faces the fallout</li></ul></div>
+<div class="cd st"><div class="fr" style="background-image:url(stills/bed.jpg);background-position:35% 50%"></div><div class="nm">Nikki</div><div class="ac M">Inde Navarrette</div><ul><li>Bear’s crush</li><li>Center of the wish</li><li>Drives the story</li></ul></div>
+<div class="cd st"><div class="fr" style="background-image:url(stills/friends.jpg);background-position:50% 40%"></div><div class="nm">Ian &amp; Sarah</div><div class="ac M">Cooper Tomlinson · Megan Lawless</div><ul><li>Close friends</li><li>Pulled in</li><li>Feel the fallout</li></ul></div></div></section><section class="slide beige" id="s6" data-th="beige" data-who="Swet" data-t="3 min"><div class="h h1"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="M r" style="margin-bottom:2vmin;font-size:clamp(10px,1.8vmin,17px)">06 · The title</div><h3>Love</h3><ul><li class="st">Mutual</li><li class="st">Respects boundaries</li><li class="st">Allows freedom</li><li class="st">Accepts “no”</li></ul></div>
+<div class="h h2"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><h3>Obses&shy;sion</h3><ul><li class="st">One-sided</li><li class="st">Ignores boundaries</li><li class="st">Controlling</li><li class="st">Needs one outcome</li></ul></div><div class="vs">VS</div></section><section class="slide beige" id="s7" data-th="beige" data-who="Swet" data-t="1.5 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Question 2 · audience</span><span>No. 07</span></div><div class="ghost">?</div><div class="q A">Can <span class="S r">love</span> become <span class="r">obsession?</span></div>
+<div class="opts"><div class="opt"><span class="l">1</span><span class="t">Clear difference</span><span class="n">0</span></div><div class="opt"><span class="l">2</span><span class="t">One turns into the other</span><span class="n">0</span></div></div>
+<div class="spec" style="max-width:1500px"><div class="bar"></div><div class="lb"><span>Love</span><span class="r">Obsession</span></div></div><div class="hint M">Take 2–3 answers · tap to tally</div></section><section class="slide black" id="s8" data-th="black" data-who="Hetarth" data-t="3 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Symbolism</span><span>No. 08</span></div><div class="sw"><div class="rope"></div><div class="tg">ONE<br>WISH<br>WILLOW</div></div>
+<div class="M" style="color:#D2412F;font-size:clamp(10px,1.8vmin,17px);margin-bottom:1.6vmin">The One Wish Willow</div>
+<div class="tri"><div class="A st"><small>01</small>Desire</div><div class="A st"><small>02</small>Choice</div><div class="A st"><small>03</small>Consequence</div></div>
+<div class="tags M" style="max-width:80%"><span class="st" style="border-color:var(--paper)">Looks ordinary</span><span class="st" style="border-color:var(--paper)">Really grants it</span><span class="st" style="border-color:var(--paper)">Quick fix = danger</span><span class="st" style="border-color:var(--paper)">Changes the story</span></div></section><section class="slide beige" id="s9" data-th="beige" data-who="Hetarth" data-t="2.5–3 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Horror &amp; cinematography</span><span>No. 09</span></div><div class="A" style="font-size:clamp(36px,8vmin,110px);margin-bottom:3vmin">How does it create <span class="S r">fear?</span></div>
+<div class="hz"><ul class="kw"><li class="st"><b>01</b>Darkness &amp; shadows</li><li class="st"><b>02</b>Silence &amp; suspense</li><li class="st"><b>03</b>Uncertainty</li><li class="st"><b>04</b>Slow escalation</li><li class="st"><b>05</b>Ordinary vs disturbing</li></ul>
+<div class="film st"><div style="background-image:url(stills/house.jpg)"></div><div style="background-image:url(stills/phone.jpg)"></div><div style="background-image:url(stills/bed.jpg)"></div></div></div></section><section class="slide beige" id="s10" data-th="beige" data-who="Aanshi" data-t="3 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Psychological &amp; social themes</span><span>No. 10</span></div><div class="A" style="font-size:clamp(36px,8vmin,110px);margin-bottom:2vmin">What it’s <span class="S r">really</span> about</div>
+<div class="tb"><div class="row st"><span class="A">Desire</span><p>How badly do we want it?</p></div><div class="row st"><span class="A">Control</span><p>Can feelings be controlled?</p></div><div class="row st"><span class="A">Boundaries</span><p>When do we accept “no”?</p></div><div class="row st"><span class="A">Consequences</span><p>Acting without thinking</p></div><div class="row st"><span class="A r">Reality vs fantasy</span><p>What we imagine ≠ what is</p></div></div></section><section class="slide black" id="s11" data-th="black" data-who="Aanshi" data-t="2 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / What it teaches</span><span>No. 11</span></div><div class="A" style="font-size:clamp(40px,9vmin,120px);margin-bottom:2vmin">Lessons</div>
+<ul class="ls"><li class="st"><b>01</b>Feelings can’t be forced</li><li class="st"><b>02</b>Desire clouds judgment</li><li class="st"><b>03</b>Every choice has consequences</li><li class="st"><b>04</b>Love needs mutual choice</li><li class="st"><b>05</b>What we want <span style="color:#D2412F">≠</span> what’s best</li></ul></section><section class="slide beige" id="s12" data-th="beige" data-who="Jal" data-t="2 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Summary · in one line</span><span>No. 12</span></div><div class="ghost">12</div><div class="big A st">A desire for <span class="S r">love</span> becomes a lesson about <span class="r">consequences.</span></div>
+<div class="chain A st"><span>Desire</span><i>/</i><span>Control</span><i>/</i><span>Boundaries</span><i>/</i><span class="r">Consequences</span></div></section><section class="slide redbg" id="s13" data-th="redbg" data-who="Jal" data-t="1.5–2 min"><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Conclusion · final takeaway</span><span>No. 13</span></div><div class="big A st">“You cannot create genuine <span class="S" style="color:var(--ink)">love</span> by forcing the outcome.”</div>
+<div class="trio A st"><span>Mutual feelings</span><span>Freedom</span><span>Respect</span></div></section><section class="slide black" id="s14" data-th="black" data-who="Jal" data-t="Q&amp;A"><div class="bgi"></div><div class="grain"><svg width="100%" height="100%"><rect width="100%" height="100%" filter="url(#n)"/></svg></div><div class="hd M"><span><b>OBSESSION</b> / Thank you</span><span>No. 14</span></div><div class="tt A fl">Thank<br>you</div><div class="qq A st">Any questions?</div>
+<div class="M st" style="margin-top:3vmin;font-size:clamp(11px,2vmin,20px)">“Be careful who you wish for…”</div></section>
 <div id="chip"></div><div id="cnt"></div><div id="bar"></div>
 <div id="nav"><div id="pv"></div><div id="nx"></div></div>
 <script>
@@ -257,7 +181,7 @@ function show(n,end){
   const s=S[i];sts(s).forEach(e=>e.classList.toggle('show',!!end));
   chip.innerHTML='<b>'+s.dataset.who+'</b> · '+s.dataset.t;
   cnt.textContent=String(i+1).padStart(2,'0')+' / '+S.length;bar.style.width=((i+1)/S.length*100)+'%';
-  location.hash=i+1;
+  document.body.className=(location.search.includes('all')?'all ':'')+'th-'+s.dataset.th;location.hash=i+1;
   if(!end)autoreveal(s);
 }
 let timer;
@@ -277,6 +201,6 @@ let tx=null;addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:tr
 addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50){d<0?next():prev()}tx=null},{passive:true});
 // polls
 document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',e=>{e.stopPropagation();const n=o.querySelector('.n');n.textContent=+n.textContent+1;o.classList.add('hit');setTimeout(()=>o.classList.remove('hit'),500)})});
-if(location.search.includes('all'))document.body.classList.add('all');
+if(location.search.includes('all'))document.body.classList.add('all');document.body.classList.add('th-'+S[0].dataset.th);
 const h=parseInt(location.hash.slice(1));show(h>0?h-1:0,location.search.includes('all'));
 </script></body></html>

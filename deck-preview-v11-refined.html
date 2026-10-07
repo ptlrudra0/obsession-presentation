@@ -70,11 +70,13 @@ body.th-inkbg #bar,body.th-redbg #bar{background:var(--paper)}
 .ph img{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply;display:block}
 .ph .r{animation:reg 9s ease-in-out infinite}
 @keyframes reg{0%,100%{transform:translate(0,0)}50%{transform:translate(3px,2px)}}
-.gl{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#FBF0DD 0%,rgba(251,240,221,.92) 22%,rgba(244,226,202,.55) 48%,transparent 72%);pointer-events:none;z-index:2}
-.gl.g0{animation:fa 7s infinite}.gl.g1{animation:fb 9s infinite}.gl.g2{animation:fc 11s infinite}
-@keyframes fa{0%,40%,44%,48%,100%{opacity:1}42%{opacity:.35}46%{opacity:.7}70%,72%{opacity:.85}71%{opacity:.4}}
-@keyframes fb{0%,60%,100%{opacity:1}62%{opacity:.45}64%{opacity:.9}66%{opacity:.5}20%{opacity:.9}}
-@keyframes fc{0%,80%,100%{opacity:1}81%{opacity:.5}83%{opacity:.95}30%{opacity:.8}}
+/* Light is anchored to the fixture, with a small warm core and soft falloff. */
+.gl{position:absolute;aspect-ratio:var(--halo-ar,1);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(255,228,180,.68) 0%,rgba(255,216,154,.42) 18%,rgba(251,211,151,.18) 43%,rgba(244,205,148,.04) 65%,transparent 80%);mix-blend-mode:screen;pointer-events:none;z-index:2;opacity:.9}
+.gl.g0{animation:fa 7s ease-in-out infinite}.gl.g1{animation:fb 9s ease-in-out infinite}.gl.g2{animation:fc 11s ease-in-out infinite}
+@keyframes fa{0%,36%,53%,100%{opacity:.9}42%{opacity:.57}47%{opacity:.79}65%,80%{opacity:.9}72%{opacity:.69}}
+@keyframes fb{0%,54%,76%,100%{opacity:.88}22%{opacity:.76}61%{opacity:.59}68%{opacity:.79}}
+@keyframes fc{0%,73%,92%,100%{opacity:.9}31%{opacity:.77}82%{opacity:.62}}
+@media (prefers-reduced-motion:reduce){.gl.g0,.gl.g1,.gl.g2{animation:none;opacity:.8}}
 .inkbg .ph img.k{mix-blend-mode:screen}
 /* spotlight reveal + annotations */
 #spot{position:fixed;inset:0;z-index:57;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--x,50%) var(--y,40%),transparent 0,transparent var(--r,18vmin),rgba(14,10,7,.7) calc(var(--r,18vmin)*2.1))}
@@ -188,6 +190,35 @@ body.lite .slide.on{animation:in .4s ease-out!important}
 body.lite #fold,body.lite #ht,body.lite #speck,body.lite .gl{display:none}
 body.lite .fz,body.lite .ttl{filter:none}
 </style>
+<style id="incident-details">
+/* Quiet framing: keep the deck, lose the repeated interface labels. */
+.hd,#snd,#bar{display:none}
+#cnt .act{display:none}#cnt{font-size:12px;opacity:.5;letter-spacing:.1em;right:4vmin;bottom:2.6vmin}
+#chip{background:none!important;color:currentColor!important;padding:0;font-size:12px;opacity:.58;left:4vmin;bottom:2.6vmin}#chip b{color:currentColor!important}
+.slide{padding-top:8vmin;padding-bottom:8vmin}
+#s1 .tm{border-top:0;bottom:7vmin;font-size:13px;letter-spacing:.1em}
+.slide>.ph{outline:none;box-shadow:none;transform:none;border-radius:1px;-webkit-mask-image:radial-gradient(ellipse 76% 80% at 50% 48%,#000 50%,transparent 99%);mask-image:radial-gradient(ellipse 76% 80% at 50% 48%,#000 50%,transparent 99%)}
+.slide>.ph::after{display:block!important;content:''!important;background:linear-gradient(125deg,rgba(244,226,202,.1),transparent 40%,rgba(30,26,23,.19));mix-blend-mode:normal;opacity:1;z-index:1}
+#s1>.ph,#s14>.ph{right:0!important;top:7vmin!important;width:44vw!important}
+#s2>.ph{right:-2vmin!important;top:9vmin!important;width:47vw!important}
+#s4>.ph{right:-1vmin!important;top:8vmin!important;width:43vw!important}
+#s9>.ph:first-of-type{right:-1vmin!important;top:6vmin!important;width:40vw!important}
+#s9>.ph:nth-of-type(2){right:3vmin!important;bottom:8vmin!important;width:29vw!important}
+#s9>.an{display:none}.an{font-size:clamp(22px,4vmin,44px)}
+.cd .pic{border:0;background:transparent}.cd .pic .ph{border-radius:2px;mask-image:linear-gradient(#000 82%,transparent)}
+#s8 .sw{display:none}#s8 .tri{max-width:78%}
+.wish-charm{position:absolute;right:5vmin;top:0;width:12vmin;height:35vmin;z-index:9;transform-origin:50% 0;pointer-events:none;filter:drop-shadow(1.2vmin 1.2vmin .7vmin rgba(30,26,23,.25));animation:charm-drift 13s ease-in-out infinite}
+.wish-charm svg{width:100%;height:100%;overflow:visible}
+#s1 .wish-charm,#s14 .wish-charm{right:45vw;width:7vmin;height:23vmin}
+@keyframes charm-drift{0%,100%{transform:rotate(-1deg)}45%{transform:rotate(1.4deg)}72%{transform:rotate(.2deg)}}
+@media(prefers-reduced-motion:reduce){.wish-charm{animation:none}}
+@media(max-aspect-ratio:1/1){.wish-charm{width:11vmin;height:29vmin;right:3vmin}#s1 .wish-charm,#s14 .wish-charm{display:none}.slide>.ph{margin-top:2vh}#s8 .tri{max-width:84%}}
+body.th-inkbg #chip,body.th-redbg #chip{color:var(--paper)!important}
+.wish-charm svg>path:nth-of-type(6){animation:charm-light 7s ease-in-out infinite}
+@keyframes charm-light{0%,36%,53%,100%{opacity:.45}42%{opacity:.18}47%{opacity:.34}72%{opacity:.3}}
+body.lite .wish-charm{animation:none}
+@media(prefers-reduced-motion:reduce){.wish-charm svg>path{animation:none!important}}
+</style>
 </head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <filter id="rough" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="2" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="4"/></filter>
@@ -196,14 +227,24 @@ body.lite .fz,body.lite .ttl{filter:none}
 </defs></svg>
 <div id="wipe"></div>
 <div id="spot"></div>
-<section class="slide beige" id="s1" data-th="beige" data-who="Jal" data-t="0:30"><div class="hd M"><span><b>OBSESSION</b> / English group presentation</span><span>No. 01</span></div>
-<div class="ph bgph" style="--ar:1.497;right:0;top:12vmin;width:42vw;"><img class="k" src="stills/house.jpg" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div>
+<section class="slide beige" id="s1" data-th="beige" data-who="Jal" data-t="0:30"><div class="wish-charm" aria-hidden="true"><svg viewBox="0 0 120 350" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="paper1" x1="0" x2="1"><stop stop-color="#D3B793"/><stop offset=".25" stop-color="#F4E2CA"/><stop offset=".8" stop-color="#ECD6B8"/><stop offset="1" stop-color="#BFA17B"/></linearGradient><linearGradient id="edge1" x1="0" x2="1"><stop stop-color="#7E2C20"/><stop offset=".45" stop-color="#B42719"/><stop offset="1" stop-color="#66231C"/></linearGradient></defs>
+<path d="M60 -8 C58 48 61 89 60 140" fill="none" stroke="#362B24" stroke-width="2"/><path d="M61 -8 L61 137" fill="none" stroke="#BCA082" stroke-width=".6"/>
+<path d="M35 141 L83 139 L96 155 L98 301 L30 305 L28 158Z" fill="#211A17" opacity=".5" transform="translate(3 3)"/>
+<path d="M34 141 L82 139 L94 155 L96 300 L28 304 L26 157Z" fill="url(#paper1)" stroke="#BCA182" stroke-width=".8"/>
+<path d="M32 160 L33 296 L88 293 L86 158" stroke="url(#edge1)" stroke-width="1.5" fill="none"/>
+<circle cx="60" cy="151" r="4" fill="#372A21"/><path d="M60 136 C50 140 54 151 60 150 C67 149 70 140 60 136Z" fill="none" stroke="#352A22" stroke-width="2"/>
+<path d="M54 172 L55 279" stroke="#FFF6E7" stroke-width=".7" opacity=".4"/>
+<g fill="#7E2C20" font-family="Space Mono,monospace" font-size="12" text-anchor="middle" letter-spacing="2"><text x="61" y="191">ONE</text><text x="61" y="213">WISH</text><text x="61" y="242" font-size="8" letter-spacing="1">WILLOW</text></g>
+<path d="M48 266 Q60 259 73 266 Q63 271 48 266Z M61 265 L61 282" stroke="#B42719" stroke-width="1" fill="none"/><path d="M28 304 L96 300" stroke="#947656" stroke-width="1"/>
+</svg></div><div class="hd M"><span><b>OBSESSION</b> / English group presentation</span><span>No. 01</span></div>
+<div class="ph bgph" style="--ar:1.497;right:0;top:12vmin;width:42vw;"><img class="k" src="stills/house.jpg" alt=""><i class="gl g0" style="left:49.1%;top:31.8%;width:11%;--source-x:49.1;--source-y:31.8;--source-w:11;--halo-ar:1.65"></i></div>
 <div class="ln M"><span>A film by Curry Barker · Horror · 2026</span></div>
 <div class="tt A fz ttl" data-t="Obsession">Obsession</div>
 <div class="qt S st">“Be careful who you wish for…”</div>
 <div class="tm M"><span>Jal</span><span>Rudra</span><span>Payal</span><span>Swet</span><span>Hetarth</span><span>Aanshi</span></div>
 <div class="an" style="left:70%;top:68%;--rot:-4deg;--dl:2.2s"><span>someone's watching</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s2" data-th="beige" data-who="Jal" data-t="1:00"><div class="hd M"><span><b>OBSESSION</b> / Quick intro</span><span>No. 02</span></div>
-<div class="ph " style="--ar:1.499;right:0;top:13vmin;width:46vw;"><img class="k" src="stills/friends.jpg" alt=""><i class="gl g0" style="left:75.3%;top:26.1%;width:14%"></i></div>
+<div class="ph " style="--ar:1.499;right:0;top:13vmin;width:46vw;"><img class="k" src="stills/friends.jpg" alt=""><i class="gl g0" style="left:75.8%;top:26.3%;width:6%;--source-x:75.8;--source-y:26.3;--source-w:6"></i></div>
 <div class="txt"><h2 class="A fz ttl" data-t="The film">The film</h2>
 <div class="row st"><small class="M">Genre</small><span>Horror</span></div><div class="row st"><small class="M">Director &amp; writer</small><span>Curry Barker</span></div><div class="row st"><small class="M">Release</small><span>May 15, 2026</span></div><div class="row st"><small class="M">Main characters</small><span>Bear &amp; Nikki</span></div>
 <div class="band A st"><span>Love</span><span>→</span><span>Desire</span><span>→</span><span style="color:var(--ink)">Obsession</span></div></div>
@@ -212,20 +253,30 @@ body.lite .fz,body.lite .ttl{filter:none}
 <div class="q A fz ttl" data-t="">If you could make <span class="S">one wish</span> come true… what would you choose?</div>
 <div class="opts" style="max-width:62vw;grid-template-columns:1fr 1fr"><div class="opt"><span class="l">A</span><span class="t">Love</span><span class="n">0</span></div><div class="opt"><span class="l">B</span><span class="t">Success</span><span class="n">0</span></div><div class="opt"><span class="l">C</span><span class="t">Money</span><span class="n">0</span></div><div class="opt"><span class="l">D</span><span class="t">Something else</span><span class="n">0</span></div></div>
 <div class="hint M">Take 2–3 answers · tap to tally</div><div class="an" style="left:69%;top:40%;--rot:5deg;--dl:2.2s"><span>pick one</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s4" data-th="beige" data-who="Rudra" data-t="3 min"><div class="hd M"><span><b>OBSESSION</b> / Story &amp; plot</span><span>No. 04</span></div>
-<div class="ph " style="--ar:1.777;right:0;top:11vmin;width:40vw;"><img class="k" src="stills/phone.jpg" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div>
+<div class="ph " style="--ar:1.777;right:0;top:11vmin;width:40vw;"><img class="k" src="stills/phone.jpg" alt=""><i class="gl g0" style="left:9.2%;top:49.7%;width:6%;--source-x:9.2;--source-y:49.7;--source-w:6"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:7.5%;--source-x:16.7;--source-y:38.9;--source-w:7.5"></i><i class="gl g2" style="left:26.3%;top:49.6%;width:6.5%;--source-x:26.3;--source-y:49.6;--source-w:6.5"></i><i class="gl g0" style="left:30.4%;top:52%;width:5%;--source-x:30.4;--source-y:52;--source-w:5"></i></div>
 <div class="stairs A ttl" style="position:relative;z-index:5;mix-blend-mode:multiply"><span class="A fz st" data-t=""><i>1</i>Bear</span><span class="A fz st" data-t=""><i>2</i>Wish</span><span class="A fz st" data-t=""><i>3</i>Nikki</span><span class="A fz st" data-t=""><i>4</i>Consequences</span></div>
 <div class="tags M" style="max-width:65%"><span class="st">Feelings for Nikki</span><span class="st">Can’t say it</span><span class="st">One Wish Willow</span><span class="st">The wish</span><span class="st">After the wish</span><span class="st">Everything shifts</span></div>
 <div class="an" style="left:74%;top:70%;--rot:-4deg;--dl:2.2s"><span>she's watching</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 20 C60 80 150 80 190 20"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s5" data-th="beige" data-who="Payal" data-t="3 min"><div class="hd M"><span><b>OBSESSION</b> / Main characters</span><span>No. 05</span></div><div class="cards">
-<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.777;"><img class="k" src="stills/phone.jpg" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div></div><div class="nm fz ttl" data-t="">Bear</div><div class="ac M">Michael Johnston</div><ul><li>Protagonist</li><li>Loves Nikki</li><li>Makes the wish</li><li>Faces the fallout</li></ul></div>
+<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.777;"><img class="k" src="stills/phone.jpg" alt=""><i class="gl g0" style="left:9.2%;top:49.7%;width:6%;--source-x:9.2;--source-y:49.7;--source-w:6"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:7.5%;--source-x:16.7;--source-y:38.9;--source-w:7.5"></i><i class="gl g2" style="left:26.3%;top:49.6%;width:6.5%;--source-x:26.3;--source-y:49.6;--source-w:6.5"></i><i class="gl g0" style="left:30.4%;top:52%;width:5%;--source-x:30.4;--source-y:52;--source-w:5"></i></div></div><div class="nm fz ttl" data-t="">Bear</div><div class="ac M">Michael Johnston</div><ul><li>Protagonist</li><li>Loves Nikki</li><li>Makes the wish</li><li>Faces the fallout</li></ul></div>
 <div class="cd st"><div class="pic"><div class="ph " style="--ar:1.777;"><img class="k" src="stills/bed.jpg" alt=""></div></div><div class="nm fz" data-t="">Nikki</div><div class="ac M">Inde Navarrette</div><ul><li>Bear’s crush</li><li>Center of the wish</li><li>Drives the story</li></ul></div>
-<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.499;"><img class="k" src="stills/friends.jpg" alt=""><i class="gl g0" style="left:75.3%;top:26.1%;width:14%"></i></div></div><div class="nm fz" data-t="">Ian &amp; Sarah</div><div class="ac M">Cooper Tomlinson · Megan Lawless</div><ul><li>Close friends</li><li>Pulled in</li><li>Feel the fallout</li></ul></div></div></section><section class="slide beige" id="s6" data-th="beige" data-who="Swet" data-t="3 min"><div class="h h1"><div class="M r" style="margin-bottom:2vmin;font-size:clamp(11px,1.9vmin,18px);font-weight:700">06 · The title</div><h3 class="fz ttl" data-t="">Love</h3><ul><li class="st">Mutual</li><li class="st">Respects boundaries</li><li class="st">Allows freedom</li><li class="st">Accepts “no”</li></ul></div>
+<div class="cd st"><div class="pic"><div class="ph " style="--ar:1.499;"><img class="k" src="stills/friends.jpg" alt=""><i class="gl g0" style="left:75.8%;top:26.3%;width:6%;--source-x:75.8;--source-y:26.3;--source-w:6"></i></div></div><div class="nm fz" data-t="">Ian &amp; Sarah</div><div class="ac M">Cooper Tomlinson · Megan Lawless</div><ul><li>Close friends</li><li>Pulled in</li><li>Feel the fallout</li></ul></div></div></section><section class="slide beige" id="s6" data-th="beige" data-who="Swet" data-t="3 min"><div class="h h1"><div class="M r" style="margin-bottom:2vmin;font-size:clamp(11px,1.9vmin,18px);font-weight:700">06 · The title</div><h3 class="fz ttl" data-t="">Love</h3><ul><li class="st">Mutual</li><li class="st">Respects boundaries</li><li class="st">Allows freedom</li><li class="st">Accepts “no”</li></ul></div>
 <div class="h h2"><h3>Obses&shy;sion</h3><ul><li class="st">One-sided</li><li class="st">Ignores boundaries</li><li class="st">Controlling</li><li class="st">Needs one outcome</li></ul></div><div class="vs">VS</div></section><section class="slide beige" id="s7" data-th="beige" data-who="Swet" data-t="1.5 min"><div class="hd M"><span><b>OBSESSION</b> / Question 2 · audience</span><span>No. 07</span></div><div class="qmark">?</div><div class="q A fz ttl" data-t="" style="position:relative;z-index:4">Can <span class="S">love</span> become obsession?</div>
 <div class="opts" style="position:relative;z-index:4"><div class="opt"><span class="l">1</span><span class="t">Clear difference</span><span class="n">0</span></div><div class="opt"><span class="l">2</span><span class="t">One turns into the other</span><span class="n">0</span></div></div>
-<div class="spec" style="max-width:1500px;position:relative;z-index:4"><div class="bar"></div><div class="lb"><span>Love</span><span class="r">Obsession</span></div></div><div class="hint M" style="position:relative;z-index:4">Take 2–3 answers · tap to tally</div><div class="an" style="left:36%;top:67%;--rot:-4deg;--dl:2.2s"><span>tap to vote</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide redbg" id="s8" data-th="redbg" data-who="Hetarth" data-t="3 min"><div class="hd M"><span><b>OBSESSION</b> / Symbolism</span><span>No. 08</span></div><div class="sw"><div class="rope"></div><div class="tg">ONE<br>WISH<br>WILLOW</div></div>
+<div class="spec" style="max-width:1500px;position:relative;z-index:4"><div class="bar"></div><div class="lb"><span>Love</span><span class="r">Obsession</span></div></div><div class="hint M" style="position:relative;z-index:4">Take 2–3 answers · tap to tally</div><div class="an" style="left:36%;top:67%;--rot:-4deg;--dl:2.2s"><span>tap to vote</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide redbg" id="s8" data-th="redbg" data-who="Hetarth" data-t="3 min"><div class="wish-charm" aria-hidden="true"><svg viewBox="0 0 120 350" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="paper8" x1="0" x2="1"><stop stop-color="#D3B793"/><stop offset=".25" stop-color="#F4E2CA"/><stop offset=".8" stop-color="#ECD6B8"/><stop offset="1" stop-color="#BFA17B"/></linearGradient><linearGradient id="edge8" x1="0" x2="1"><stop stop-color="#7E2C20"/><stop offset=".45" stop-color="#B42719"/><stop offset="1" stop-color="#66231C"/></linearGradient></defs>
+<path d="M60 -8 C58 48 61 89 60 140" fill="none" stroke="#362B24" stroke-width="2"/><path d="M61 -8 L61 137" fill="none" stroke="#BCA082" stroke-width=".6"/>
+<path d="M35 141 L83 139 L96 155 L98 301 L30 305 L28 158Z" fill="#211A17" opacity=".5" transform="translate(3 3)"/>
+<path d="M34 141 L82 139 L94 155 L96 300 L28 304 L26 157Z" fill="url(#paper8)" stroke="#BCA182" stroke-width=".8"/>
+<path d="M32 160 L33 296 L88 293 L86 158" stroke="url(#edge8)" stroke-width="1.5" fill="none"/>
+<circle cx="60" cy="151" r="4" fill="#372A21"/><path d="M60 136 C50 140 54 151 60 150 C67 149 70 140 60 136Z" fill="none" stroke="#352A22" stroke-width="2"/>
+<path d="M54 172 L55 279" stroke="#FFF6E7" stroke-width=".7" opacity=".4"/>
+<g fill="#7E2C20" font-family="Space Mono,monospace" font-size="12" text-anchor="middle" letter-spacing="2"><text x="61" y="191">ONE</text><text x="61" y="213">WISH</text><text x="61" y="242" font-size="8" letter-spacing="1">WILLOW</text></g>
+<path d="M48 266 Q60 259 73 266 Q63 271 48 266Z M61 265 L61 282" stroke="#B42719" stroke-width="1" fill="none"/><path d="M28 304 L96 300" stroke="#947656" stroke-width="1"/>
+</svg></div><div class="hd M"><span><b>OBSESSION</b> / Symbolism</span><span>No. 08</span></div><div class="sw"><div class="rope"></div><div class="tg">ONE<br>WISH<br>WILLOW</div></div>
 <div class="M" style="font-size:clamp(11px,1.9vmin,18px);margin-bottom:1.4vmin;font-weight:700">The One Wish Willow</div>
 <div class="tri ttl"><div class="A fz st" data-t=""><small>01</small>Desire</div><div class="A fz st" data-t=""><small>02</small>Choice</div><div class="A fz st" data-t=""><small>03</small>Consequence</div></div>
 <div class="tags M" style="max-width:80%"><span class="st">Looks ordinary</span><span class="st">Really grants it</span><span class="st">Quick fix = danger</span><span class="st">Changes the story</span></div><div class="an" style="left:60%;top:16%;--rot:-5deg;--dl:2.2s"><span>careful…</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s9" data-th="beige" data-who="Hetarth" data-t="2.5–3 min"><div class="hd M"><span><b>OBSESSION</b> / Horror &amp; cinematography</span><span>No. 09</span></div>
-<div class="ph " style="--ar:1.497;right:0;top:9vmin;width:38vw;"><img class="k" src="stills/house.jpg" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div><div class="ph " style="--ar:1.777;right:1vmin;bottom:3vmin;width:30vw;"><img class="k" src="stills/phone.jpg" alt=""><i class="gl g0" style="left:9.2%;top:49.6%;width:16%"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:16%"></i><i class="gl g2" style="left:26.200000000000003%;top:49.6%;width:16%"></i><i class="gl g0" style="left:30.4%;top:52.0%;width:14%"></i></div>
+<div class="ph " style="--ar:1.497;right:0;top:9vmin;width:38vw;"><img class="k" src="stills/house.jpg" alt=""><i class="gl g0" style="left:49.1%;top:31.8%;width:11%;--source-x:49.1;--source-y:31.8;--source-w:11;--halo-ar:1.65"></i></div><div class="ph " style="--ar:1.777;right:1vmin;bottom:3vmin;width:30vw;"><img class="k" src="stills/phone.jpg" alt=""><i class="gl g0" style="left:9.2%;top:49.7%;width:6%;--source-x:9.2;--source-y:49.7;--source-w:6"></i><i class="gl g1" style="left:16.7%;top:38.9%;width:7.5%;--source-x:16.7;--source-y:38.9;--source-w:7.5"></i><i class="gl g2" style="left:26.3%;top:49.6%;width:6.5%;--source-x:26.3;--source-y:49.6;--source-w:6.5"></i><i class="gl g0" style="left:30.4%;top:52%;width:5%;--source-x:30.4;--source-y:52;--source-w:5"></i></div>
 <div class="A fz ttl" data-t="" style="font-size:clamp(40px,9.4vmin,130px);margin-bottom:3vmin;position:relative;z-index:5;max-width:48%">How does it create <span class="S">fear?</span></div>
 <ul class="kw" style="position:relative;z-index:5;max-width:50%;background:var(--paper)"><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>01</b>Darkness &amp; shadows</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>02</b>Silence &amp; suspense</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>03</b>Uncertainty</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>04</b>Slow escalation</li><li class="st" style="font-size:clamp(24px,5.2vmin,66px)"><b>05</b>Ordinary vs disturbing</li></ul>
 <div class="an" style="left:54%;top:27%;--rot:-5deg;--dl:2.2s"><span>look at the light</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section><section class="slide beige" id="s10" data-th="beige" data-who="Aanshi" data-t="3 min"><div class="hd M"><span><b>OBSESSION</b> / Psychological &amp; social themes</span><span>No. 10</span></div>
@@ -243,8 +294,18 @@ body.lite .fz,body.lite .ttl{filter:none}
 <div class="chain A st"><span>Desire</span><span>/</span><span>Control</span><span>/</span><span>Boundaries</span><span>/</span><span>Consequences</span></div><div class="mq"><span>Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + </span><span>Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + Wish + Desire + Control + Consequence + </span></div></section><section class="slide beige" id="s13" data-th="beige" data-who="Jal" data-t="1.5–2 min"><div class="hd M"><span><b>OBSESSION</b> / Conclusion · final takeaway</span><span>No. 13</span></div>
 <div class="ph " style="--ar:1.499;right:0;bottom:9vmin;width:36vw;opacity:.9;"><img class="k" src="stills/friends.jpg" alt=""></div>
 <div class="big A fz ttl st" data-t="" style="max-width:52%;position:relative;z-index:5">“You cannot create genuine <span class="S">love</span> by forcing the outcome.”</div>
-<div class="trio A st"><span>Mutual feelings</span><span>Freedom</span><span>Respect</span></div></section><section class="slide beige" id="s14" data-th="beige" data-who="Jal" data-t="Q&amp;A"><div class="hd M"><span><b>OBSESSION</b> / Thank you</span><span>No. 14</span></div>
-<div class="ph bgph" style="--ar:1.497;right:0;top:12vmin;width:48vw;"><img class="k" src="stills/house.jpg" alt=""><i class="gl g0" style="left:49.4%;top:33.6%;width:22%"></i></div>
+<div class="trio A st"><span>Mutual feelings</span><span>Freedom</span><span>Respect</span></div></section><section class="slide beige" id="s14" data-th="beige" data-who="Jal" data-t="Q&amp;A"><div class="wish-charm" aria-hidden="true"><svg viewBox="0 0 120 350" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="paper14" x1="0" x2="1"><stop stop-color="#D3B793"/><stop offset=".25" stop-color="#F4E2CA"/><stop offset=".8" stop-color="#ECD6B8"/><stop offset="1" stop-color="#BFA17B"/></linearGradient><linearGradient id="edge14" x1="0" x2="1"><stop stop-color="#7E2C20"/><stop offset=".45" stop-color="#B42719"/><stop offset="1" stop-color="#66231C"/></linearGradient></defs>
+<path d="M60 -8 C58 48 61 89 60 140" fill="none" stroke="#362B24" stroke-width="2"/><path d="M61 -8 L61 137" fill="none" stroke="#BCA082" stroke-width=".6"/>
+<path d="M35 141 L83 139 L96 155 L98 301 L30 305 L28 158Z" fill="#211A17" opacity=".5" transform="translate(3 3)"/>
+<path d="M34 141 L82 139 L94 155 L96 300 L28 304 L26 157Z" fill="url(#paper14)" stroke="#BCA182" stroke-width=".8"/>
+<path d="M32 160 L33 296 L88 293 L86 158" stroke="url(#edge14)" stroke-width="1.5" fill="none"/>
+<circle cx="60" cy="151" r="4" fill="#372A21"/><path d="M60 136 C50 140 54 151 60 150 C67 149 70 140 60 136Z" fill="none" stroke="#352A22" stroke-width="2"/>
+<path d="M54 172 L55 279" stroke="#FFF6E7" stroke-width=".7" opacity=".4"/>
+<g fill="#7E2C20" font-family="Space Mono,monospace" font-size="12" text-anchor="middle" letter-spacing="2"><text x="61" y="191">ONE</text><text x="61" y="213">WISH</text><text x="61" y="242" font-size="8" letter-spacing="1">WILLOW</text></g>
+<path d="M48 266 Q60 259 73 266 Q63 271 48 266Z M61 265 L61 282" stroke="#B42719" stroke-width="1" fill="none"/><path d="M28 304 L96 300" stroke="#947656" stroke-width="1"/>
+</svg></div><div class="hd M"><span><b>OBSESSION</b> / Thank you</span><span>No. 14</span></div>
+<div class="ph bgph" style="--ar:1.497;right:0;top:12vmin;width:48vw;"><img class="k" src="stills/house.jpg" alt=""><i class="gl g0" style="left:49.1%;top:31.8%;width:11%;--source-x:49.1;--source-y:31.8;--source-w:11;--halo-ar:1.65"></i></div>
 <div class="tt A fz ttl" data-t="">Thank<br>you</div><div class="qq A st">Any questions?</div>
 <div class="M st" style="margin-top:3vmin;font-size:clamp(12px,2.2vmin,22px);font-weight:700">“Be careful who you wish for…”</div><div class="an" style="left:35%;top:62%;--rot:-5deg;--dl:2.2s"><span>ask away</span><svg viewBox="0 0 210 90" width="210" height="90"><path d="M10 70 C60 5 150 5 190 60"/><path d="M168 38 L192 60 L162 72"/></svg></div></section>
 <div id="snd">Press M for sound</div><div id="chip"></div><div id="cnt"></div><div id="bar"></div>
@@ -311,9 +372,30 @@ else{ // laptop: warm the next slide's stills so there is no pop-in
 // dim earlier points so the class looks at the one being discussed
 function upd(){const s=document.querySelector('.slide.on');if(!s)return;const a=[...s.querySelectorAll('.st.show')];
  const on=a.length>1&&!/[?&]all/.test(location.search);
- s.querySelectorAll('.st').forEach(e=>e.classList.toggle('dim',on&&e.classList.contains('show')&&e!==a[a.length-1]));}
+ s.querySelectorAll('.st').forEach(e=>{const d=on&&e.classList.contains('show')&&e!==a[a.length-1];if(e.classList.contains('dim')!==d)e.classList.toggle('dim',d)});}
 const m=new MutationObserver(upd);
 document.querySelectorAll('.st').forEach(e=>m.observe(e,{attributes:true,attributeFilter:['class']}));
+})();
+</script>
+<script id="light-source-alignment">
+(function(){
+ function align(ph){
+  const im=ph.querySelector('img');if(!im||!im.naturalWidth)return;
+  const W=ph.clientWidth,H=ph.clientHeight;if(!W||!H)return;
+  const cover=getComputedStyle(im).objectFit==='cover';
+  const scale=cover?Math.max(W/im.naturalWidth,H/im.naturalHeight):0;
+  const iw=cover?im.naturalWidth*scale:W,ih=cover?im.naturalHeight*scale:H;
+  ph.querySelectorAll('.gl').forEach(gl=>{
+   const st=gl.style;
+   st.left=((W-iw)/2+iw*parseFloat(st.getPropertyValue('--source-x'))/100)+'px';
+   st.top=((H-ih)/2+ih*parseFloat(st.getPropertyValue('--source-y'))/100)+'px';
+   st.width=(iw*parseFloat(st.getPropertyValue('--source-w'))/100)+'px';
+  });
+ }
+ const ro=new ResizeObserver(entries=>entries.forEach(e=>align(e.target)));
+ document.querySelectorAll('.ph').forEach(ph=>{if(!ph.querySelector('.gl'))return;
+  ro.observe(ph);const im=ph.querySelector('img');im.addEventListener('load',()=>align(ph));align(ph);
+ });
 })();
 </script>
 </body></html>

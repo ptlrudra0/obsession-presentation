@@ -82,7 +82,7 @@ html,body{height:100%;background:#050505;overflow:hidden;-webkit-user-select:non
 .dd-photo b{position:absolute;left:18px;bottom:30px;font:700 26px/1 'Newsreader',serif;letter-spacing:.1em;text-transform:uppercase;color:#1B1A18}
 .dd-tape{position:absolute;left:170px;top:-26px;width:140px;height:46px;background:rgba(179,48,28,.78);transform:rotate(-5deg)}
 .dd-credit{position:absolute;left:1290px;top:880px;width:480px;font:400 19px/1.3 'Newsreader',serif;color:#1B1A18;opacity:.8}
-.dd-graphic{position:absolute;left:980px;top:690px;width:820px;height:340px;opacity:0;transition:opacity .8s 1.2s}
+.dd-graphic{position:absolute;left:980px;top:745px;width:820px;height:300px;opacity:0;transition:opacity .8s 1.2s}
 .sl.on .dd-graphic{opacity:1}
 
 /* v4 */
@@ -91,10 +91,10 @@ html,body{height:100%;background:#050505;overflow:hidden;-webkit-user-select:non
 .sl.lt{--wa:#B3301C;--wb:#F4EDE0}.sl.dk{--wa:#F4EDE0;--wb:#B3301C}
 .wa .fa{fill:var(--wa)}.wa .fb{fill:var(--wb)}
 .wa text{font-family:'Newsreader',Georgia,serif;font-weight:700;text-transform:uppercase}
-.wa.cp{left:0;bottom:0;width:430px;height:260px}
+.wa.cp{left:0;bottom:0;width:380px;height:200px}
 .wa.sl_{left:110px;bottom:60px;width:330px;height:130px;transform:rotate(-4deg)}
 .wa.bu{left:110px;bottom:50px;width:250px;height:250px;transform:rotate(-8deg)}
-.wa.sp{left:90px;bottom:60px;width:560px;height:150px}
+.wa.sp{left:90px;bottom:40px;width:560px;height:110px}
 .wa.cd{left:110px;bottom:60px;width:400px;height:240px;transform:rotate(-2.5deg)}
 
 html,body{background:#E4D0A8;-webkit-tap-highlight-color:transparent;cursor:pointer;touch-action:manipulation}
@@ -193,7 +193,7 @@ var sl=document.querySelectorAll('.sl');
 for(var k in CR){k=+k;var x=sl[k];var w=k==0||k==8?600:640;var ph=Math.round((w-36)*DIM[k][1]/DIM[k][0]);
  var f=document.createElement('div');f.className='fr';f.style.cssText='width:'+w+'px;left:'+(1920-96-w)+'px;top:'+(k==7?330:k==6?300:Math.max(200,Math.min(300,1000-ph-80)))+'px;transform:rotate('+(k%2?-2:2)+'deg)';
  f.innerHTML='<div class="tp"></div><img alt="" src="data:image/jpeg;base64,'+CR[k]+'"><b>Obsession · 2026</b>';x.appendChild(f);
- x.querySelector('.bg').style.setProperty('--s',1);var c2=x.querySelector('.c2'),c1=x.querySelector('.c1');if(c2&&c1){c2.style.cssText+=';left:'+getComputedStyle(c1).left+';top:700px;width:900px';}
+ x.querySelector('.bg').style.setProperty('--s',1);var c2=x.querySelector('.c2'),c1=x.querySelector('.c1');if(c2&&c1){c2.style.cssText+=';left:'+getComputedStyle(c1).left+';top:670px;width:900px';}
 }
 
 var ST4='<path class="fb" d="M0 -14 L3 -3 L14 0 L3 3 L0 14 L-3 3 L-14 0 L-3 -3 Z"/>';

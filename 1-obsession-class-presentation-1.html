@@ -1,0 +1,3366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OBSESSION (2026) — Interactive Classroom Presentation</title>
+  <style>
+    :root {
+      --bg-void: #050507;
+      --bg-deep: #0b0c10;
+      --bg-panel: #12141c;
+      --bg-panel-elevated: #181b26;
+      --bg-glass: rgba(18, 20, 28, 0.86);
+      --border-subtle: rgba(242, 237, 228, 0.12);
+      --border-strong: rgba(242, 237, 228, 0.24);
+      --border-crimson: rgba(217, 38, 56, 0.48);
+      --text-ivory: #f4efe6;
+      --text-muted: #b8b3aa;
+      --text-dim: #7e7a74;
+      --crimson: #d92638;
+      --crimson-bright: #ff3b4e;
+      --crimson-glow: rgba(217, 38, 56, 0.22);
+      --midnight: #1d2d44;
+      --slate-blue: #4a6fa5;
+      --amber: #e09f3e;
+      --emerald: #2ec4b6;
+      --font-display: 'Playfair Display', 'Didot', 'Bodoni MT', 'Georgia', 'Times New Roman', serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      --ease-cinema: cubic-bezier(0.22, 1, 0.36, 1);
+      --transition-speed: 420ms;
+    }
+
+    body.reduced-motion,
+    body.reduced-motion *,
+    body.reduced-motion *::before,
+    body.reduced-motion *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-void);
+      color: var(--text-ivory);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    /* Ambient Atmosphere & Cursor Spotlight */
+    #ambient-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.55;
+    }
+
+    #cursor-light {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(550px circle at var(--mx, 50%) var(--my, 50%), rgba(217, 38, 56, 0.065), rgba(74, 111, 165, 0.03) 45%, transparent 75%);
+      transition: opacity 0.3s ease;
+    }
+
+    body.reduced-motion #ambient-canvas,
+    body.reduced-motion #cursor-light,
+    body.silence-active #ambient-canvas,
+    body.silence-active #cursor-light {
+      opacity: 0.08;
+    }
+
+    .film-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.035;
+      background-image: radial-gradient(rgba(255,255,255,0.35) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    /* Choreographed Opening Sequence Overlay */
+    #prologue-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: radial-gradient(circle at 50% 42%, #130b10 0%, #07070a 62%, #030305 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      transition: opacity 0.75s var(--ease-cinema), visibility 0.75s var(--ease-cinema);
+    }
+
+    #prologue-overlay.dismissed {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      display: none;
+    }
+
+    .prologue-stage {
+      max-width: 880px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .willow-emblem {
+      width: 180px;
+      height: 92px;
+      opacity: 0;
+      transform: scale(0.94);
+      animation: prologueFadeIn 1.4s var(--ease-cinema) 0.15s forwards;
+    }
+
+    .prologue-question {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.15rem, 2.1vw, 1.65rem);
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      max-width: 640px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: prologueFadeIn 1.4s var(--ease-cinema) 0.6s forwards;
+    }
+
+    .prologue-title-wrap {
+      position: relative;
+      padding: 0.4rem 1.2rem;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: prologueFadeIn 1.6s var(--ease-cinema) 1.3s forwards;
+    }
+
+    .prologue-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      color: var(--crimson-bright);
+      margin-bottom: 0.5rem;
+    }
+
+    .prologue-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7.8vw, 6.4rem);
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      line-height: 1;
+      color: var(--text-ivory);
+      text-shadow: 0 0 42px rgba(217, 38, 56, 0.32);
+      position: relative;
+    }
+
+    .prologue-meta {
+      font-size: clamp(0.92rem, 1.3vw, 1.08rem);
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      animation: prologueFadeIn 1.4s var(--ease-cinema) 2.0s forwards;
+    }
+
+    .prologue-team-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      opacity: 0;
+      animation: prologueFadeIn 1.4s var(--ease-cinema) 2.2s forwards;
+    }
+
+    .prologue-team-strip span {
+      padding: 0.25rem 0.65rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .prologue-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.8rem;
+      opacity: 1;
+    }
+
+    @keyframes prologueFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Buttons & Interactive Controls */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-ivory);
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover, .btn:focus-visible {
+      border-color: var(--crimson-bright);
+      background: rgba(217, 38, 56, 0.16);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #b81d2d 0%, #d92638 100%);
+      border-color: #ff5263;
+      box-shadow: 0 8px 28px rgba(217, 38, 56, 0.32);
+    }
+
+    .btn-primary:hover, .btn-primary:focus-visible {
+      background: linear-gradient(135deg, #cf2234 0%, #ef2d40 100%);
+      box-shadow: 0 10px 34px rgba(217, 38, 56, 0.48);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      padding: 0.45rem 0.85rem;
+    }
+
+    .btn-ghost:hover, .btn-ghost:focus-visible {
+      color: var(--text-ivory);
+      border-color: var(--border-strong);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* App Shell Layout */
+    #app-shell {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 100vw;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      overflow: hidden;
+      transition: opacity 0.4s ease;
+    }
+
+    /* Top Presenter Header Bar */
+    .hud-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 54px;
+      padding: 0.35rem 1rem;
+      background: rgba(8, 9, 13, 0.88);
+      border-bottom: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      gap: 0.5rem;
+      min-width: 0;
+      max-width: 100%;
+      z-index: 30;
+      transition: opacity 0.4s ease;
+    }
+
+    body.silence-active .hud-top,
+    body.silence-active .hud-bottom {
+      opacity: 0.18;
+    }
+
+    .hud-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      font-size: 0.95rem;
+      color: var(--text-ivory);
+      white-space: nowrap;
+    }
+
+    .speaker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(217, 38, 56, 0.15);
+      border: 1px solid var(--border-crimson);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-ivory);
+      white-space: nowrap;
+    }
+
+    .speaker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--crimson-bright);
+      box-shadow: 0 0 8px var(--crimson-bright);
+    }
+
+    .handoff-indicator {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      padding: 0.2rem 0.55rem;
+      border-left: 2px solid var(--slate-blue);
+      background: rgba(74, 111, 165, 0.1);
+      border-radius: 0 4px 4px 0;
+      white-space: nowrap;
+    }
+
+    /* Timer Widget in HUD */
+    .hud-timer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    .timer-readout {
+      font-weight: 700;
+      color: var(--text-ivory);
+      min-width: 98px;
+    }
+
+    .timer-pace-badge {
+      font-size: 0.7rem;
+      padding: 0.12rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(46, 196, 182, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(46, 196, 182, 0.35);
+    }
+
+    .hud-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Main Slide Viewport */
+    .stage-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(0.65rem, 1.5vw, 1.35rem);
+    }
+
+    .slide-frame {
+      width: 100%;
+      max-width: 1340px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.95rem;
+      padding: clamp(1rem, 1.8vw, 1.65rem);
+      background: linear-gradient(160deg, rgba(20, 23, 33, 0.88) 0%, rgba(10, 11, 16, 0.94) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+      position: relative;
+      overflow: visible;
+      animation: slideEnter var(--transition-speed) var(--ease-cinema);
+    }
+
+    @keyframes slideEnter {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.992);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Section-specific visual atmosphere accents */
+    .slide-frame[data-mood="opening"] {
+      border-top: 2px solid var(--crimson);
+      background: radial-gradient(circle at 85% 15%, rgba(217, 38, 56, 0.12), transparent 50%), linear-gradient(160deg, rgba(20, 18, 26, 0.92), rgba(9, 9, 13, 0.96));
+    }
+    .slide-frame[data-mood="psychology"] {
+      border-top: 2px solid #b5179e;
+      background: radial-gradient(circle at 80% 20%, rgba(181, 23, 158, 0.1), rgba(217, 38, 56, 0.08) 40%, transparent 65%), linear-gradient(160deg, rgba(22, 18, 30, 0.92), rgba(9, 10, 15, 0.96));
+    }
+    .slide-frame[data-mood="cinema"] {
+      border-top: 2px solid var(--slate-blue);
+      background: radial-gradient(circle at 18% 20%, rgba(74, 111, 165, 0.15), transparent 55%), linear-gradient(160deg, rgba(16, 22, 34, 0.92), rgba(8, 10, 15, 0.96));
+    }
+    .slide-frame[data-mood="silence"] {
+      border-top: 2px solid var(--amber);
+      background: radial-gradient(circle at 50% 50%, rgba(224, 159, 62, 0.07), transparent 60%), #07080c;
+    }
+    .slide-frame[data-mood="reflection"] {
+      border-top: 2px solid var(--emerald);
+      background: radial-gradient(circle at 82% 18%, rgba(46, 196, 182, 0.1), transparent 55%), linear-gradient(160deg, rgba(16, 25, 28, 0.92), rgba(9, 12, 16, 0.96));
+    }
+
+    /* Slide Header Metadata & Title */
+    .slide-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.9rem;
+    }
+
+    .slide-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .slide-headline {
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 3vw, 2.55rem);
+      font-weight: 700;
+      color: var(--text-ivory);
+      line-height: 1.18;
+      letter-spacing: 0.01em;
+    }
+
+    .slide-subheadline {
+      font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+      color: var(--text-muted);
+      max-width: 900px;
+    }
+
+    /* Slide Body Grid Layouts */
+    .slide-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 1rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+      gap: 0.9rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+      gap: 0.85rem;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .panel-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      min-width: 0;
+      max-width: 100%;
+      transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    }
+
+    .panel-card.interactive {
+      cursor: pointer;
+    }
+
+    .panel-card.interactive:hover,
+    .panel-card.interactive:focus-visible {
+      border-color: var(--crimson-bright);
+      background: rgba(217, 38, 56, 0.08);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .panel-card.active-card {
+      border-color: var(--crimson-bright);
+      background: rgba(217, 38, 56, 0.13);
+      box-shadow: 0 0 24px rgba(217, 38, 56, 0.2);
+    }
+
+    .card-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--crimson-bright);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--text-ivory);
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .script-quote {
+      padding: 0.9rem 1.15rem;
+      border-left: 3px solid var(--crimson);
+      background: rgba(217, 38, 56, 0.07);
+      border-radius: 0 8px 8px 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.02rem, 1.4vw, 1.25rem);
+      color: var(--text-ivory);
+      font-style: italic;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag-badge {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-ivory);
+    }
+
+    .tag-badge.note-source {
+      border-color: rgba(224, 159, 62, 0.45);
+      color: #f3c677;
+      background: rgba(224, 159, 62, 0.1);
+    }
+
+    /* Slide Footer Inside Card */
+    .slide-footer-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    /* Bottom Navigation & Progress Bar */
+    .hud-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      background: rgba(8, 9, 13, 0.9);
+      border-top: 1px solid var(--border-subtle);
+      position: relative;
+      z-index: 30;
+      transition: opacity 0.4s ease;
+    }
+
+    .progress-track {
+      position: absolute;
+      top: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson) 0%, #ff5c6c 100%);
+      width: 5%;
+      transition: width 0.3s var(--ease-cinema);
+    }
+
+    .nav-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-ivory);
+      padding: 0 0.5rem;
+    }
+
+    /* Drawers & Modals (Presenter Notes, Chapter Overview, Help) */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .drawer-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 960px;
+      max-height: 86vh;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.35rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-panel-elevated);
+    }
+
+    .modal-body {
+      padding: 1.35rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Presenter Notes Side Panel */
+    #notes-drawer {
+      position: fixed;
+      top: 58px;
+      right: 0;
+      bottom: 56px;
+      width: min(440px, 92vw);
+      background: rgba(14, 16, 24, 0.97);
+      border-left: 1px solid var(--border-strong);
+      z-index: 80;
+      transform: translateX(102%);
+      transition: transform 0.32s var(--ease-cinema);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -16px 0 44px rgba(0, 0, 0, 0.7);
+    }
+
+    #notes-drawer.open {
+      transform: translateX(0);
+    }
+
+    /* Interactive Components Specific Styles */
+    .vote-bar-wrap {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.35rem;
+    }
+
+    .vote-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson) 0%, #ff6b7b 100%);
+      width: 0%;
+      transition: width 0.45s var(--ease-cinema);
+    }
+
+    /* Cinematography Lab Stage */
+    .cinema-stage {
+      width: 100%;
+      height: 270px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080a10;
+      transition: all 0.35s ease;
+    }
+
+    /* Silence Countdown Ring */
+    .silence-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      border-radius: 12px;
+      background: rgba(5, 6, 9, 0.9);
+      border: 1px solid var(--border-subtle);
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .range-slider {
+      width: 100%;
+      accent-color: var(--crimson-bright);
+      cursor: pointer;
+    }
+
+    .input-text {
+      width: 100%;
+      min-width: 0;
+      flex: 1;
+      padding: 0.65rem 0.9rem;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      color: var(--text-ivory);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+    }
+
+    .input-text:focus {
+      outline: 2px solid var(--crimson-bright);
+      border-color: transparent;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 860px) {
+      .handoff-indicator {
+        display: none;
+      }
+      .hud-top, .hud-bottom {
+        padding: 0 0.65rem;
+      }
+      .brand-title {
+        font-size: 0.82rem;
+      }
+      .slide-frame {
+        padding: 1rem;
+      }
+    }
+  </style>
+<style>@media (max-width:820px),(pointer:coarse){*,*::before,*::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}}</style></head>
+<body>
+  <!-- Ambient Background Canvas & Cursor Light -->
+  <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+  <div id="cursor-light" aria-hidden="true"></div>
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- Choreographed Opening Sequence (Prologue) -->
+  <section id="prologue-overlay" aria-label="Cinematic Opening Sequence">
+    <div class="prologue-stage">
+      <!-- Original SVG Art: The One Wish Willow -->
+      <svg class="willow-emblem" viewBox="0 0 320 140" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One Wish Willow twisted branch illustration">
+        <defs>
+          <radialGradient id="willowGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ff3b4e" stop-opacity="0.48"/>
+            <stop offset="60%" stop-color="#4a6fa5" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#050507" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="160" cy="70" rx="125" ry="52" fill="url(#willowGlow)"/>
+        <path d="M28 78 C78 62, 118 32, 162 46 C204 59, 236 92, 292 60" stroke="#f4efe6" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M48 64 C96 92, 138 104, 178 72 C212 45, 248 48, 282 78" stroke="#d92638" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M112 52 C136 25, 184 25, 204 58 C184 91, 136 91, 112 52 Z" stroke="#b8b3aa" stroke-width="1.8" stroke-dasharray="4 3"/>
+        <circle cx="160" cy="62" r="5.5" fill="#ff3b4e"/>
+      </svg>
+
+      <p class="prologue-question">
+        “Where does caring deeply end… and obsession begin?”
+      </p>
+
+      <div class="prologue-title-wrap">
+        <div class="prologue-kicker">English Presentation · 2026 Film Study</div>
+        <h1 class="prologue-title">OBSESSION</h1>
+      </div>
+
+      <p class="prologue-meta">
+        Directed &amp; Written by Curry Barker · Released May 15, 2026 · Love → Desire → Obsession
+      </p>
+
+      <div class="prologue-team-strip" aria-label="Presentation Team Members">
+        <span>Jal (Team Leader)</span>
+        <span>Aanshi</span>
+        <span>Priyal</span>
+        <span>Rudra</span>
+        <span>Swet</span>
+        <span>Hetarth</span>
+      </div>
+
+      <div class="prologue-actions">
+        <button type="button" class="btn btn-primary" id="btn-enter-experience">
+          Enter Presentation Experience →
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-enter-with-timer">
+          Enter &amp; Start 20-Min Timer
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Presentation Shell -->
+  <div id="app-shell">
+    <!-- Top Presenter Bar -->
+    <header class="hud-top" aria-label="Presenter Control Bar">
+      <div class="hud-brand">
+        <span class="brand-title">OBSESSION (2026)</span>
+        <div class="speaker-pill" id="hud-speaker-pill" title="Current Slide Speaker">
+          <span class="speaker-dot"></span>
+          <span id="hud-speaker-name">JAL (Leader)</span>
+        </div>
+        <div class="handoff-indicator" id="hud-handoff-text">
+          Block: 0:00–2:30 · Next: Jal
+        </div>
+      </div>
+
+      <div class="hud-timer" aria-label="20-Minute Presentation Timer">
+        <span class="timer-readout" id="timer-display">00:00 / 20:00</span>
+        <span class="timer-pace-badge" id="timer-pace-status">Ready</span>
+        <button type="button" class="btn btn-ghost" id="btn-timer-toggle" title="Start or Pause 20-Minute Presentation Timer (Shortcut: T)">Start</button>
+        <button type="button" class="btn btn-ghost" id="btn-timer-reset" title="Reset Presentation Timer">Reset</button>
+      </div>
+
+      <div class="hud-controls">
+        <button type="button" class="btn btn-ghost" id="btn-open-overview" title="Slide Overview &amp; Chapter Navigator (Shortcut: O)">
+          Slides (20)
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-toggle-notes" title="Toggle Private Presenter Notes &amp; Script (Shortcut: N)">
+          Notes (N)
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-reset-slide" title="Reset Current Slide Interactions (Shortcut: R)">
+          Reset Slide (R)
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-toggle-motion" title="Toggle Reduced Motion Mode (Shortcut: M)" aria-pressed="false">
+          Motion: On
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-fullscreen" title="Toggle Fullscreen Mode (Shortcut: F)">
+          Fullscreen
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-open-help" title="Controls, Rehearsal Guide &amp; QA Report (Shortcut: H)">
+          Guide &amp; QA (H)
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Slide Viewport -->
+    <main class="stage-container" id="stage-container" aria-live="polite">
+      <article class="slide-frame" id="slide-mount" data-mood="opening">
+        <!-- Dynamically rendered by renderSlide() -->
+      </article>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="hud-bottom" aria-label="Slide Navigation">
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-fill" id="slide-progress-fill"></div>
+      </div>
+
+      <div class="nav-cluster">
+        <button type="button" class="btn" id="btn-prev-slide" title="Previous Slide (ArrowLeft)">
+          ← Prev
+        </button>
+        <span class="slide-counter" id="hud-slide-counter">Slide 01 / 20</span>
+        <button type="button" class="btn btn-primary" id="btn-next-slide" title="Next Slide (ArrowRight or Space)">
+          Next →
+        </button>
+      </div>
+
+      <div class="nav-cluster">
+        <span id="hud-section-label" style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-muted);">
+          Section 1 · Opening &amp; Premise
+        </span>
+        <button type="button" class="btn btn-ghost" id="btn-replay-prologue" title="Re-open Opening Title Sequence">
+          Replay Intro
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Collapsible Presenter Notes Drawer -->
+  <aside id="notes-drawer" aria-label="Presenter Notes and Verbatim Script">
+    <div class="modal-header">
+      <div>
+        <div class="card-kicker">Single-Screen Presenter Aid</div>
+        <h2 style="font-size: 1.05rem; font-family: var(--font-display);">Speaker Notes &amp; Verbatim Script</h2>
+      </div>
+      <button type="button" class="btn btn-ghost" id="btn-close-notes">Close ✕</button>
+    </div>
+    <div class="modal-body" id="notes-drawer-body">
+      <!-- Populated dynamically per slide -->
+    </div>
+  </aside>
+
+  <!-- 20-Slide Overview & Chapter Navigator Modal -->
+  <div class="drawer-backdrop" id="overview-modal" role="dialog" aria-modal="true" aria-labelledby="overview-modal-title">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div>
+          <div class="card-kicker">20-Slide Source Architecture</div>
+          <h2 id="overview-modal-title" style="font-family: var(--font-display); font-size: 1.35rem;">Slide Navigator &amp; Speaker Schedule</h2>
+        </div>
+        <button type="button" class="btn btn-ghost" id="btn-close-overview">Close ✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          Click any slide below to jump directly to it. Your 20-minute presentation timer continues running independently without resetting.
+        </p>
+        <div class="grid-3" id="overview-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help, Rehearsal Pacing & QA Audit Modal -->
+  <div class="drawer-backdrop" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div>
+          <div class="card-kicker">Classroom Operations &amp; Verification</div>
+          <h2 id="help-modal-title" style="font-family: var(--font-display); font-size: 1.35rem;">Presenter Guide, Team Rehearsal Plan &amp; Script Audit</h2>
+        </div>
+        <button type="button" class="btn btn-ghost" id="btn-close-help">Close ✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="panel-card">
+            <div class="card-kicker">Keyboard Shortcuts</div>
+            <h3 class="card-title">Live Classroom Controls</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.88rem; color: var(--text-muted);">
+              <li><strong style="color: var(--text-ivory);">ArrowRight / Space:</strong> Advance to next slide</li>
+              <li><strong style="color: var(--text-ivory);">ArrowLeft:</strong> Return to previous slide</li>
+              <li><strong style="color: var(--text-ivory);">O:</strong> Open 20-Slide Chapter Navigator</li>
+              <li><strong style="color: var(--text-ivory);">N:</strong> Toggle Presenter Notes Drawer (Single-screen overlay; keep closed when projecting to class or review on rehearsal device)</li>
+              <li><strong style="color: var(--text-ivory);">T:</strong> Start / Pause 20-minute presentation timer</li>
+              <li><strong style="color: var(--text-ivory);">R:</strong> Reset current slide's interactive state</li>
+              <li><strong style="color: var(--text-ivory);">M:</strong> Toggle Reduced Motion mode</li>
+              <li><strong style="color: var(--text-ivory);">F:</strong> Enter / Exit Fullscreen projector mode</li>
+              <li><strong style="color: var(--text-ivory);">H or ?:</strong> Toggle this Help &amp; Rehearsal modal</li>
+            </ul>
+          </div>
+          <div class="panel-card">
+            <div class="card-kicker">20-Minute Pacing Allocation</div>
+            <h3 class="card-title">6-Speaker Handoff Timeline</h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.86rem; color: var(--text-muted);">
+              <li><strong style="color: var(--text-ivory);">0:00 – 2:30 (Jal · Slides 1–3):</strong> Film intro, One Wish Willow premise, live class wish question (wait for 3–4 answers), and 6-member team intro.</li>
+              <li><strong style="color: var(--text-ivory);">2:30 – 6:00 (Aanshi · Slides 4–6):</strong> What is psychological horror, central idea progression, and Caring Deeply vs. Being Controlled.</li>
+              <li><strong style="color: var(--text-ivory);">6:00 – 9:30 (Priyal · Slides 7–9):</strong> 4 Main Themes, Psychological Perspective, and Live Classroom Show-of-Hands Voting.</li>
+              <li><strong style="color: var(--text-ivory);">9:30 – 12:30 (Rudra · Slides 10–11):</strong> 3 Character Questions, 5 Motivations, and Filmmaker Information Control.</li>
+              <li><strong style="color: var(--text-ivory);">12:30 – 16:30 (Swet · Slides 12–15):</strong> Cinematography Lab, 5-Second Silence Activity, Symbolism, and Real-Life Connection.</li>
+              <li><strong style="color: var(--text-ivory);">16:30 – 19:00 (Hetarth · Slides 16–18):</strong> 4-Question Classroom Quiz (5s wait per question), Critical Thinking, and 4 Life Lessons.</li>
+              <li><strong style="color: var(--text-ivory);">19:00 – 20:00 (Jal · Slides 19–20):</strong> Final Thoughts synthesis and Closing Thank-You takeaway.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="card-kicker">Source Script Audit &amp; Transparency Note</div>
+          <h3 class="card-title">How Cropped Page Transitions in “Obsession script.pdf” Were Handled</h3>
+          <p class="card-text">
+            In the supplied 6-page scanned PDF, three page breaks clipped lines at the bottom/top margin:
+            (1) <strong>Page 1→2 (Slides 5–6, Aanshi)</strong> clipped the body under <code>=== SLIDE 5 - CENTRAL IDEA - AANSHI ===</code> and started Page 2 with <code>[W]anting success, love, friendship is normal...</code>;
+            (2) <strong>Page 2→3 (Slide 11, Rudra)</strong> clipped the header and points 1–3, starting Page 3 with <code>[in]creases pressure / 4. New info changes understanding</code>;
+            (3) <strong>Page 3→4 (Slide 16, Hetarth)</strong> clipped the header and start of Q1, beginning Page 4 with <code>[ps]ychological horror? / Ans: A) Focus on mental tension</code>.
+            Every surviving word from the PDF is preserved verbatim, and reconstructed bridge headings are explicitly badged so no invented plot claims are ever passed off as film canon.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ==========================================================================
+         1. COMPLETE 20-SLIDE DATA MODEL (FAITHFUL TO ATTACHED SCRIPT PDF)
+         ========================================================================== */
+      const SLIDES = [
+        {
+          number: 1,
+          title: 'OBSESSION (2026) — Premise & Central Progression',
+          speaker: 'Jal (Team Leader)',
+          timeBlock: '0:00 – 2:30 (Suggested: 0:00 – 1:00)',
+          timingSource: 'Script Header: 0:00 to 2:30',
+          handoff: 'Opening Speaker: Jal (Team Leader)',
+          nextSpeaker: 'Jal (Slide 2: Interactive Question)',
+          mood: 'opening',
+          section: 'Section 1 · Opening & Premise',
+          subtitle: '“Good morning everyone. We are here to present Obsession, a 2026 horror film directed and written by Curry Barker.”',
+          verbatimScript: [
+            'Good morning everyone. We are here to present Obsession, a 2026 horror film directed and written by Curry Barker.',
+            'Genre: Horror | Director: Curry Barker | Release: May 15, 2026 | Main: Bear & Nikki | Central: Love -> Desire -> Obsession',
+            'The movie begins with a simple desire. Bear wants the affection of Nikki. He finds a mysterious object called the One Wish Willow and uses it to make his wish come true. But instead of a normal relationship, the wish creates disturbing consequences.'
+          ],
+          presenterTips: 'Deliver the opening warmly and deliberately. Click through the three stages of the Central Progression (Love → Desire → Obsession) as you introduce Bear, Nikki, and the One Wish Willow.',
+          externalNote: 'Verified film metadata (Wikipedia / Focus Features): Starring Michael Johnston (Bear) and Inde Navarrette (Nikki); directed & written by Curry Barker; US theatrical release May 15, 2026.'
+        },
+        {
+          number: 2,
+          title: 'Interactive Question: The One Wish Dilemma',
+          speaker: 'Jal (Team Leader)',
+          timeBlock: '0:00 – 2:30 (Suggested: 1:00 – 1:45)',
+          timingSource: 'Script Directive: [WAIT FOR 3-4 ANSWERS]',
+          handoff: 'Continuing: Jal → Classroom Engagement',
+          nextSpeaker: 'Jal (Slide 3: Meet the Team)',
+          mood: 'opening',
+          section: 'Section 1 · Opening & Premise',
+          subtitle: '“If you could make one wish come true, what would you choose?” — [WAIT FOR 3-4 ANSWERS]',
+          verbatimScript: [
+            'If you could make one wish come true, what would you choose?',
+            '[WAIT FOR 3-4 ANSWERS]'
+          ],
+          presenterTips: 'Ask the question aloud and pause. Use the interactive cards when classmates answer, or log 3–4 brief answers in the live classroom response recorder to visually validate student participation.'
+        },
+        {
+          number: 3,
+          title: 'Meet the Team — Six-Member Architecture',
+          speaker: 'Jal (Team Leader)',
+          timeBlock: '0:00 – 2:30 (Suggested: 1:45 – 2:30)',
+          timingSource: 'Script Header: 0:00 to 2:30',
+          handoff: 'Handoff at end of slide: “Now I invite Aanshi to begin.”',
+          nextSpeaker: 'Aanshi (Slide 4: Film Overview)',
+          mood: 'opening',
+          section: 'Section 1 · Opening & Premise',
+          subtitle: 'Coordinated six-member analysis exploring genre, themes, psychology, characters, craft, and real-life lessons.',
+          verbatimScript: [
+            'I am Jal, team leader - Introduction & Conclusion',
+            'Aanshi - Film overview & Genre',
+            'Rudra - Characters & Storytelling',
+            'Priyal - Themes & Psychology',
+            'Swet - Cinematography, Sound & Atmosphere',
+            'Hetarth - Audience Discussion & Conclusion',
+            'Now I invite Aanshi to begin.'
+          ],
+          presenterTips: 'Introduce each member clearly. Note for the team: while Rudra is listed 3rd on this introductory roster, Priyal speaks on Slides 7–9 (6:00–9:30) before Rudra speaks on Slides 10–11 (9:30–12:30). End by inviting Aanshi.'
+        },
+        {
+          number: 4,
+          title: 'Film Overview — What Is Psychological Horror?',
+          speaker: 'Aanshi',
+          timeBlock: '2:30 – 6:00 (Suggested: 2:30 – 4:15)',
+          timingSource: 'Script Header: 2:30 to 6:00',
+          handoff: 'Handoff Received: Jal → Aanshi (“Thank you, Jal.”)',
+          nextSpeaker: 'Aanshi (Slide 5: Central Idea)',
+          mood: 'psychology',
+          section: 'Section 2 · Genre & Central Idea',
+          subtitle: '“Thank you, Jal. What is psychological horror? It is different from horror that depends only on sudden shocks.”',
+          verbatimScript: [
+            'Thank you, Jal.',
+            'What is psychological horror? It is different from horror that depends only on sudden shocks.',
+            'It creates tension through uncertainty, emotional pressure and the way we interpret what we see.',
+            'Instead of asking whether something is frightening, it asks WHY it feels frightening.',
+            'This makes the audience involved in understanding characters and atmosphere.'
+          ],
+          presenterTips: 'Use the interactive comparison toggle between Shock Horror and Psychological Horror, then reveal your four key points progressively so the class focuses on each sentence as you speak.'
+        },
+        {
+          number: 5,
+          title: 'Central Idea — From Normal Desire to Fixation',
+          speaker: 'Aanshi',
+          timeBlock: '2:30 – 6:00 (Suggested: 4:15 – 5:05)',
+          timingSource: 'Script Block: 2:30 to 6:00',
+          handoff: 'Continuing: Aanshi (Genre → Central Idea)',
+          nextSpeaker: 'Aanshi (Slide 6: Caring Deeply vs. Being Controlled)',
+          mood: 'psychology',
+          section: 'Section 2 · Genre & Central Idea',
+          subtitle: 'Tracing the script’s central progression: how a normal human desire crosses the threshold into obsession.',
+          verbatimScript: [
+            '=== SLIDE 5 - CENTRAL IDEA - AANSHI ===',
+            '[Source PDF Note: Bottom margin of Page 1 cropped directly below the Slide 5 heading; bridges into Page 2 opening lines on Desire vs. Obsession.]',
+            'Core Script Progression: Love -> Desire -> Obsession',
+            'Beginning with a simple desire for affection, the story examines what happens when one wish overrides mutual choice and respect.'
+          ],
+          presenterTips: 'Click through the 3 stages of the Central Idea lens to bridge from psychological horror (Slide 4) into the moral distinction between normal motivation and destructive fixation (Slide 6).'
+        },
+        {
+          number: 6,
+          title: 'Desire vs. Obsession — Caring Deeply vs. Being Controlled',
+          speaker: 'Aanshi',
+          timeBlock: '2:30 – 6:00 (Suggested: 5:05 – 6:00)',
+          timingSource: 'Script Block: 2:30 to 6:00',
+          handoff: 'Handoff at end of slide: Aanshi → Priyal',
+          nextSpeaker: 'Priyal (Slide 7: Main Themes)',
+          mood: 'psychology',
+          section: 'Section 2 · Genre & Central Idea',
+          subtitle: '“What is a person willing to do to get what they want?”',
+          verbatimScript: [
+            '[W]anting success, love, friendship is normal. It motivates us.',
+            'Problems begin when ONE desire dominates judgement and respect for others.',
+            'Difference: Caring deeply vs Being controlled.',
+            'What is a person willing to do to get what they want?'
+          ],
+          presenterTips: 'Move the interactive Conceptual Spectrum selector from Healthy Affection to Obsession to show how judgement and respect erode when a single desire dominates everything.'
+        },
+        {
+          number: 7,
+          title: 'Main Themes — The Four Interlocking Pillars',
+          speaker: 'Priyal',
+          timeBlock: '6:00 – 9:30 (Suggested: 6:00 – 7:15)',
+          timingSource: 'Script Header: 6:00 to 9:30',
+          handoff: 'Handoff Received: Aanshi → Priyal',
+          nextSpeaker: 'Priyal (Slide 8: Psychological Perspective)',
+          mood: 'psychology',
+          section: 'Section 3 · Themes, Psychology & Voting',
+          subtitle: 'Four connected forces that drive the psychological escalation of Obsession.',
+          verbatimScript: [
+            '1. OBSESSION - thought dominates focus',
+            '2. CONTROL - wanting to control outcomes, uncertainty is uncomfortable',
+            '3. FEAR - grows when losing control',
+            '4. CONSEQUENCES - decisions affect relationships & responsibilities'
+          ],
+          presenterTips: 'Click each of the four theme cards in order (1 → 2 → 3 → 4) to reveal its definition and light up the causal chain connecting Obsession to Consequences.'
+        },
+        {
+          number: 8,
+          title: 'Psychological Perspective — How Tension Works on the Mind',
+          speaker: 'Priyal',
+          timeBlock: '6:00 – 9:30 (Suggested: 7:15 – 8:30)',
+          timingSource: 'Script Block: 6:00 to 9:30',
+          handoff: 'Continuing: Priyal (Main Themes → Psychology)',
+          nextSpeaker: 'Priyal (Slide 9: Audience Voting)',
+          mood: 'psychology',
+          section: 'Section 3 · Themes, Psychology & Voting',
+          subtitle: '“Are we worried because of what we saw, or because we are unsure what it means?”',
+          verbatimScript: [
+            'How it works:',
+            '- Repetition - pattern & meaning',
+            '- Uncertainty - imagination fills gaps',
+            '- Emotional Conflict - questioning decisions',
+            '- Unsettling Feeling - \'not quite right\' is scarier',
+            'Are we worried because of what we saw, or because we are unsure what it means?'
+          ],
+          presenterTips: 'Click through the four mechanisms (Repetition, Uncertainty, Emotional Conflict, Unsettling Feeling) and pause on the closing rhetorical question before launching the class vote.'
+        },
+        {
+          number: 9,
+          title: 'Audience Voting — What Makes Obsession Most Dangerous?',
+          speaker: 'Priyal',
+          timeBlock: '6:00 – 9:30 (Suggested: 8:30 – 9:30)',
+          timingSource: 'Script Directive: [VOTE - COUNT SLOWLY - 1,2,3...]',
+          handoff: 'Handoff at end of slide: Priyal → Rudra',
+          nextSpeaker: 'Rudra (Slide 10: Characters)',
+          mood: 'psychology',
+          section: 'Section 3 · Themes, Psychology & Voting',
+          subtitle: 'Live classroom show-of-hands poll — count slowly (1, 2, 3…) and record each vote on this device.',
+          verbatimScript: [
+            'What makes obsession most dangerous?',
+            'A. Uncontrolled desire?',
+            'B. The need for control?',
+            'C. Fear of losing something?',
+            'D. Poor decisions?',
+            '[VOTE - COUNT SLOWLY - 1,2,3...]'
+          ],
+          presenterTips: 'Read options A, B, C, and D aloud. Ask for a show of hands for each option, counting slowly (1, 2, 3...) and clicking +1 for each hand. Click "Reveal Result Analysis" once all four options are counted.'
+        },
+        {
+          number: 10,
+          title: 'Characters — Three Questions & Five Motivations',
+          speaker: 'Rudra',
+          timeBlock: '9:30 – 12:30 (Suggested: 9:30 – 11:00)',
+          timingSource: 'Script Header: 9:30 to 12:30',
+          handoff: 'Handoff Received: Priyal → Rudra',
+          nextSpeaker: 'Rudra (Slide 11: Storytelling & Information)',
+          mood: 'cinema',
+          section: 'Section 4 · Characters & Storytelling',
+          subtitle: '“Understanding does NOT mean agreeing.”',
+          verbatimScript: [
+            'Three questions:',
+            '1. What does this person want?',
+            '2. Why does it matter so much?',
+            '3. How do choices affect others?',
+            'Motivation: Fear, Insecurity, Affection, Ambition, Desire for Control',
+            'Understanding does NOT mean agreeing.'
+          ],
+          presenterTips: 'Click through the Three Questions and select each of the 5 Motivations to show how psychological horror invites us to analyze character motives critically without excusing harmful choices.'
+        },
+        {
+          number: 11,
+          title: 'Storytelling — Managing Information & Building Pressure',
+          speaker: 'Rudra',
+          timeBlock: '9:30 – 12:30 (Suggested: 11:00 – 12:30)',
+          timingSource: 'Script Block: 9:30 to 12:30',
+          handoff: 'Handoff at end of slide: Rudra → Swet',
+          nextSpeaker: 'Swet (Slide 12: Cinematography)',
+          mood: 'cinema',
+          section: 'Section 4 · Characters & Storytelling',
+          subtitle: '“Filmmaker manages information carefully. We constantly ask: What next? Why? Could it be different?”',
+          verbatimScript: [
+            '[Source PDF Note: Top of Page 3 begins at point 3 tail "...creases pressure" and point 4.]',
+            '...[in]creases pressure',
+            '4. New info changes understanding',
+            'Filmmaker manages information carefully.',
+            'We constantly ask: What next? Why? Could it be different?'
+          ],
+          presenterTips: 'Step through the 4-stage Narrative Pressure Timeline to demonstrate how careful information control keeps the audience questioning "What next? Why? Could it be different?"'
+        },
+        {
+          number: 12,
+          title: 'Cinematography — Interactive Visual Grammar Laboratory',
+          speaker: 'Swet',
+          timeBlock: '12:30 – 16:30 (Suggested: 12:30 – 13:40)',
+          timingSource: 'Script Header: 12:30 to 16:30',
+          handoff: 'Handoff Received: Rudra → Swet',
+          nextSpeaker: 'Swet (Slide 13: Sound & Silence)',
+          mood: 'cinema',
+          section: 'Section 5 · Craft, Symbolism & Real Life',
+          subtitle: '“Not just WHAT happens, but HOW it is presented.”',
+          verbatimScript: [
+            '- Lighting - visible vs hidden',
+            '- Camera Angles - powerful / vulnerable / isolated',
+            '- Composition - guides attention',
+            '- Colour - establishes mood',
+            '- Editing - shot length & cut timing',
+            'Not just WHAT happens, but HOW it is presented.'
+          ],
+          presenterTips: 'Use the live Cinematography Lab controls to toggle Lighting (Visible vs. Hidden), Camera Angle (Powerful, Vulnerable, Isolated), Composition, Colour, and Editing rhythm while speaking.'
+        },
+        {
+          number: 13,
+          title: 'Sound and Silence — The 5-Second Classroom Experiment',
+          speaker: 'Swet',
+          timeBlock: '12:30 – 16:30 (Suggested: 13:40 – 14:40)',
+          timingSource: 'Script Directive: [PAUSE 5 SECONDS]',
+          handoff: 'Continuing: Swet (Cinematography → Sound & Silence)',
+          nextSpeaker: 'Swet (Slide 14: Symbolism)',
+          mood: 'silence',
+          section: 'Section 5 · Craft, Symbolism & Real Life',
+          subtitle: '“Question: Would a tense scene feel same if we removed its sound?” — [PAUSE 5 SECONDS]',
+          verbatimScript: [
+            'Music suggests moment matters.',
+            'Sudden sound interrupts quiet.',
+            'Silence makes us notice small details.',
+            'Absence of music can be more uncomfortable than loud soundtrack.',
+            'Slow quiet = anticipation',
+            'Sudden change = surprise',
+            'Question: Would a tense scene feel same if we removed its sound?',
+            '[PAUSE 5 SECONDS]'
+          ],
+          presenterTips: 'Ask the question at the bottom of the slide, then click "Begin 5-Second Silence". Stand completely still and silent while the visual ring completes its 5-second countdown.'
+        },
+        {
+          number: 14,
+          title: 'Symbolism — Shadows, Spaces, Reflections & Repetition',
+          speaker: 'Swet',
+          timeBlock: '12:30 – 16:30 (Suggested: 14:40 – 15:40)',
+          timingSource: 'Script Block: 12:30 to 16:30',
+          handoff: 'Continuing: Swet (Sound → Symbolism)',
+          nextSpeaker: 'Swet (Slide 15: Real-Life Connection)',
+          mood: 'cinema',
+          section: 'Section 5 · Craft, Symbolism & Real Life',
+          subtitle: '“Symbols have no fixed meaning - depends on context. Connect symbol to moment and explain WHY.”',
+          verbatimScript: [
+            '- Shadows = uncertainty / hidden motives',
+            '- Closed spaces = pressure / limited freedom',
+            '- Reflections = identity / self-perception',
+            '- Repeated images = important idea',
+            'Symbols have no fixed meaning - depends on context.',
+            'Connect symbol to moment and explain WHY.'
+          ],
+          presenterTips: 'Click each of the four symbols to inspect its script meaning and toggle the classroom interpretation question showing how context shapes symbolic meaning.'
+        },
+        {
+          number: 15,
+          title: 'Real-Life Connection — Healthy Dedication vs. Fixation',
+          speaker: 'Swet',
+          timeBlock: '12:30 – 16:30 (Suggested: 15:40 – 16:30)',
+          timingSource: 'Script Block: 12:30 to 16:30',
+          handoff: 'Handoff at end of slide: Swet → Hetarth',
+          nextSpeaker: 'Hetarth (Slide 16: Classroom Quiz)',
+          mood: 'reflection',
+          section: 'Section 5 · Craft, Symbolism & Real Life',
+          subtitle: 'Distinguishing positive, balanced commitment from boundary-ignoring fixation.',
+          verbatimScript: [
+            'Strong interest + Balance + Respect = Positive',
+            'Example: Working hard for academic goal',
+            'Fixation = Interferes with life or ignores boundaries = Concerning'
+          ],
+          presenterTips: 'Compare the two formulas clearly and test the interactive real-life boundary scenarios before handing over to Hetarth for the audience quiz and discussion.'
+        },
+        {
+          number: 16,
+          title: 'Audience Quiz — 5-Second Think & Reveal',
+          speaker: 'Hetarth',
+          timeBlock: '16:30 – 19:00 (Suggested: 16:30 – 17:30)',
+          timingSource: 'Script Directive: [READ QUESTION - WAIT 5 SEC - REVEAL ANSWER]',
+          handoff: 'Handoff Received: Swet → Hetarth',
+          nextSpeaker: 'Hetarth (Slide 17: Critical Thinking)',
+          mood: 'reflection',
+          section: 'Section 6 · Quiz, Critical Thinking & Lessons',
+          subtitle: '[READ QUESTION — WAIT 5 SEC — REVEAL ANSWER]',
+          verbatimScript: [
+            '[Q1: Main focus of ps]ychological horror? -> Ans: A) Focus on mental tension',
+            'Q2: Technique for suspense? -> Ans: B) Using silence and sound',
+            'Q3: Healthy relationships? -> Ans: C) Respecting personal choices',
+            'Q4: Why use shadows? -> Ans: A) To create mystery',
+            '[READ QUESTION - WAIT 5 SEC - REVEAL ANSWER]'
+          ],
+          presenterTips: 'For each question (Q1 to Q4): read the question aloud, click "Wait 5 Seconds", let the class call out or raise hands, and then click "Reveal Answer". Never reveal early!'
+        },
+        {
+          number: 17,
+          title: 'Critical Thinking — Classroom Discussion Prompts',
+          speaker: 'Hetarth',
+          timeBlock: '16:30 – 19:00 (Suggested: 17:30 – 18:20)',
+          timingSource: 'Script Block: 16:30 to 19:00',
+          handoff: 'Continuing: Hetarth (Quiz → Critical Thinking)',
+          nextSpeaker: 'Hetarth (Slide 18: Lessons)',
+          mood: 'reflection',
+          section: 'Section 6 · Quiz, Critical Thinking & Lessons',
+          subtitle: 'Three open-ended analytical questions connecting film craft to human behaviour.',
+          verbatimScript: [
+            'Q1: Can strong desire become harmful? Why?',
+            '-> When it affects judgement & respect',
+            'Q2: How create fear without frightening image?',
+            '-> Sound, silence, lighting, uncertainty',
+            'Q3: What makes message memorable?',
+            '-> Characters, conflict, atmosphere, questions it leaves us thinking'
+          ],
+          presenterTips: 'Pose each question to the room first. After a student responds, click "Reveal Script Anchor" on that card to show the arrow synthesis from our script.'
+        },
+        {
+          number: 18,
+          title: 'Lessons — Four Principles That Matter',
+          speaker: 'Hetarth',
+          timeBlock: '16:30 – 19:00 (Suggested: 18:20 – 19:00)',
+          timingSource: 'Script Block: 16:30 to 19:00',
+          handoff: 'Handoff at end of slide: Hetarth → Jal',
+          nextSpeaker: 'Jal (Slide 19: Final Thoughts)',
+          mood: 'reflection',
+          section: 'Section 6 · Quiz, Critical Thinking & Lessons',
+          subtitle: 'Balance, Boundaries, Choices, and Reflection.',
+          verbatimScript: [
+            '1. Balance Matters - One desire should not control every decision',
+            '2. Boundaries Matter - Respect for others choices is essential',
+            '3. Choices Matter - Actions affect others unexpectedly',
+            '4. Reflection Matters - Stories let us examine assumptions'
+          ],
+          presenterTips: 'Reveal each of the four "Matters" pillars progressively, then hand the floor back to team leader Jal for Final Thoughts.'
+        },
+        {
+          number: 19,
+          title: 'Final Thoughts — Returning to the Central Idea',
+          speaker: 'Jal (Team Leader)',
+          timeBlock: '19:00 – 20:00 (Suggested: 19:00 – 19:35)',
+          timingSource: 'Suggested Closing Pacing: 19:00 to 19:35',
+          handoff: 'Handoff Received: Hetarth → Jal (“Thank you, Hetarth.”)',
+          nextSpeaker: 'Jal & Full Team (Slide 20: Thank You)',
+          mood: 'opening',
+          section: 'Section 7 · Resolution & Closing',
+          subtitle: '“The line between desire and obsession can be thinner than we think.”',
+          verbatimScript: [
+            'Thank you, Hetarth.',
+            'As we come towards the end, let us return to our central idea:',
+            'The line between desire and obsession can be thinner than we think.',
+            'By looking at themes, characters, sound, lighting and storytelling, we can understand how a film builds tension and communicates ideas.',
+            'More importantly, we can ask what the story encourages us to consider about our own choices and our respect for others.',
+            'A film can entertain us, surprise us and make us think.',
+            'And sometimes, the most interesting part of a film is not simply what happens on the screen, but the questions we continue asking after it ends.',
+            'That is one reason film discussions can be valuable in an English presentation.'
+          ],
+          presenterTips: 'Speak at a calm, reflective pace. Click the synthesis pillars as you mention themes, characters, sound, lighting, and storytelling.'
+        },
+        {
+          number: 20,
+          title: 'Thank You — When the Screen Goes Dark, the Thinking Begins',
+          speaker: 'Jal & Full Team',
+          timeBlock: '19:00 – 20:00 (Suggested: 19:35 – 20:00)',
+          timingSource: 'Suggested Closing Pacing: 19:35 to 20:00',
+          handoff: 'Final Resolution · All 6 Team Members Stand Ready for Teacher Q&A',
+          nextSpeaker: 'End of Presentation (Teacher & Class Q&A)',
+          mood: 'opening',
+          section: 'Section 7 · Resolution & Closing',
+          subtitle: '“On behalf of our entire team — Aanshi, Rudra, Priyal, Swet, Hetarth and myself, Jal…”',
+          verbatimScript: [
+            'On behalf of our entire team - Aanshi, Rudra, Priyal, Swet, Hetarth and myself, Jal - I would like to sincerely thank our respected teacher and all our classmates for listening so patiently and participating so actively in our discussion.',
+            'Your questions, your votes, and your participation made this presentation more meaningful.',
+            'As we close, I want to leave you with one final thought about Obsession (2026):',
+            'Obsession teaches us that every wish has a price, and every desire needs a limit.',
+            'Love becomes dangerous only when it forgets respect.',
+            'Desire becomes obsession only when it forgets boundaries.',
+            'The real horror is not on the screen, but in what happens when we let one feeling control everything.',
+            'So remember - Care deeply, but stay balanced. Want strongly, but respect others. Dream big, but stay human.',
+            'A good story does not end when the screen goes dark. Sometimes, that is when the thinking begins.'
+          ],
+          presenterTips: 'Deliver the final lines slowly with all 6 team members standing together. Leave the final screen visible as you invite comments or questions from your English teacher.'
+        }
+      ];
+
+      /* ==========================================================================
+         2. APPLICATION STATE (PRESERVED ACROSS SLIDE NAVIGATION & RESETTABLE)
+         ========================================================================== */
+      const state = {
+        currentSlide: 0, // 0-indexed (0..19)
+        reducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        notesOpen: false,
+        // 20-minute presentation timer (independent of slide changes, timestamp-accurate)
+        timerRunning: false,
+        timerStartTimestamp: null,
+        timerAccumulatedMs: 0,
+        timerIntervalId: null,
+
+        // Per-slide interactive states
+        slide1Stage: 0, // 0: Love, 1: Desire, 2: Obsession
+        slide2SelectedArchetype: null,
+        slide2CustomWishes: [],
+        slide3OrderMode: 'roster', // 'roster' | 'chronological'
+        slide3SelectedMember: 0,
+        slide4Mode: 'psychological', // 'shock' | 'psychological'
+        slide4RevealedSteps: 1,
+        slide5Stage: 0,
+        slide6SpectrumIndex: 2, // 0..4
+        slide6CompareMode: 'caring', // 'caring' | 'controlled'
+        slide7Revealed: [true, false, false, false],
+        slide8SelectedMech: 0,
+        slide9Votes: { A: 0, B: 0, C: 0, D: 0 },
+        slide9Revealed: false,
+        slide10ActiveQuestion: 0,
+        slide10ActiveMotivation: 0,
+        slide11Step: 0,
+        slide12Lab: {
+          lighting: 'hidden', // 'visible' | 'hidden'
+          angle: 'isolated',  // 'powerful' | 'vulnerable' | 'isolated'
+          composition: 'center', // 'thirds' | 'center' | 'tight'
+          colour: 'crimson',  // 'neutral' | 'cold' | 'crimson'
+          editing: 'slow'     // 'slow' | 'rapid'
+        },
+        slide13SilenceRunning: false,
+        slide13SilenceRemainingMs: 5000,
+        slide13SilenceDone: false,
+        slide13IntervalId: null,
+        slide14ActiveSymbol: 0,
+        slide14Tab: 'script', // 'script' | 'classroom'
+        slide15ActiveScenario: 0,
+        slide16CurrentQ: 0,
+        slide16Revealed: [false, false, false, false],
+        slide16SelectedChoice: [null, null, null, null],
+        slide16CountdownRunning: false,
+        slide16CountdownRemaining: 5,
+        slide16IntervalId: null,
+        slide17Revealed: [false, false, false],
+        slide18Revealed: [true, false, false, false],
+        slide19ActivePillar: 0,
+        slide20RevealedStanzas: 4
+      };
+
+      if (state.reducedMotion) {
+        document.body.classList.add('reduced-motion');
+      }
+
+      /* ==========================================================================
+         3. TIMER LOGIC (TIMESTAMP-BASED, TAB-INACTIVE SAFE, NEVER AUTO-ADVANCES)
+         ========================================================================== */
+      function getElapsedMs() {
+        if (!state.timerRunning || !state.timerStartTimestamp) {
+          return state.timerAccumulatedMs;
+        }
+        return state.timerAccumulatedMs + (Date.now() - state.timerStartTimestamp);
+      }
+
+      function formatTime(ms) {
+        const totalSec = Math.floor(ms / 1000);
+        const mins = Math.floor(totalSec / 60);
+        const secs = totalSec % 60;
+        return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+      }
+
+      function updateTimerUI() {
+        const elapsedMs = getElapsedMs();
+        const displayEl = document.getElementById('timer-display');
+        const paceEl = document.getElementById('timer-pace-status');
+        const toggleBtn = document.getElementById('btn-timer-toggle');
+        if (!displayEl || !paceEl || !toggleBtn) return;
+
+        displayEl.textContent = formatTime(elapsedMs) + ' / 20:00';
+        toggleBtn.textContent = state.timerRunning ? 'Pause' : (elapsedMs > 0 ? 'Resume' : 'Start');
+
+        const elapsedMinutes = elapsedMs / 60000;
+        const expectedMinutes = ((state.currentSlide + 1) / 20) * 20;
+        if (elapsedMs === 0 && !state.timerRunning) {
+          paceEl.textContent = 'Ready';
+          paceEl.style.color = 'var(--emerald)';
+        } else if (elapsedMinutes > 20) {
+          paceEl.textContent = '20m Reached';
+          paceEl.style.color = 'var(--crimson-bright)';
+        } else if (Math.abs(elapsedMinutes - expectedMinutes) <= 1.75) {
+          paceEl.textContent = 'On Pace';
+          paceEl.style.color = 'var(--emerald)';
+        } else if (elapsedMinutes > expectedMinutes + 1.75) {
+          paceEl.textContent = 'Behind Pace';
+          paceEl.style.color = 'var(--amber)';
+        } else {
+          paceEl.textContent = 'Ahead of Pace';
+          paceEl.style.color = '#7cc6fe';
+        }
+      }
+
+      function toggleMainTimer() {
+        if (state.timerRunning) {
+          state.timerAccumulatedMs = getElapsedMs();
+          state.timerStartTimestamp = null;
+          state.timerRunning = false;
+          if (state.timerIntervalId) {
+            clearInterval(state.timerIntervalId);
+            state.timerIntervalId = null;
+          }
+        } else {
+          state.timerStartTimestamp = Date.now();
+          state.timerRunning = true;
+          if (state.timerIntervalId) clearInterval(state.timerIntervalId);
+          state.timerIntervalId = setInterval(updateTimerUI, 250);
+        }
+        updateTimerUI();
+      }
+
+      function resetMainTimer() {
+        state.timerRunning = false;
+        state.timerStartTimestamp = null;
+        state.timerAccumulatedMs = 0;
+        if (state.timerIntervalId) {
+          clearInterval(state.timerIntervalId);
+          state.timerIntervalId = null;
+        }
+        updateTimerUI();
+      }
+
+      /* ==========================================================================
+         4. CLEANUP FOR SLIDE-LOCAL COUNTDOWNS (SILENCE & QUIZ TIMERS)
+         ========================================================================== */
+      function clearSlideTimers() {
+        if (state.slide13IntervalId) {
+          clearInterval(state.slide13IntervalId);
+          state.slide13IntervalId = null;
+        }
+        state.slide13SilenceRunning = false;
+        document.body.classList.remove('silence-active');
+
+        if (state.slide16IntervalId) {
+          clearInterval(state.slide16IntervalId);
+          state.slide16IntervalId = null;
+        }
+        state.slide16CountdownRunning = false;
+      }
+
+      /* ==========================================================================
+         5. RESET CURRENT SLIDE INTERACTION (SHORTCUT: R)
+         ========================================================================== */
+      function resetCurrentSlideState() {
+        clearSlideTimers();
+        const idx = state.currentSlide + 1;
+        switch (idx) {
+          case 1: state.slide1Stage = 0; break;
+          case 2: state.slide2SelectedArchetype = null; state.slide2CustomWishes = []; break;
+          case 3: state.slide3OrderMode = 'roster'; state.slide3SelectedMember = 0; break;
+          case 4: state.slide4Mode = 'psychological'; state.slide4RevealedSteps = 1; break;
+          case 5: state.slide5Stage = 0; break;
+          case 6: state.slide6SpectrumIndex = 2; state.slide6CompareMode = 'caring'; break;
+          case 7: state.slide7Revealed = [true, false, false, false]; break;
+          case 8: state.slide8SelectedMech = 0; break;
+          case 9: state.slide9Votes = { A: 0, B: 0, C: 0, D: 0 }; state.slide9Revealed = false; break;
+          case 10: state.slide10ActiveQuestion = 0; state.slide10ActiveMotivation = 0; break;
+          case 11: state.slide11Step = 0; break;
+          case 12:
+            state.slide12Lab = { lighting: 'hidden', angle: 'isolated', composition: 'center', colour: 'crimson', editing: 'slow' };
+            break;
+          case 13:
+            state.slide13SilenceRemainingMs = 5000;
+            state.slide13SilenceDone = false;
+            break;
+          case 14: state.slide14ActiveSymbol = 0; state.slide14Tab = 'script'; break;
+          case 15: state.slide15ActiveScenario = 0; break;
+          case 16:
+            state.slide16CurrentQ = 0;
+            state.slide16Revealed = [false, false, false, false];
+            state.slide16SelectedChoice = [null, null, null, null];
+            state.slide16CountdownRemaining = 5;
+            break;
+          case 17: state.slide17Revealed = [false, false, false]; break;
+          case 18: state.slide18Revealed = [true, false, false, false]; break;
+          case 19: state.slide19ActivePillar = 0; break;
+          case 20: state.slide20RevealedStanzas = 4; break;
+        }
+        renderCurrentSlide();
+      }
+
+      /* ==========================================================================
+         6. BESPOKE SLIDE BODY RENDERERS (ALL 20 SLIDES)
+         ========================================================================== */
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function renderSlideBody(slideNum) {
+        switch (slideNum) {
+          case 1: {
+            const stages = [
+              {
+                label: 'Stage 01 · LOVE / AFFECTION',
+                title: 'A Simple Desire for Affection',
+                desc: '“The movie begins with a simple desire. Bear wants the affection of Nikki.” At its starting point, wanting connection and mutual warmth is relatable and human.'
+              },
+              {
+                label: 'Stage 02 · DESIRE & THE WISH',
+                title: 'The One Wish Willow',
+                desc: '“He finds a mysterious object called the One Wish Willow and uses it to make his wish come true.” Instead of accepting Nikki’s autonomous feelings, Bear uses the object to force an outcome.'
+              },
+              {
+                label: 'Stage 03 · OBSESSION & CONSEQUENCES',
+                title: 'Disturbing Consequences',
+                desc: '“But instead of a normal relationship, the wish creates disturbing consequences.” When affection is manufactured without genuine choice, desire mutates into terrifying obsession.'
+              }
+            ];
+            const active = stages[state.slide1Stage] || stages[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Verified Film Dossier (Script Slide 1)</div>
+                  <h3 class="card-title">Obsession (2026)</h3>
+                  <div class="badge-row">
+                    <span class="tag-badge">Genre: Horror</span>
+                    <span class="tag-badge">Director &amp; Writer: Curry Barker</span>
+                    <span class="tag-badge">Release: May 15, 2026</span>
+                    <span class="tag-badge">Main: Bear &amp; Nikki</span>
+                  </div>
+                  <div class="script-quote" style="margin-top: 0.4rem;">
+                    “The movie begins with a simple desire. Bear wants the affection of Nikki. He finds a mysterious object called the One Wish Willow and uses it to make his wish come true. But instead of a normal relationship, the wish creates disturbing consequences.”
+                  </div>
+                  <p class="card-text" style="font-size: 0.84rem;">
+                    <strong>Central Progression:</strong> Love → Desire → Obsession
+                  </p>
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">Interactive Progression Explorer</div>
+                  <h3 class="card-title">Trace the Core Arc: Love → Desire → Obsession</h3>
+                  <div class="grid-3" style="margin-top: 0.25rem;">
+                    ${stages.map((st, i) => `
+                      <button type="button" class="btn ${state.slide1Stage === i ? 'btn-primary' : ''}" data-action="slide1-stage" data-index="${i}">
+                        ${i === 0 ? '1. Love' : i === 1 ? '2. Desire' : '3. Obsession'}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div class="panel-card active-card" style="margin-top: 0.5rem;">
+                    <div class="card-kicker">${active.label}</div>
+                    <div class="card-title">${active.title}</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${active.desc}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 2: {
+            const archetypes = [
+              {
+                id: 'love',
+                title: 'Guaranteed Affection or Romance',
+                prompt: 'Wishing someone specific would fall in love with you immediately.',
+                reflection: 'Hypothetical Reflection (Non-Canon): Connects directly to Bear’s choice in the script. If love is granted by a wish rather than free choice, does it respect the other person’s boundaries?'
+              },
+              {
+                id: 'success',
+                title: 'Instant Academic or Career Triumph',
+                prompt: 'Wishing for effortless top grades, wealth, or status overnight.',
+                reflection: 'Hypothetical Reflection (Non-Canon): Removes uncertainty and effort, raising the script’s central question of how shortcuts change our sense of responsibility.'
+              },
+              {
+                id: 'control',
+                title: 'Total Certainty Over the Future',
+                prompt: 'Wishing to control every outcome so nothing unexpected ever happens.',
+                reflection: 'Hypothetical Reflection (Non-Canon): Highlights Priyal’s theme on Slide 7 — wanting to control outcomes because uncertainty feels uncomfortable.'
+              },
+              {
+                id: 'undo',
+                title: 'Rewriting a Past Mistake',
+                prompt: 'Wishing to erase a painful decision or consequence.',
+                reflection: 'Hypothetical Reflection (Non-Canon): Connects to Hetarth’s lesson on Slide 18 — choices matter because actions affect others unexpectedly.'
+              }
+            ];
+            const selectedObj = archetypes.find(a => a.id === state.slide2SelectedArchetype);
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Audience Moral Dilemma · [WAIT FOR 3-4 ANSWERS]</div>
+                  <h3 class="card-title">“If you could make one wish come true, what would you choose?”</h3>
+                  <p class="card-text">
+                    Select an audience wish category below as classmates respond, or log 3–4 actual classmate wishes on the right:
+                  </p>
+                  <div class="grid-2" style="margin-top: 0.35rem;">
+                    ${archetypes.map(a => `
+                      <div class="panel-card interactive ${state.slide2SelectedArchetype === a.id ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide2-archetype" data-id="${a.id}">
+                        <div class="card-kicker">Wish Archetype</div>
+                        <div style="font-weight: 700; color: var(--text-ivory); font-size: 0.96rem;">${a.title}</div>
+                        <div style="font-size: 0.82rem; color: var(--text-muted);">${a.prompt}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                  ${selectedObj ? `
+                    <div class="script-quote" style="margin-top: 0.5rem; font-style: normal; font-family: var(--font-sans); font-size: 0.9rem;">
+                      <strong style="color: var(--crimson-bright);">Thematic Bridge:</strong> ${selectedObj.reflection}
+                    </div>
+                  ` : ''}
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">Live Classroom Wish Log (${state.slide2CustomWishes.length} / 4 Answers Target)</div>
+                  <h3 class="card-title">Record 3–4 Classmate Responses</h3>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="slide2-wish-input" class="input-text" placeholder="Type a classmate's wish (e.g., 'Endless wealth', 'Peace')..." maxlength="90" />
+                    <button type="button" class="btn btn-primary" id="btn-add-wish">Log Wish</button>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 0.45rem; margin-top: 0.4rem;">
+                    ${state.slide2CustomWishes.length === 0 ? `
+                      <p class="card-text" style="font-size: 0.86rem;">
+                        No live classmate responses logged yet. Ask 3–4 students for their wish and record them here or click an archetype card on the left.
+                      </p>
+                    ` : state.slide2CustomWishes.map((w, idx) => `
+                      <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; background: rgba(217,38,56,0.1); border: 1px solid var(--border-crimson); border-radius: 6px;">
+                        <span style="font-size: 0.9rem; color: var(--text-ivory);"><strong>Answer #${idx + 1}:</strong> “${escapeHtml(w)}”</span>
+                        <span class="tag-badge">Hypothetical Class Response</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 3: {
+            const members = [
+              { name: 'Jal', role: 'Team Leader — Introduction & Conclusion', slides: 'Slides 1–3 & 19–20', time: '0:00–2:30 & 19:00–20:00', rosterOrder: 1, chronoOrder: 1, focus: 'Sets up the premise of Obsession (2026), facilitates the opening wish question, introduces the 6-member team, and delivers Final Thoughts & Thank You.' },
+              { name: 'Aanshi', role: 'Film Overview & Genre', slides: 'Slides 4–6', time: '2:30–6:00', rosterOrder: 2, chronoOrder: 2, focus: 'Defines psychological horror vs. sudden shocks, establishes the Central Idea, and contrasts Caring Deeply vs. Being Controlled.' },
+              { name: 'Rudra', role: 'Characters & Storytelling', slides: 'Slides 10–11', time: '9:30–12:30', rosterOrder: 3, chronoOrder: 4, focus: 'Examines the 3 character questions, 5 core motivations (understanding ≠ agreeing), and how filmmakers manage information to build pressure.' },
+              { name: 'Priyal', role: 'Themes & Psychology', slides: 'Slides 7–9', time: '6:00–9:30', rosterOrder: 4, chronoOrder: 3, focus: 'Unpacks the 4 Main Themes (Obsession, Control, Fear, Consequences), the psychological mechanisms of uncertainty, and conducts the Live Class Vote.' },
+              { name: 'Swet', role: 'Cinematography, Sound & Atmosphere', slides: 'Slides 12–15', time: '12:30–16:30', rosterOrder: 5, chronoOrder: 5, focus: 'Demonstrates lighting, angles, composition, colour & editing, leads the 5-Second Silence activity, decodes symbolism, and connects to real-life boundaries.' },
+              { name: 'Hetarth', role: 'Audience Discussion & Conclusion', slides: 'Slides 16–18', time: '16:30–19:00', rosterOrder: 6, chronoOrder: 6, focus: 'Leads the 4-question 5-second classroom quiz, facilitates critical thinking prompts, and synthesizes the 4 real-life lessons.' }
+            ];
+            const sorted = [...members].sort((a, b) => state.slide3OrderMode === 'roster' ? a.rosterOrder - b.rosterOrder : a.chronoOrder - b.chronoOrder);
+            const selected = sorted[state.slide3SelectedMember] || sorted[0];
+            return `
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                  <div class="badge-row">
+                    <button type="button" class="btn ${state.slide3OrderMode === 'roster' ? 'btn-primary' : 'btn-ghost'}" data-action="slide3-mode" data-mode="roster">
+                      Script Slide 3 Roster Order
+                    </button>
+                    <button type="button" class="btn ${state.slide3OrderMode === 'chronological' ? 'btn-primary' : 'btn-ghost'}" data-action="slide3-mode" data-mode="chronological">
+                      Actual Speaking Timeline Order (0:00 → 20:00)
+                    </button>
+                  </div>
+                  <span class="tag-badge">Next Handoff Cue: “Now I invite Aanshi to begin.”</span>
+                </div>
+
+                <div class="grid-3">
+                  ${sorted.map((m, i) => `
+                    <div class="panel-card interactive ${state.slide3SelectedMember === i ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide3-member" data-index="${i}">
+                      <div class="card-kicker">${m.slides} · ${m.time}</div>
+                      <div class="card-title">${m.name}</div>
+                      <div style="font-size: 0.88rem; color: var(--text-ivory); font-weight: 600;">${m.role}</div>
+                      <p class="card-text" style="font-size: 0.82rem;">${m.focus}</p>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <div class="panel-card" style="flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                  <div>
+                    <span class="card-kicker">Highlighted Speaker Brief · ${selected.name}</span>
+                    <p style="font-size: 0.92rem; color: var(--text-ivory); margin-top: 0.2rem;">${selected.focus}</p>
+                  </div>
+                  <button type="button" class="btn btn-primary" data-action="goto-slide" data-slide="3">
+                    Hand Over to Aanshi (Slide 4) →
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          case 4: {
+            const steps = [
+              'What is psychological horror? It is different from horror that depends only on sudden shocks.',
+              'It creates tension through uncertainty, emotional pressure and the way we interpret what we see.',
+              'Instead of asking whether something is frightening, it asks WHY it feels frightening.',
+              'This makes the audience involved in understanding characters and atmosphere.'
+            ];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Interactive Genre Contrast</div>
+                  <h3 class="card-title">Sudden Shock Horror vs. Psychological Horror</h3>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="btn ${state.slide4Mode === 'shock' ? 'btn-primary' : ''}" data-action="slide4-mode" data-mode="shock">
+                      Conventional Shock Horror
+                    </button>
+                    <button type="button" class="btn ${state.slide4Mode === 'psychological' ? 'btn-primary' : ''}" data-action="slide4-mode" data-mode="psychological">
+                      Psychological Horror (Obsession)
+                    </button>
+                  </div>
+
+                  ${state.slide4Mode === 'shock' ? `
+                    <div class="panel-card" style="margin-top: 0.4rem;">
+                      <div class="card-kicker">Conventional Approach</div>
+                      <div class="card-title">Depends on Sudden Shocks</div>
+                      <p class="card-text">Relies on immediate startle reflexes and external threats. Asks <em>whether</em> something on screen is frightening in the moment, then quickly dissipates.</p>
+                    </div>
+                  ` : `
+                    <div class="panel-card active-card" style="margin-top: 0.4rem;">
+                      <div class="card-kicker">Aanshi’s Core Definition</div>
+                      <div class="card-title">Asks WHY It Feels Frightening</div>
+                      <p class="card-text" style="color: var(--text-ivory);">Creates sustained tension through <strong>uncertainty</strong>, <strong>emotional pressure</strong>, and <strong>the way we interpret what we see</strong>—involving the audience in understanding characters and atmosphere.</p>
+                    </div>
+                  `}
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">Progressive Disclosure (${state.slide4RevealedSteps} / 4 Statements Revealed)</div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="card-title">Aanshi’s Key Arguments</h3>
+                    <button type="button" class="btn btn-primary" data-action="slide4-reveal-next">
+                      ${state.slide4RevealedSteps < 4 ? 'Reveal Next Point (+1)' : 'Reset Points'}
+                    </button>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    ${steps.map((line, idx) => idx < state.slide4RevealedSteps ? `
+                      <div style="padding: 0.65rem 0.9rem; border-left: 3px solid var(--crimson-bright); background: rgba(255,255,255,0.03); border-radius: 0 6px 6px 0;">
+                        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--crimson-bright);">0${idx + 1}</span>
+                        <p style="font-size: 0.93rem; color: var(--text-ivory);">${line}</p>
+                      </div>
+                    ` : `
+                      <div style="padding: 0.6rem 0.9rem; border: 1px dashed var(--border-subtle); border-radius: 6px; color: var(--text-dim); font-size: 0.85rem;">
+                        Point 0${idx + 1} — Click “Reveal Next Point” as Aanshi speaks
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 5: {
+            const lenses = [
+              {
+                title: '1. Normal Human Motivation',
+                subtitle: 'Affection, Friendship & Ambition',
+                text: 'Wanting love, friendship, or success is a healthy part of human life—it motivates us to grow and connect with others.'
+              },
+              {
+                title: '2. The Tipping Point',
+                subtitle: 'When One Desire Dominates Judgement',
+                text: 'The central conflict begins when a single desire overrides balanced judgement and eclipses respect for another person’s autonomy.'
+              },
+              {
+                title: '3. The Central Question',
+                subtitle: 'Love → Desire → Obsession',
+                text: 'Instead of a mutual relationship built on respect, fixation turns affection into possession—asking how far someone will go to get what they want.'
+              }
+            ];
+            const activeLens = lenses[state.slide5Stage] || lenses[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="badge-row">
+                    <span class="tag-badge">=== SLIDE 5 - CENTRAL IDEA - AANSHI ===</span>
+                    <span class="tag-badge note-source">PDF Page 1→2 Bridge Reconstructed</span>
+                  </div>
+                  <h3 class="card-title">The Threshold Between Desire and Obsession</h3>
+                  <p class="card-text">
+                    In <em>Obsession</em>, the central idea is not merely supernatural horror—it is the psychological transition from <strong>wanting connection</strong> to <strong>demanding control</strong>.
+                  </p>
+                  <div style="display: flex; gap: 0.5rem; margin-top: 0.35rem;">
+                    ${lenses.map((l, idx) => `
+                      <button type="button" class="btn ${state.slide5Stage === idx ? 'btn-primary' : ''}" data-action="slide5-stage" data-index="${idx}">
+                        Step ${idx + 1}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div class="panel-card active-card" style="margin-top: 0.4rem;">
+                    <div class="card-kicker">${activeLens.subtitle}</div>
+                    <div class="card-title">${activeLens.title}</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${activeLens.text}</p>
+                  </div>
+                </div>
+
+                <div class="panel-card" style="justify-content: center; align-items: center; text-align: center;">
+                  <div class="card-kicker">Visual Thesis Diagram</div>
+                  <svg viewBox="0 0 420 190" style="width: 100%; max-width: 420px; height: auto;" role="img" aria-label="Love to Desire to Obsession progression diagram">
+                    <line x1="65" y1="95" x2="355" y2="95" stroke="rgba(244,239,230,0.25)" stroke-width="2" stroke-dasharray="5 5"/>
+                    <circle cx="75" cy="95" r="38" fill="${state.slide5Stage === 0 ? 'rgba(46,196,182,0.28)' : 'rgba(255,255,255,0.04)'}" stroke="#2ec4b6" stroke-width="2"/>
+                    <text x="75" y="99" text-anchor="middle" fill="#f4efe6" font-size="13" font-weight="bold">LOVE</text>
+                    <circle cx="210" cy="95" r="42" fill="${state.slide5Stage === 1 ? 'rgba(224,159,62,0.28)' : 'rgba(255,255,255,0.04)'}" stroke="#e09f3e" stroke-width="2"/>
+                    <text x="210" y="99" text-anchor="middle" fill="#f4efe6" font-size="13" font-weight="bold">DESIRE</text>
+                    <circle cx="345" cy="95" r="46" fill="${state.slide5Stage === 2 ? 'rgba(217,38,56,0.35)' : 'rgba(255,255,255,0.04)'}" stroke="#ff3b4e" stroke-width="2.5"/>
+                    <text x="345" y="99" text-anchor="middle" fill="#f4efe6" font-size="13" font-weight="bold">OBSESSION</text>
+                  </svg>
+                  <p class="card-text" style="font-size: 0.84rem;">
+                    Click Steps 1–3 on the left to highlight each transition along the thesis arc.
+                  </p>
+                </div>
+              </div>
+            `;
+          }
+
+          case 6: {
+            const spectrum = [
+              { label: '1. Healthy Affection', stateText: 'Mutual respect; values the other person’s autonomy and choices.', status: 'Balanced & Respectful' },
+              { label: '2. Normal Motivation', stateText: '“Wanting success, love, friendship is normal. It motivates us.”', status: 'Constructive Desire' },
+              { label: '3. Fixation Threshold', stateText: 'One specific outcome begins crowding out perspective and patience.', status: 'Warning Boundary' },
+              { label: '4. Dominating Judgement', stateText: '“Problems begin when ONE desire dominates judgement and respect for others.”', status: 'Eroding Respect' },
+              { label: '5. Controlling Obsession', stateText: '“Difference: Caring deeply vs Being controlled. What is a person willing to do to get what they want?”', status: 'Destructive Obsession' }
+            ];
+            const currentSpec = spectrum[state.slide6SpectrumIndex] || spectrum[2];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Verbatim Script Anchor (Page 2 Top)</div>
+                  <div class="script-quote">
+                    “Wanting success, love, friendship is normal. It motivates us. Problems begin when ONE desire dominates judgement and respect for others.”
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; margin-top: 0.35rem;">
+                    <button type="button" class="btn ${state.slide6CompareMode === 'caring' ? 'btn-primary' : ''}" data-action="slide6-compare" data-mode="caring">
+                      Caring Deeply
+                    </button>
+                    <button type="button" class="btn ${state.slide6CompareMode === 'controlled' ? 'btn-primary' : ''}" data-action="slide6-compare" data-mode="controlled">
+                      Being Controlled
+                    </button>
+                  </div>
+                  ${state.slide6CompareMode === 'caring' ? `
+                    <div class="panel-card" style="border-color: var(--emerald);">
+                      <div class="card-kicker" style="color: var(--emerald);">Caring Deeply</div>
+                      <p class="card-text" style="color: var(--text-ivory);">Respects personal boundaries, accepts “no” or uncertainty, and keeps judgement intact alongside other life responsibilities.</p>
+                    </div>
+                  ` : `
+                    <div class="panel-card active-card">
+                      <div class="card-kicker">Being Controlled by One Desire</div>
+                      <p class="card-text" style="color: var(--text-ivory);">Treats another person as a prize or outcome to be locked down; sacrifices ethics and mutual respect to get what it wants.</p>
+                    </div>
+                  `}
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">Interactive Desire-vs-Obsession Spectrum (Conceptual Model)</div>
+                  <h3 class="card-title">“What is a person willing to do to get what they want?”</h3>
+                  <label for="slide6-slider" style="font-size: 0.85rem; color: var(--text-muted);">
+                    Move across the 5 conceptual stages (illustrative classroom continuum, not a clinical metric):
+                  </label>
+                  <input id="slide6-slider" type="range" min="0" max="4" step="1" value="${state.slide6SpectrumIndex}" class="range-slider" />
+                  <div class="panel-card active-card" style="margin-top: 0.35rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span class="card-kicker">${currentSpec.status}</span>
+                      <span class="tag-badge">Stage ${state.slide6SpectrumIndex + 1} / 5</span>
+                    </div>
+                    <div class="card-title">${currentSpec.label}</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${currentSpec.stateText}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 7: {
+            const themes = [
+              { num: '1', name: 'OBSESSION', line: 'thought dominates focus', detail: 'A single fixation occupies the mind until every normal interaction is filtered through that one wish.' },
+              { num: '2', name: 'CONTROL', line: 'wanting to control outcomes, uncertainty is uncomfortable', detail: 'Rather than tolerating natural human uncertainty, the character tries to force guaranteed results.' },
+              { num: '3', name: 'FEAR', line: 'grows when losing control', detail: 'The moment the manufactured outcome is threatened, anxiety and paranoia escalate rapidly.' },
+              { num: '4', name: 'CONSEQUENCES', line: 'decisions affect relationships & responsibilities', detail: 'Every choice made to preserve control damages trust, autonomy, and real-world relationships.' }
+            ];
+            return `
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                  <p class="card-text">Click each theme card as Priyal explains how one feeds into the next:</p>
+                  <button type="button" class="btn btn-ghost" data-action="slide7-reveal-all">Reveal All 4 Themes</button>
+                </div>
+                <div class="grid-4">
+                  ${themes.map((t, i) => {
+                    const isRev = state.slide7Revealed[i];
+                    return `
+                      <div class="panel-card interactive ${isRev ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide7-toggle" data-index="${i}">
+                        <div class="card-kicker">Theme 0${t.num}</div>
+                        <div class="card-title">${t.name}</div>
+                        ${isRev ? `
+                          <div style="font-weight: 700; color: var(--crimson-bright); font-size: 0.95rem;">“${t.line}”</div>
+                          <p class="card-text" style="font-size: 0.85rem; color: var(--text-ivory);">${t.detail}</p>
+                        ` : `
+                          <p class="card-text" style="font-size: 0.85rem; color: var(--text-dim);">Click to reveal Priyal’s script definition →</p>
+                        `}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          case 8: {
+            const mechs = [
+              { name: 'Repetition', script: 'pattern & meaning', explanation: 'Recurring behaviours, phrases, or visual motifs train the audience to notice patterns and suspect hidden meaning.' },
+              { name: 'Uncertainty', script: 'imagination fills gaps', explanation: 'When the film withholds full explanation, the viewer’s own imagination supplies possibilities more unsettling than explicit gore.' },
+              { name: 'Emotional Conflict', script: 'questioning decisions', explanation: 'Characters and audience alike are torn between what was wished for and the disturbing reality of what that wish costs.' },
+              { name: 'Unsettling Feeling', script: "'not quite right' is scarier", explanation: 'Familiar settings and relationships that feel slightly off create deeper psychological dread than a conventional monster.' }
+            ];
+            const activeM = mechs[state.slide8SelectedMech] || mechs[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">How It Works · 4 Psychological Mechanisms</div>
+                  <div class="grid-2">
+                    ${mechs.map((m, i) => `
+                      <div class="panel-card interactive ${state.slide8SelectedMech === i ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide8-mech" data-index="${i}">
+                        <div class="card-kicker">Mechanism 0${i + 1}</div>
+                        <div class="card-title" style="font-size: 1.08rem;">${m.name}</div>
+                        <div style="font-size: 0.86rem; color: var(--crimson-bright);">${m.script}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <div class="panel-card" style="justify-content: space-between;">
+                  <div>
+                    <div class="card-kicker">Selected Mechanism Deep Dive</div>
+                    <h3 class="card-title">${activeM.name} — “${activeM.script}”</h3>
+                    <p class="card-text" style="color: var(--text-ivory); margin-top: 0.4rem;">${activeM.explanation}</p>
+                  </div>
+                  <div class="script-quote">
+                    “Are we worried because of what we saw, or because we are unsure what it means?”
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 9: {
+            const options = [
+              { key: 'A', label: 'A. Uncontrolled desire?' },
+              { key: 'B', label: 'B. The need for control?' },
+              { key: 'C', label: 'C. Fear of losing something?' },
+              { key: 'D', label: 'D. Poor decisions?' }
+            ];
+            const totalVotes = state.slide9Votes.A + state.slide9Votes.B + state.slide9Votes.C + state.slide9Votes.D;
+            let leaderText = 'Record classroom votes above to identify the leading perspective.';
+            if (totalVotes > 0) {
+              const maxCount = Math.max(state.slide9Votes.A, state.slide9Votes.B, state.slide9Votes.C, state.slide9Votes.D);
+              const winners = options.filter(o => state.slide9Votes[o.key] === maxCount).map(o => o.label);
+              leaderText = `Leading Classroom Choice (${maxCount} vote${maxCount === 1 ? '' : 's'}): ${winners.join(' & ')}`;
+            }
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="card-kicker">[VOTE - COUNT SLOWLY - 1,2,3...]</span>
+                    <span class="tag-badge">Local Device Tally · Total Votes: ${totalVotes}</span>
+                  </div>
+                  <h3 class="card-title">“What makes obsession most dangerous?”</h3>
+                  <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.25rem;">
+                    ${options.map(opt => {
+                      const count = state.slide9Votes[opt.key];
+                      const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                      return `
+                        <div class="panel-card" style="padding: 0.75rem 1rem;">
+                          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                            <strong style="color: var(--text-ivory); font-size: 0.96rem;">${opt.label}</strong>
+                            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                              <button type="button" class="btn btn-ghost" data-action="slide9-vote" data-opt="${opt.key}" data-delta="-1" aria-label="Subtract vote for ${opt.key}">−</button>
+                              <span style="font-family: var(--font-mono); min-width: 68px; text-align: center; font-weight: 700;">
+                                ${state.slide9Revealed ? `${count} (${pct}%)` : `${count} recorded`}
+                              </span>
+                              <button type="button" class="btn btn-primary" data-action="slide9-vote" data-opt="${opt.key}" data-delta="1" aria-label="Add vote for ${opt.key}">+1 Vote</button>
+                            </div>
+                          </div>
+                          ${state.slide9Revealed ? `
+                            <div class="vote-bar-wrap">
+                              <div class="vote-bar-fill" style="width: ${pct}%;"></div>
+                            </div>
+                          ` : ''}
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+
+                <div class="panel-card" style="justify-content: space-between;">
+                  <div>
+                    <div class="card-kicker">Classroom Poll Controls &amp; Transparency</div>
+                    <h3 class="card-title">Show-of-Hands Poll Mode</h3>
+                    <p class="card-text">
+                      Votes are tallied locally on the presenter’s laptop during Priyal’s hand count (no student app or internet required).
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.75rem;">
+                      <button type="button" class="btn btn-primary" data-action="slide9-toggle-reveal">
+                        ${state.slide9Revealed ? 'Hide Percentages & Graph' : 'Reveal Live Bar Graph & Percentages'}
+                      </button>
+                      <button type="button" class="btn btn-ghost" data-action="slide9-reset">
+                        Reset Poll to 0
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="panel-card ${state.slide9Revealed ? 'active-card' : ''}">
+                    <div class="card-kicker">Poll Outcome Synthesis</div>
+                    <p style="font-size: 0.95rem; color: var(--text-ivory); font-weight: 600;">
+                      ${state.slide9Revealed ? leaderText : 'Graph hidden while counting hands — click “Reveal Live Bar Graph & Percentages” when ready.'}
+                    </p>
+                    <p class="card-text" style="font-size: 0.84rem;">
+                      Notice how all four choices connect back to Priyal’s four themes on Slide 7: Desire (A), Control (B), Fear (C), and Consequences of Decisions (D).
+                    </p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 10: {
+            const questions = [
+              { q: '1. What does this person want?', analysis: 'In the script’s opening, Bear wants the affection of Nikki—beginning with a recognisable desire to be loved.' },
+              { q: '2. Why does it matter so much?', analysis: 'Driven by fear, insecurity, affection, ambition, or desire for control, a single wish starts to feel essential to self-worth.' },
+              { q: '3. How do choices affect others?', analysis: 'Using the One Wish Willow overrides Nikki’s personal agency, turning a one-sided wish into disturbing consequences for both characters.' }
+            ];
+            const motivations = [
+              { name: 'Fear', note: 'Fear of rejection or losing what one cares about pushes characters toward desperate shortcuts.' },
+              { name: 'Insecurity', note: 'Doubt about whether one is enough fuels the temptation to force certainty.' },
+              { name: 'Affection', note: 'Genuine warmth can be the starting point, before boundary-erosion distorts it.' },
+              { name: 'Ambition', note: 'A relentless drive to achieve a goal at any cost can blind ethical judgement.' },
+              { name: 'Desire for Control', note: 'Attempting to dictate another person’s feelings removes authentic human connection.' }
+            ];
+            const activeQ = questions[state.slide10ActiveQuestion] || questions[0];
+            const activeMot = motivations[state.slide10ActiveMotivation] || motivations[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Rudra’s Character Framework · Three Questions</div>
+                  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    ${questions.map((item, i) => `
+                      <div class="panel-card interactive ${state.slide10ActiveQuestion === i ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide10-q" data-index="${i}">
+                        <div style="font-weight: 700; color: var(--text-ivory);">${item.q}</div>
+                        ${state.slide10ActiveQuestion === i ? `<p class="card-text" style="color: var(--text-ivory); font-size: 0.88rem;">${item.analysis}</p>` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="script-quote" style="margin-top: 0.35rem;">
+                    “Understanding does NOT mean agreeing.”
+                  </div>
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">5 Script Motivations</div>
+                  <h3 class="card-title">Explore Character Motivation Drivers</h3>
+                  <div class="badge-row">
+                    ${motivations.map((m, i) => `
+                      <button type="button" class="btn ${state.slide10ActiveMotivation === i ? 'btn-primary' : 'btn-ghost'}" data-action="slide10-mot" data-index="${i}">
+                        ${m.name}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div class="panel-card active-card" style="margin-top: 0.45rem;">
+                    <div class="card-kicker">Selected Motivation</div>
+                    <div class="card-title">${activeMot.name}</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${activeMot.note}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 11: {
+            const steps = [
+              { num: '1', label: '1. Establish Desire & Choice [Reconstructed Context]', text: 'The story introduces a relatable human wish so the audience understands the initial temptation.' },
+              { num: '2', label: '2. Withhold Full Explanation [Reconstructed Context]', text: 'By rationing what characters and viewers know, uncertainty grows around what the wish actually changed.' },
+              { num: '3', label: '3. Escalating Conflict “…[in]creases pressure” [Script Page 3 Top]', text: 'Surviving script line at top of Page 3: “…creases pressure” — emotional and narrative pressure tightens around every scene.' },
+              { num: '4', label: '4. “New info changes understanding” [Verbatim Script]', text: '“Filmmaker manages information carefully. We constantly ask: What next? Why? Could it be different?”' }
+            ];
+            const activeStep = steps[state.slide11Step] || steps[3];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="badge-row">
+                    <span class="tag-badge">Rudra · Storytelling</span>
+                    <span class="tag-badge note-source">PDF Page 2→3 Top Margin Preserved</span>
+                  </div>
+                  <h3 class="card-title">How the Filmmaker Manages Information</h3>
+                  <div style="display: flex; flex-direction: column; gap: 0.45rem;">
+                    ${steps.map((st, i) => `
+                      <div class="panel-card interactive ${state.slide11Step === i ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide11-step" data-index="${i}" style="padding: 0.65rem 0.9rem;">
+                        <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-ivory);">${st.label}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <div class="panel-card" style="justify-content: space-between;">
+                  <div class="panel-card active-card">
+                    <div class="card-kicker">Active Narrative Stage</div>
+                    <div class="card-title">${activeStep.label}</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${activeStep.text}</p>
+                  </div>
+                  <div class="script-quote">
+                    “Filmmaker manages information carefully. We constantly ask: What next? Why? Could it be different?”
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 12: {
+            const lab = state.slide12Lab;
+            const bgMap = {
+              neutral: 'radial-gradient(circle at 50% 45%, #2b303c 0%, #101218 75%)',
+              cold: 'radial-gradient(circle at 50% 45%, #1d3557 0%, #090d16 75%)',
+              crimson: 'radial-gradient(circle at 50% 45%, #590d18 0%, #090609 75%)'
+            };
+            const scaleTransform = lab.angle === 'powerful' ? 'scale(1.18) translateY(-10px)' : lab.angle === 'vulnerable' ? 'scale(0.76) translateY(18px)' : 'scale(0.88) translateX(42px)';
+            const compJustify = lab.composition === 'thirds' ? 'flex-start' : 'center';
+            const pulseAnim = lab.editing === 'rapid' && !state.reducedMotion ? 'animation: slideEnter 0.35s infinite alternate;' : '';
+
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Swet’s 5 Cinematography Elements · Live Controls</div>
+                  <h3 class="card-title">“Not just WHAT happens, but HOW it is presented.”</h3>
+
+                  <div style="display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.84rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                      <strong>1. Lighting (visible vs hidden):</strong>
+                      <div class="badge-row">
+                        <button type="button" class="btn ${lab.lighting === 'visible' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="lighting" data-val="visible">Visible</button>
+                        <button type="button" class="btn ${lab.lighting === 'hidden' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="lighting" data-val="hidden">Hidden in Shadow</button>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                      <strong>2. Camera Angles:</strong>
+                      <div class="badge-row">
+                        <button type="button" class="btn ${lab.angle === 'powerful' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="angle" data-val="powerful">Powerful</button>
+                        <button type="button" class="btn ${lab.angle === 'vulnerable' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="angle" data-val="vulnerable">Vulnerable</button>
+                        <button type="button" class="btn ${lab.angle === 'isolated' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="angle" data-val="isolated">Isolated</button>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                      <strong>3. Composition (guides attention):</strong>
+                      <div class="badge-row">
+                        <button type="button" class="btn ${lab.composition === 'thirds' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="composition" data-val="thirds">Rule of Thirds</button>
+                        <button type="button" class="btn ${lab.composition === 'center' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="composition" data-val="center">Uncanny Center</button>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                      <strong>4. Colour (establishes mood):</strong>
+                      <div class="badge-row">
+                        <button type="button" class="btn ${lab.colour === 'neutral' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="colour" data-val="neutral">Neutral</button>
+                        <button type="button" class="btn ${lab.colour === 'cold' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="colour" data-val="cold">Cold Slate</button>
+                        <button type="button" class="btn ${lab.colour === 'crimson' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="colour" data-val="crimson">Crimson Dread</button>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                      <strong>5. Editing (shot length &amp; cut timing):</strong>
+                      <div class="badge-row">
+                        <button type="button" class="btn ${lab.editing === 'slow' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="editing" data-val="slow">Long Take</button>
+                        <button type="button" class="btn ${lab.editing === 'rapid' ? 'btn-primary' : 'btn-ghost'}" data-action="slide12-lab" data-key="editing" data-val="rapid">Rapid Cut Pulse</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="card-kicker">Abstract Technique Simulator (Non-Film Still)</span>
+                    <button type="button" class="btn btn-ghost" data-action="slide12-reset">Reset Lab</button>
+                  </div>
+                  <div class="cinema-stage" style="background: ${bgMap[lab.colour]}; justify-content: ${compJustify}; padding: 0 2.5rem; ${pulseAnim}">
+                    <!-- Shadow Blinds Overlay when hidden lighting is selected -->
+                    ${lab.lighting === 'hidden' ? `
+                      <div style="position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(0,0,0,0.78) 0px, rgba(0,0,0,0.78) 18px, transparent 18px, transparent 32px); pointer-events: none;"></div>
+                    ` : ''}
+                    <!-- Rule of thirds grid overlay -->
+                    <svg viewBox="0 0 300 180" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.25;">
+                      <line x1="100" y1="0" x2="100" y2="180" stroke="#f4efe6" stroke-width="1"/>
+                      <line x1="200" y1="0" x2="200" y2="180" stroke="#f4efe6" stroke-width="1"/>
+                      <line x1="0" y1="60" x2="300" y2="60" stroke="#f4efe6" stroke-width="1"/>
+                      <line x1="0" y1="120" x2="300" y2="120" stroke="#f4efe6" stroke-width="1"/>
+                    </svg>
+                    <!-- Subject Silhouette -->
+                    <div style="transform: ${scaleTransform}; transition: transform 0.35s ease; display: flex; flex-direction: column; align-items: center; z-index: 2;">
+                      <div style="width: 44px; height: 44px; border-radius: 50%; background: ${lab.lighting === 'hidden' ? '#1a1c24' : '#f4efe6'}; border: 2px solid #ff3b4e; box-shadow: 0 0 25px rgba(255,59,78,0.45);"></div>
+                      <div style="width: 82px; height: 74px; border-radius: 36px 36px 8px 8px; background: ${lab.lighting === 'hidden' ? '#12131a' : '#d8d2c7'}; border: 2px solid rgba(255,255,255,0.25); margin-top: 6px;"></div>
+                    </div>
+                  </div>
+                  <p class="card-text" style="font-size: 0.85rem; color: var(--text-ivory);">
+                    <strong>What to Notice:</strong> Lighting = <em>${lab.lighting}</em> · Angle = <em>${lab.angle}</em> · Composition = <em>${lab.composition}</em> · Colour = <em>${lab.colour}</em> · Editing = <em>${lab.editing}</em>.
+                  </p>
+                </div>
+              </div>
+            `;
+          }
+
+          case 13: {
+            const pct = ((5000 - state.slide13SilenceRemainingMs) / 5000) * 100;
+            const secText = (state.slide13SilenceRemainingMs / 1000).toFixed(1) + 's';
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Swet · Sound and Silence</div>
+                  <h3 class="card-title">Why Absence of Music Is Uncomfortable</h3>
+                  <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.92rem; color: var(--text-ivory);">
+                    <li>• <strong>Music</strong> suggests moment matters.</li>
+                    <li>• <strong>Sudden sound</strong> interrupts quiet.</li>
+                    <li>• <strong>Silence</strong> makes us notice small details.</li>
+                    <li>• <strong>Absence of music</strong> can be more uncomfortable than loud soundtrack.</li>
+                  </ul>
+                  <div class="badge-row" style="margin-top: 0.35rem;">
+                    <span class="tag-badge">Slow quiet = anticipation</span>
+                    <span class="tag-badge">Sudden change = surprise</span>
+                  </div>
+                  <div class="script-quote" style="margin-top: 0.35rem;">
+                    “Question: Would a tense scene feel same if we removed its sound?”
+                  </div>
+                </div>
+
+                <div class="silence-stage">
+                  <div class="card-kicker">[PAUSE 5 SECONDS] · Deliberate Classroom Silence</div>
+                  <svg width="132" height="132" viewBox="0 0 120 120" role="img" aria-label="5 second silence countdown indicator">
+                    <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.1)" stroke-width="6" fill="none"/>
+                    <circle id="silence-ring-circle" cx="60" cy="60" r="50" stroke="#e09f3e" stroke-width="6" fill="none"
+                      stroke-dasharray="314.16"
+                      stroke-dashoffset="${314.16 - (314.16 * pct) / 100}"
+                      transform="rotate(-90 60 60)"/>
+                    <text id="silence-ring-text" x="60" y="66" text-anchor="middle" fill="#f4efe6" font-family="monospace" font-size="22" font-weight="bold">
+                      ${state.slide13SilenceDone ? 'DONE' : secText}
+                    </text>
+                  </svg>
+                  <p class="card-text" style="font-size: 0.88rem; max-width: 360px;">
+                    ${state.slide13SilenceRunning
+                      ? 'Hold complete classroom silence… notice every small ambient sound in the room.'
+                      : state.slide13SilenceDone
+                        ? '5-second silence complete. Notice how the absence of sound heightens anticipation before you click Next.'
+                        : 'Click below after reading the question aloud to hold a silent 5-second pause with the class.'}
+                  </p>
+                  <div style="display: flex; gap: 0.6rem;">
+                    <button type="button" class="btn btn-primary" id="btn-start-silence">
+                      ${state.slide13SilenceRunning ? 'Pause 5s Timer' : 'Begin 5-Second Silence'}
+                    </button>
+                    <button type="button" class="btn btn-ghost" id="btn-reset-silence">
+                      Reset 5.0s
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 14: {
+            const symbols = [
+              {
+                name: 'Shadows',
+                scriptMeaning: 'uncertainty / hidden motives',
+                scriptDetail: 'Shadows obscure what a character is truly thinking or planning, forcing the audience to question what remains unseen.',
+                classPrompt: 'Open Interpretation Question: When a character stands half in shadow during a conversation, how does that change whether you trust their words?'
+              },
+              {
+                name: 'Closed spaces',
+                scriptMeaning: 'pressure / limited freedom',
+                scriptDetail: 'Confined rooms, doorways, and tight interiors physically mirror emotional entrapment and the loss of personal autonomy.',
+                classPrompt: 'Open Interpretation Question: Why do ordinary domestic rooms feel claustrophobic once a relationship loses mutual respect?'
+              },
+              {
+                name: 'Reflections',
+                scriptMeaning: 'identity / self-perception',
+                scriptDetail: 'Mirrors and glass reflections split a character into how they see themselves versus what their choices have turned them into.',
+                classPrompt: 'Open Interpretation Question: What can a mirror shot suggest about a character who no longer recognizes their own behaviour?'
+              },
+              {
+                name: 'Repeated images',
+                scriptMeaning: 'important idea',
+                scriptDetail: 'Visual motifs that return across scenes signal an unresolved fixation that refuses to let go.',
+                classPrompt: 'Open Interpretation Question: How does repeating an object—like the One Wish Willow—turn a simple prop into a moral warning?'
+              }
+            ];
+            const activeSym = symbols[state.slide14ActiveSymbol] || symbols[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Swet · 4 Visual Symbols in the Script</div>
+                  <div class="grid-2">
+                    ${symbols.map((s, i) => `
+                      <div class="panel-card interactive ${state.slide14ActiveSymbol === i ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide14-sym" data-index="${i}">
+                        <div class="card-kicker">Symbol 0${i + 1}</div>
+                        <div class="card-title" style="font-size: 1.1rem;">${s.name}</div>
+                        <div style="font-size: 0.85rem; color: var(--crimson-bright);">= ${s.scriptMeaning}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="script-quote" style="margin-top: 0.35rem;">
+                    “Symbols have no fixed meaning - depends on context. Connect symbol to moment and explain WHY.”
+                  </div>
+                </div>
+
+                <div class="panel-card">
+                  <div style="display: flex; gap: 0.5rem;">
+                    <button type="button" class="btn ${state.slide14Tab === 'script' ? 'btn-primary' : 'btn-ghost'}" data-action="slide14-tab" data-tab="script">
+                      Script-Supported Meaning
+                    </button>
+                    <button type="button" class="btn ${state.slide14Tab === 'classroom' ? 'btn-primary' : 'btn-ghost'}" data-action="slide14-tab" data-tab="classroom">
+                      Open Classroom Discussion Prompt
+                    </button>
+                  </div>
+
+                  <div class="panel-card active-card" style="margin-top: 0.4rem; flex: 1; justify-content: center;">
+                    <div class="card-kicker">${activeSym.name} = ${activeSym.scriptMeaning}</div>
+                    <h3 class="card-title">${state.slide14Tab === 'script' ? 'Script Analysis' : 'Audience Interpretation Prompt'}</h3>
+                    <p class="card-text" style="color: var(--text-ivory); font-size: 0.96rem;">
+                      ${state.slide14Tab === 'script' ? activeSym.scriptDetail : activeSym.classPrompt}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 15: {
+            const scenarios = [
+              {
+                title: 'Script Example: Working Hard for an Academic Goal',
+                category: 'Strong interest + Balance + Respect = Positive',
+                positive: true,
+                explanation: 'Dedicating focused effort toward an exam or college project while respecting classmates, sleep, and ethical boundaries is healthy motivation.'
+              },
+              {
+                title: 'Respecting a Friend’s Independent Choice',
+                category: 'Strong interest + Balance + Respect = Positive',
+                positive: true,
+                explanation: 'Caring deeply about someone while accepting their personal space and independent decisions keeps relationships balanced and mutual.'
+              },
+              {
+                title: 'Fixation That Ignores Personal Boundaries',
+                category: 'Fixation = Interferes with life or ignores boundaries = Concerning',
+                positive: false,
+                explanation: 'When a single fixation interferes with daily responsibilities or disregards another person’s boundaries and consent, it crosses into concerning behaviour.'
+              }
+            ];
+            const activeSc = scenarios[state.slide15ActiveScenario] || scenarios[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Swet · Real-Life Connection Equations</div>
+                  <div class="panel-card" style="border-color: var(--emerald); background: rgba(46,196,182,0.08);">
+                    <div class="card-kicker" style="color: var(--emerald);">Healthy Commitment</div>
+                    <div style="font-weight: 700; color: var(--text-ivory); font-size: 1.02rem;">Strong interest + Balance + Respect = Positive</div>
+                    <div style="font-size: 0.88rem; color: var(--text-muted);">Script Example: Working hard for academic goal</div>
+                  </div>
+
+                  <div class="panel-card" style="border-color: var(--crimson-bright); background: rgba(217,38,56,0.09);">
+                    <div class="card-kicker">Unbalanced Fixation</div>
+                    <div style="font-weight: 700; color: var(--text-ivory); font-size: 1.02rem;">Fixation = Interferes with life or ignores boundaries = Concerning</div>
+                  </div>
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">Interactive Boundary Reflection</div>
+                  <h3 class="card-title">Compare Real-Life Scenarios</h3>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.45rem;">
+                    ${scenarios.map((sc, i) => `
+                      <button type="button" class="btn ${state.slide15ActiveScenario === i ? 'btn-primary' : 'btn-ghost'}" data-action="slide15-sc" data-index="${i}">
+                        Scenario ${i + 1}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div class="panel-card active-card" style="margin-top: 0.4rem;">
+                    <div class="card-kicker">${activeSc.category}</div>
+                    <div class="card-title">${activeSc.title}</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${activeSc.explanation}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 16: {
+            const quizItems = [
+              {
+                qNum: 1,
+                question: 'Q1: What is the main focus of psychological horror? [Reconstructed start of clipped line “…ychological horror?”]',
+                options: [
+                  'A) Focus on mental tension',
+                  'B) Relying only on sudden loud shocks',
+                  'C) Fast-paced action chases'
+                ],
+                correctIndex: 0,
+                scriptAns: 'Ans: A) Focus on mental tension',
+                explanation: 'As Aanshi explained on Slide 4, psychological horror creates tension through uncertainty, emotional pressure, and mental interpretation rather than sudden shocks alone.'
+              },
+              {
+                qNum: 2,
+                question: 'Q2: Technique for suspense?',
+                options: [
+                  'A) Explaining every mystery immediately',
+                  'B) Using silence and sound',
+                  'C) Keeping bright, flat lighting at all times'
+                ],
+                correctIndex: 1,
+                scriptAns: 'Ans: B) Using silence and sound',
+                explanation: 'As Swet demonstrated on Slide 13, slow quiet builds anticipation and sudden changes create surprise—making silence and sound powerful tools for suspense.'
+              },
+              {
+                qNum: 3,
+                question: 'Q3: Healthy relationships?',
+                options: [
+                  'A) Controlling every outcome',
+                  'B) Letting one desire dominate judgement',
+                  'C) Respecting personal choices'
+                ],
+                correctIndex: 2,
+                scriptAns: 'Ans: C) Respecting personal choices',
+                explanation: 'Throughout the script (Slides 6, 15, and 18), caring deeply is separated from obsession by balance and respect for others’ personal choices and boundaries.'
+              },
+              {
+                qNum: 4,
+                question: 'Q4: Why use shadows?',
+                options: [
+                  'A) To create mystery',
+                  'B) To make editing faster',
+                  'C) To remove all symbolism'
+                ],
+                correctIndex: 0,
+                scriptAns: 'Ans: A) To create mystery',
+                explanation: 'As shown on Slides 12 and 14, shadows hide visual information and represent uncertainty or hidden motives, creating mystery.'
+              }
+            ];
+            const curr = quizItems[state.slide16CurrentQ] || quizItems[0];
+            const isRev = state.slide16Revealed[state.slide16CurrentQ];
+            const chosen = state.slide16SelectedChoice[state.slide16CurrentQ];
+
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="card-kicker">[READ QUESTION - WAIT 5 SEC - REVEAL ANSWER]</span>
+                    <div class="badge-row">
+                      ${quizItems.map((item, idx) => `
+                        <button type="button" class="btn ${state.slide16CurrentQ === idx ? 'btn-primary' : 'btn-ghost'}" data-action="slide16-select-q" data-index="${idx}">
+                          Q${item.qNum} ${state.slide16Revealed[idx] ? '✓' : ''}
+                        </button>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <h3 class="card-title">${curr.question}</h3>
+
+                  <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.35rem;">
+                    ${curr.options.map((optText, oIdx) => {
+                      const isCorrect = oIdx === curr.correctIndex;
+                      let borderStyle = '';
+                      if (isRev && isCorrect) {
+                        borderStyle = 'border-color: var(--emerald); background: rgba(46,196,182,0.16);';
+                      } else if (chosen === oIdx) {
+                        borderStyle = 'border-color: var(--crimson-bright); background: rgba(217,38,56,0.12);';
+                      }
+                      return `
+                        <div class="panel-card interactive" tabindex="0" role="button" data-action="slide16-pick-opt" data-opt="${oIdx}" style="padding: 0.7rem 1rem; ${borderStyle}">
+                          <span style="font-weight: 600; color: var(--text-ivory);">${optText}</span>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+
+                <div class="panel-card" style="justify-content: space-between;">
+                  <div>
+                    <div class="card-kicker">Hetarth’s 5-Second Wait &amp; Manual Reveal Control</div>
+                    <h3 class="card-title">Step 1: Read Question → Step 2: Wait 5s → Step 3: Reveal</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.65rem; align-items: center;">
+                      <button type="button" class="btn" id="btn-quiz-wait">
+                        ${state.slide16CountdownRunning ? `Waiting… (${state.slide16CountdownRemaining}s)` : 'Start 5-Sec Wait Timer'}
+                      </button>
+                      <button type="button" class="btn btn-primary" data-action="slide16-toggle-reveal">
+                        ${isRev ? 'Hide Answer' : 'Reveal Official Answer'}
+                      </button>
+                    </div>
+                  </div>
+
+                  ${isRev ? `
+                    <div class="panel-card active-card" style="border-color: var(--emerald);">
+                      <div class="card-kicker" style="color: var(--emerald);">Verified Script Answer</div>
+                      <div class="card-title">${curr.scriptAns}</div>
+                      <p class="card-text" style="color: var(--text-ivory);">${curr.explanation}</p>
+                    </div>
+                  ` : `
+                    <div class="panel-card" style="border-style: dashed;">
+                      <div class="card-kicker">Answer Hidden Until Presenter Clicks Reveal</div>
+                      <p class="card-text">
+                        Let classmates call out their choice first. Even if the 5-second wait timer finishes, the answer stays hidden until Hetarth clicks <strong>“Reveal Official Answer”</strong>.
+                      </p>
+                    </div>
+                  `}
+                </div>
+              </div>
+            `;
+          }
+
+          case 17: {
+            const prompts = [
+              {
+                q: 'Q1: Can strong desire become harmful? Why?',
+                ans: '-> When it affects judgement & respect',
+                context: 'Strong desire motivates us when balanced, but becomes harmful the moment it overrides ethical judgement and disrespects another person’s autonomy.'
+              },
+              {
+                q: 'Q2: How create fear without frightening image?',
+                ans: '-> Sound, silence, lighting, uncertainty',
+                context: 'By combining shadow, silence, subtle shifts in tone, and unanswered questions, the audience’s own mind constructs the tension.'
+              },
+              {
+                q: 'Q3: What makes message memorable?',
+                ans: '-> Characters, conflict, atmosphere, questions it leaves us thinking',
+                context: 'A story stays with us after the screen goes dark when its characters, atmosphere, and moral conflict make us reflect on our own choices.'
+              }
+            ];
+            return `
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                  <p class="card-text">Ask each question to the class first, then click the card to reveal the script’s takeaway arrow:</p>
+                  <button type="button" class="btn btn-ghost" data-action="slide17-reveal-all">Reveal All 3 Takeaways</button>
+                </div>
+                <div class="grid-3">
+                  ${prompts.map((p, i) => {
+                    const rev = state.slide17Revealed[i];
+                    return `
+                      <div class="panel-card interactive ${rev ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide17-toggle" data-index="${i}">
+                        <div class="card-kicker">Critical Thinking Prompt 0${i + 1}</div>
+                        <div class="card-title" style="font-size: 1.12rem;">${p.q}</div>
+                        ${rev ? `
+                          <div style="font-weight: 700; color: var(--emerald); font-size: 0.98rem; margin-top: 0.25rem;">${p.ans}</div>
+                          <p class="card-text" style="font-size: 0.86rem; color: var(--text-ivory);">${p.context}</p>
+                        ` : `
+                          <p class="card-text" style="font-size: 0.84rem; color: var(--text-dim); margin-top: 0.4rem;">
+                            Click to reveal script synthesis after student discussion →
+                          </p>
+                        `}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          case 18: {
+            const lessons = [
+              { num: '1', title: 'Balance Matters', text: 'One desire should not control every decision' },
+              { num: '2', title: 'Boundaries Matter', text: 'Respect for others choices is essential' },
+              { num: '3', title: 'Choices Matter', text: 'Actions affect others unexpectedly' },
+              { num: '4', title: 'Reflection Matters', text: 'Stories let us examine assumptions' }
+            ];
+            return `
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                  <p class="card-text">Hetarth’s Four Core Lessons — click each pillar to reveal and discuss:</p>
+                  <button type="button" class="btn btn-ghost" data-action="slide18-reveal-all">Reveal All 4 Lessons</button>
+                </div>
+                <div class="grid-4">
+                  ${lessons.map((l, i) => {
+                    const rev = state.slide18Revealed[i];
+                    return `
+                      <div class="panel-card interactive ${rev ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide18-toggle" data-index="${i}">
+                        <div class="card-kicker">Lesson 0${l.num}</div>
+                        <div class="card-title">${l.title}</div>
+                        ${rev ? `
+                          <p class="card-text" style="color: var(--text-ivory); font-weight: 600;">“${l.text}”</p>
+                        ` : `
+                          <p class="card-text" style="color: var(--text-dim); font-size: 0.84rem;">Click to reveal lesson →</p>
+                        `}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          case 19: {
+            const pillars = [
+              { name: 'Themes & Psychology', member: 'Priyal', synthesis: 'Showed how obsession, control, fear, and consequences escalate through uncertainty.' },
+              { name: 'Characters & Storytelling', member: 'Rudra', synthesis: 'Demonstrated how understanding motives does not mean agreeing, and how information shapes suspense.' },
+              { name: 'Sound, Lighting & Craft', member: 'Swet', synthesis: 'Revealed how visual composition, shadows, and even 5 seconds of silence build tension.' },
+              { name: 'Genre & Real-Life Reflection', member: 'Aanshi & Hetarth', synthesis: 'Connected psychological horror to real-life balance, boundaries, choices, and critical thinking.' }
+            ];
+            const activeP = pillars[state.slide19ActivePillar] || pillars[0];
+            return `
+              <div class="grid-2">
+                <div class="panel-card">
+                  <div class="card-kicker">Jal · Returning to Our Central Idea</div>
+                  <div class="script-quote">
+                    “Thank you, Hetarth. As we come towards the end, let us return to our central idea: The line between desire and obsession can be thinner than we think.”
+                  </div>
+                  <p class="card-text" style="color: var(--text-ivory);">
+                    “By looking at themes, characters, sound, lighting and storytelling, we can understand how a film builds tension and communicates ideas. More importantly, we can ask what the story encourages us to consider about our own choices and our respect for others.”
+                  </p>
+                  <p class="card-text">
+                    “A film can entertain us, surprise us and make us think. And sometimes, the most interesting part of a film is not simply what happens on the screen, but the questions we continue asking after it ends. That is one reason film discussions can be valuable in an English presentation.”
+                  </p>
+                </div>
+
+                <div class="panel-card">
+                  <div class="card-kicker">Interactive Team Synthesis Callback</div>
+                  <h3 class="card-title">How Every Section Connected</h3>
+                  <div class="grid-2">
+                    ${pillars.map((p, i) => `
+                      <div class="panel-card interactive ${state.slide19ActivePillar === i ? 'active-card' : ''}" tabindex="0" role="button" data-action="slide19-pillar" data-index="${i}">
+                        <div class="card-kicker">${p.member}</div>
+                        <div style="font-weight: 700; color: var(--text-ivory); font-size: 0.95rem;">${p.name}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="panel-card active-card" style="margin-top: 0.4rem;">
+                    <div class="card-kicker">${activeP.name} (${activeP.member})</div>
+                    <p class="card-text" style="color: var(--text-ivory);">${activeP.synthesis}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          case 20: {
+            return `
+              <div class="grid-2">
+                <div class="panel-card" style="justify-content: space-between;">
+                  <div>
+                    <div class="card-kicker">Visual Callback to Opening · Full Team Gratitude</div>
+                    <h3 class="card-title">On Behalf of Our Entire Team</h3>
+                    <p class="card-text" style="color: var(--text-ivory);">
+                      “On behalf of our entire team — <strong>Aanshi, Rudra, Priyal, Swet, Hetarth and myself, Jal</strong> — I would like to sincerely thank our respected teacher and all our classmates for listening so patiently and participating so actively in our discussion. Your questions, your votes, and your participation made this presentation more meaningful.”
+                    </p>
+                  </div>
+
+                  <!-- Visual callback to the opening One Wish Willow SVG, now balanced and serene -->
+                  <div style="display: flex; flex-direction: column; align-items: center; padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px;">
+                    <svg viewBox="0 0 320 90" style="width: 210px; height: 60px;" role="img" aria-label="Balanced closing willow motif">
+                      <path d="M25 48 C85 32, 130 28, 160 45 C190 62, 235 58, 295 42" stroke="#f4efe6" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <path d="M45 40 C95 58, 135 62, 160 45 C185 28, 225 32, 275 50" stroke="#2ec4b6" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <circle cx="160" cy="45" r="5" fill="#d92638"/>
+                    </svg>
+                    <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.1em;">
+                      CARE DEEPLY · STAY BALANCED · RESPECT BOUNDARIES
+                    </span>
+                  </div>
+                </div>
+
+                <div class="panel-card active-card" style="justify-content: space-between;">
+                  <div class="card-kicker">Final Thought on Obsession (2026) — Verbatim Closing</div>
+                  <div style="display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.94rem; color: var(--text-ivory);">
+                    <p>Obsession teaches us that <strong>every wish has a price,</strong> and every desire needs a limit.</p>
+                    <p><strong>Love becomes dangerous</strong> only when it forgets respect.</p>
+                    <p><strong>Desire becomes obsession</strong> only when it forgets boundaries.</p>
+                    <p><strong>The real horror is not on the screen,</strong> but in what happens when we let one feeling control everything.</p>
+                    <div style="padding: 0.65rem 0.9rem; background: rgba(0,0,0,0.35); border-left: 3px solid var(--emerald); border-radius: 0 6px 6px 0; font-family: var(--font-display);">
+                      <div><strong>Care deeply, but stay balanced.</strong></div>
+                      <div><strong>Want strongly, but respect others.</strong></div>
+                      <div><strong>Dream big, but stay human.</strong></div>
+                    </div>
+                    <p style="font-family: var(--font-display); font-size: 1.08rem; color: var(--text-ivory);">
+                      A good story does not end when the screen goes dark. Sometimes, that is when <strong>the thinking begins.</strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        }
+      }
+
+      /* ==========================================================================
+         7. MAIN RENDER FUNCTION & EVENT DELEGATION
+         ========================================================================== */
+      function renderCurrentSlide() {
+        const slide = SLIDES[state.currentSlide];
+        const mount = document.getElementById('slide-mount');
+        if (!mount || !slide) return;
+
+        mount.setAttribute('data-mood', slide.mood);
+        mount.innerHTML = `
+          <div class="slide-header">
+            <div class="slide-meta-row">
+              <span>Slide ${String(slide.number).padStart(2, '0')} of 20 · ${escapeHtml(slide.timingSource)}</span>
+              <span>Speaker: <strong style="color: var(--text-ivory);">${escapeHtml(slide.speaker)}</strong> · ${escapeHtml(slide.timeBlock)}</span>
+            </div>
+            <h2 class="slide-headline">${escapeHtml(slide.title)}</h2>
+            <p class="slide-subheadline">${escapeHtml(slide.subtitle)}</p>
+          </div>
+
+          <div class="slide-body">
+            ${renderSlideBody(slide.number)}
+          </div>
+
+          <div class="slide-footer-strip">
+            <span><strong>Speaker Transition:</strong> ${escapeHtml(slide.handoff)}</span>
+            <span><strong>Up Next:</strong> ${escapeHtml(slide.nextSpeaker)}</span>
+          </div>
+        `;
+
+        // Update Top & Bottom HUD
+        document.getElementById('hud-speaker-name').textContent = slide.speaker;
+        document.getElementById('hud-handoff-text').textContent = `${slide.timeBlock} · Next: ${slide.nextSpeaker}`;
+        document.getElementById('hud-slide-counter').textContent = `Slide ${String(slide.number).padStart(2, '0')} / 20`;
+        document.getElementById('hud-section-label').textContent = slide.section;
+        document.getElementById('slide-progress-fill').style.width = `${(slide.number / 20) * 100}%`;
+
+        document.getElementById('btn-prev-slide').disabled = state.currentSlide === 0;
+        document.getElementById('btn-next-slide').disabled = state.currentSlide === SLIDES.length - 1;
+
+        // Update Presenter Notes Drawer Content
+        const notesBody = document.getElementById('notes-drawer-body');
+        if (notesBody) {
+          notesBody.innerHTML = `
+            <div class="panel-card">
+              <div class="card-kicker">Slide ${slide.number} · ${escapeHtml(slide.speaker)}</div>
+              <div class="card-title">${escapeHtml(slide.title)}</div>
+              <div style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--emerald);">
+                Timing Window: ${escapeHtml(slide.timeBlock)}
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-muted);">
+                Handoff Cue: ${escapeHtml(slide.handoff)} → ${escapeHtml(slide.nextSpeaker)}
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <div class="card-kicker">Verbatim Lines from “Obsession script.pdf”</div>
+              ${slide.verbatimScript.map(line => `<p style="font-size: 0.92rem; color: var(--text-ivory); margin-bottom: 0.45rem;">“${escapeHtml(line)}”</p>`).join('')}
+            </div>
+
+            <div class="panel-card">
+              <div class="card-kicker">Delivery &amp; Interaction Coaching</div>
+              <p class="card-text" style="color: var(--text-ivory);">${escapeHtml(slide.presenterTips)}</p>
+              ${slide.externalNote ? `<p class="card-text" style="font-size: 0.8rem; margin-top: 0.4rem; color: var(--amber);">${escapeHtml(slide.externalNote)}</p>` : ''}
+            </div>
+          `;
+        }
+
+        // Bind slide-specific inputs
+        const wishInput = document.getElementById('slide2-wish-input');
+        const addWishBtn = document.getElementById('btn-add-wish');
+        if (wishInput && addWishBtn) {
+          const submitWish = () => {
+            const val = wishInput.value.trim();
+            if (val) {
+              state.slide2CustomWishes.push(val);
+              renderCurrentSlide();
+            }
+          };
+          addWishBtn.addEventListener('click', submitWish);
+          wishInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              submitWish();
+            }
+          });
+        }
+
+        const slider6 = document.getElementById('slide6-slider');
+        if (slider6) {
+          slider6.addEventListener('input', (e) => {
+            state.slide6SpectrumIndex = Number(e.target.value);
+            renderCurrentSlide();
+          });
+        }
+
+        const startSilenceBtn = document.getElementById('btn-start-silence');
+        const resetSilenceBtn = document.getElementById('btn-reset-silence');
+        if (startSilenceBtn) {
+          startSilenceBtn.addEventListener('click', () => {
+            if (state.slide13SilenceRunning) {
+              clearSlideTimers();
+              renderCurrentSlide();
+              return;
+            }
+            if (state.slide13SilenceRemainingMs <= 0) {
+              state.slide13SilenceRemainingMs = 5000;
+              state.slide13SilenceDone = false;
+            }
+            state.slide13SilenceRunning = true;
+            document.body.classList.add('silence-active');
+            const startedAt = Date.now();
+            const initialRem = state.slide13SilenceRemainingMs;
+            state.slide13IntervalId = setInterval(() => {
+              const elapsed = Date.now() - startedAt;
+              const rem = Math.max(0, initialRem - elapsed);
+              state.slide13SilenceRemainingMs = rem;
+              if (rem <= 0) {
+                clearSlideTimers();
+                state.slide13SilenceDone = true;
+                renderCurrentSlide();
+                return;
+              }
+              const ringEl = document.getElementById("silence-ring-circle");
+              const txtEl = document.getElementById("silence-ring-text");
+              if (ringEl && txtEl) {
+                const p = ((5000 - rem) / 5000) * 100;
+                ringEl.setAttribute("stroke-dashoffset", String(314.16 - (314.16 * p) / 100));
+                txtEl.textContent = (rem / 1000).toFixed(1) + "s";
+              }
+            }, 100);
+            renderCurrentSlide();
+          });
+        }
+        if (resetSilenceBtn) {
+          resetSilenceBtn.addEventListener('click', () => {
+            clearSlideTimers();
+            state.slide13SilenceRemainingMs = 5000;
+            state.slide13SilenceDone = false;
+            renderCurrentSlide();
+          });
+        }
+
+        const quizWaitBtn = document.getElementById('btn-quiz-wait');
+        if (quizWaitBtn) {
+          quizWaitBtn.addEventListener('click', () => {
+            if (state.slide16CountdownRunning) {
+              clearSlideTimers();
+              state.slide16CountdownRemaining = 5;
+              renderCurrentSlide();
+              return;
+            }
+            state.slide16CountdownRunning = true;
+            state.slide16CountdownRemaining = 5;
+            state.slide16IntervalId = setInterval(() => {
+              state.slide16CountdownRemaining -= 1;
+              if (state.slide16CountdownRemaining <= 0) {
+                clearSlideTimers();
+                state.slide16CountdownRemaining = 5;
+                renderCurrentSlide();
+                return;
+              }
+              const qBtn = document.getElementById("btn-quiz-wait");
+              if (qBtn) {
+                qBtn.textContent = `Waiting… (${state.slide16CountdownRemaining}s)`;
+              }
+            }, 1000);
+            renderCurrentSlide();
+          });
+        }
+
+        updateTimerUI();
+      }
+
+      function goToSlide(index) {
+        const target = Math.max(0, Math.min(SLIDES.length - 1, index));
+        if (target !== state.currentSlide) {
+          clearSlideTimers();
+          state.currentSlide = target;
+        }
+        renderCurrentSlide();
+      }
+
+      /* ==========================================================================
+         8. OVERVIEW MODAL & GLOBAL CLICK DELEGATION
+         ========================================================================== */
+      function populateOverviewModal() {
+        const grid = document.getElementById('overview-grid');
+        if (!grid) return;
+        grid.innerHTML = SLIDES.map((s, idx) => `
+          <div class="panel-card interactive ${state.currentSlide === idx ? 'active-card' : ''}" tabindex="0" role="button" data-action="overview-jump" data-index="${idx}">
+            <div class="card-kicker">Slide ${String(s.number).padStart(2, '0')} · ${escapeHtml(s.speaker)}</div>
+            <div style="font-weight: 700; color: var(--text-ivory); font-size: 0.95rem;">${escapeHtml(s.title)}</div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(s.timeBlock)}</div>
+          </div>
+        `).join('');
+      }
+
+      document.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-action]');
+        if (!el) return;
+        const action = el.getAttribute('data-action');
+
+        switch (action) {
+          case 'slide1-stage':
+            state.slide1Stage = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide2-archetype':
+            state.slide2SelectedArchetype = el.getAttribute('data-id');
+            renderCurrentSlide();
+            break;
+          case 'slide3-mode':
+            state.slide3OrderMode = el.getAttribute('data-mode');
+            state.slide3SelectedMember = 0;
+            renderCurrentSlide();
+            break;
+          case 'slide3-member':
+            state.slide3SelectedMember = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'goto-slide':
+            goToSlide(Number(el.getAttribute('data-slide')));
+            break;
+          case 'slide4-mode':
+            state.slide4Mode = el.getAttribute('data-mode');
+            renderCurrentSlide();
+            break;
+          case 'slide4-reveal-next':
+            state.slide4RevealedSteps = state.slide4RevealedSteps < 4 ? state.slide4RevealedSteps + 1 : 1;
+            renderCurrentSlide();
+            break;
+          case 'slide5-stage':
+            state.slide5Stage = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide6-compare':
+            state.slide6CompareMode = el.getAttribute('data-mode');
+            renderCurrentSlide();
+            break;
+          case 'slide7-toggle': {
+            const idx = Number(el.getAttribute('data-index'));
+            state.slide7Revealed[idx] = !state.slide7Revealed[idx];
+            renderCurrentSlide();
+            break;
+          }
+          case 'slide7-reveal-all':
+            state.slide7Revealed = [true, true, true, true];
+            renderCurrentSlide();
+            break;
+          case 'slide8-mech':
+            state.slide8SelectedMech = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide9-vote': {
+            const opt = el.getAttribute('data-opt');
+            const delta = Number(el.getAttribute('data-delta'));
+            state.slide9Votes[opt] = Math.max(0, (state.slide9Votes[opt] || 0) + delta);
+            renderCurrentSlide();
+            break;
+          }
+          case 'slide9-toggle-reveal':
+            state.slide9Revealed = !state.slide9Revealed;
+            renderCurrentSlide();
+            break;
+          case 'slide9-reset':
+            state.slide9Votes = { A: 0, B: 0, C: 0, D: 0 };
+            state.slide9Revealed = false;
+            renderCurrentSlide();
+            break;
+          case 'slide10-q':
+            state.slide10ActiveQuestion = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide10-mot':
+            state.slide10ActiveMotivation = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide11-step':
+            state.slide11Step = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide12-lab': {
+            const k = el.getAttribute('data-key');
+            const v = el.getAttribute('data-val');
+            state.slide12Lab[k] = v;
+            renderCurrentSlide();
+            break;
+          }
+          case 'slide12-reset':
+            state.slide12Lab = { lighting: 'hidden', angle: 'isolated', composition: 'center', colour: 'crimson', editing: 'slow' };
+            renderCurrentSlide();
+            break;
+          case 'slide14-sym':
+            state.slide14ActiveSymbol = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide14-tab':
+            state.slide14Tab = el.getAttribute('data-tab');
+            renderCurrentSlide();
+            break;
+          case 'slide15-sc':
+            state.slide15ActiveScenario = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'slide16-select-q':
+            clearSlideTimers();
+            state.slide16CurrentQ = Number(el.getAttribute('data-index'));
+            state.slide16CountdownRemaining = 5;
+            renderCurrentSlide();
+            break;
+          case 'slide16-pick-opt':
+            state.slide16SelectedChoice[state.slide16CurrentQ] = Number(el.getAttribute('data-opt'));
+            renderCurrentSlide();
+            break;
+          case 'slide16-toggle-reveal':
+            state.slide16Revealed[state.slide16CurrentQ] = !state.slide16Revealed[state.slide16CurrentQ];
+            renderCurrentSlide();
+            break;
+          case 'slide17-toggle': {
+            const idx = Number(el.getAttribute('data-index'));
+            state.slide17Revealed[idx] = !state.slide17Revealed[idx];
+            renderCurrentSlide();
+            break;
+          }
+          case 'slide17-reveal-all':
+            state.slide17Revealed = [true, true, true];
+            renderCurrentSlide();
+            break;
+          case 'slide18-toggle': {
+            const idx = Number(el.getAttribute('data-index'));
+            state.slide18Revealed[idx] = !state.slide18Revealed[idx];
+            renderCurrentSlide();
+            break;
+          }
+          case 'slide18-reveal-all':
+            state.slide18Revealed = [true, true, true, true];
+            renderCurrentSlide();
+            break;
+          case 'slide19-pillar':
+            state.slide19ActivePillar = Number(el.getAttribute('data-index'));
+            renderCurrentSlide();
+            break;
+          case 'overview-jump':
+            goToSlide(Number(el.getAttribute('data-index')));
+            document.getElementById('overview-modal').classList.remove('open');
+            break;
+        }
+      });
+
+      /* ==========================================================================
+         9. HUD BUTTONS & KEYBOARD NAVIGATION (SAFE FOCUS HANDLING)
+         ========================================================================== */
+      const prologueEl = document.getElementById('prologue-overlay');
+      document.getElementById('btn-enter-experience').addEventListener('click', () => {
+        prologueEl.classList.add('dismissed');
+      });
+      document.getElementById('btn-enter-with-timer').addEventListener('click', () => {
+        prologueEl.classList.add('dismissed');
+        if (!state.timerRunning) toggleMainTimer();
+      });
+      document.getElementById('btn-replay-prologue').addEventListener('click', () => {
+        prologueEl.classList.remove('dismissed');
+      });
+
+      document.getElementById('btn-prev-slide').addEventListener('click', () => goToSlide(state.currentSlide - 1));
+      document.getElementById('btn-next-slide').addEventListener('click', () => goToSlide(state.currentSlide + 1));
+      document.getElementById('btn-timer-toggle').addEventListener('click', toggleMainTimer);
+      document.getElementById('btn-timer-reset').addEventListener('click', resetMainTimer);
+      document.getElementById('btn-reset-slide').addEventListener('click', resetCurrentSlideState);
+
+      const notesDrawer = document.getElementById('notes-drawer');
+      function toggleNotesDrawer() {
+        state.notesOpen = !state.notesOpen;
+        notesDrawer.classList.toggle('open', state.notesOpen);
+      }
+      document.getElementById('btn-toggle-notes').addEventListener('click', toggleNotesDrawer);
+      document.getElementById('btn-close-notes').addEventListener('click', toggleNotesDrawer);
+
+      const overviewModal = document.getElementById('overview-modal');
+      document.getElementById('btn-open-overview').addEventListener('click', () => {
+        populateOverviewModal();
+        overviewModal.classList.add('open');
+      });
+      document.getElementById('btn-close-overview').addEventListener('click', () => {
+        overviewModal.classList.remove('open');
+      });
+
+      const helpModal = document.getElementById('help-modal');
+      document.getElementById('btn-open-help').addEventListener('click', () => {
+        helpModal.classList.toggle('open');
+      });
+      document.getElementById('btn-close-help').addEventListener('click', () => {
+        helpModal.classList.remove('open');
+      });
+
+      const motionBtn = document.getElementById('btn-toggle-motion');
+      function setReducedMotion(val) {
+        state.reducedMotion = Boolean(val);
+        document.body.classList.toggle('reduced-motion', state.reducedMotion);
+        motionBtn.textContent = state.reducedMotion ? 'Motion: Reduced' : 'Motion: On';
+        motionBtn.setAttribute('aria-pressed', String(state.reducedMotion));
+      }
+      motionBtn.addEventListener('click', () => setReducedMotion(!state.reducedMotion));
+
+      document.getElementById('btn-fullscreen').addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          }
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+        if (!prologueEl.classList.contains('dismissed') && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          prologueEl.classList.add('dismissed');
+          return;
+        }
+
+        if (e.key === 'ArrowRight' || (e.key === ' ' && tag !== 'BUTTON')) {
+          e.preventDefault();
+          goToSlide(state.currentSlide + 1);
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          goToSlide(state.currentSlide - 1);
+        } else if (e.key === 'n' || e.key === 'N') {
+          e.preventDefault();
+          toggleNotesDrawer();
+        } else if (e.key === 'o' || e.key === 'O') {
+          e.preventDefault();
+          populateOverviewModal();
+          overviewModal.classList.toggle('open');
+        } else if (e.key === 'h' || e.key === 'H' || e.key === '?') {
+          e.preventDefault();
+          helpModal.classList.toggle('open');
+        } else if (e.key === 'r' || e.key === 'R') {
+          e.preventDefault();
+          resetCurrentSlideState();
+        } else if (e.key === 't' || e.key === 'T') {
+          e.preventDefault();
+          toggleMainTimer();
+        } else if (e.key === 'm' || e.key === 'M') {
+          e.preventDefault();
+          setReducedMotion(!state.reducedMotion);
+        } else if (e.key === 'f' || e.key === 'F') {
+          e.preventDefault();
+          document.getElementById('btn-fullscreen').click();
+        } else if (e.key === 'Escape') {
+          overviewModal.classList.remove('open');
+          helpModal.classList.remove('open');
+          state.notesOpen = false;
+          notesDrawer.classList.remove('open');
+        }
+      });
+
+      /* ==========================================================================
+         10. SUBTLE AMBIENT CANVAS & CURSOR TRACKING (RESPECTS REDUCED MOTION)
+         ========================================================================== */
+      window.addEventListener('mousemove', (e) => {
+        if (state.reducedMotion) return;
+        const xPct = ((e.clientX / window.innerWidth) * 100).toFixed(1) + '%';
+        const yPct = ((e.clientY / window.innerHeight) * 100).toFixed(1) + '%';
+        document.documentElement.style.setProperty('--mx', xPct);
+        document.documentElement.style.setProperty('--my', yPct);
+      });
+
+      const canvas = document.getElementById('ambient-canvas');
+      const ctx = canvas ? canvas.getContext('2d') : null;
+      const particles = Array.from({ length: 24 }, (_, i) => ({
+        x: (i * 73) % 1000,
+        y: (i * 137) % 600,
+        r: 1 + (i % 2),
+        vx: (i % 2 === 0 ? 0.14 : -0.12),
+        vy: -0.15 - (i % 3) * 0.06
+      }));
+
+      function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      function animateParticles() {
+        if (ctx && !state.reducedMotion && !state.slide13SilenceRunning) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'rgba(244, 239, 230, 0.16)';
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.x = (p.x + p.vx + canvas.width) % canvas.width;
+            p.y = (p.y + p.vy + canvas.height) % canvas.height;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+
+      window.addEventListener('load', () => {
+        renderCurrentSlide();
+        requestAnimationFrame(animateParticles);
+      });
+    })();
+  </script>
+</body>
+</html>
